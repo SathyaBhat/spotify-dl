@@ -1,3 +1,4 @@
 .idea/
 .cache-sathyabhat
 songs.txt
+__pycache__/

@@ -8,6 +8,7 @@ def authenticate():
 
 
 def fetch_saved_tracks(sp):
+    log.info('Fetching saved tracks')
     offset = 0
     songs = []
     while True:
@@ -20,7 +21,7 @@ def fetch_saved_tracks(sp):
             offset += 1
 
         if results.get('next') is None:
-            log.info('All pages fetched, time to leave')
+            log.info('All pages fetched, time to leave. Added {} songs in total'.format(offset))
             break
     return songs
 
