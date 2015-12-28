@@ -3,7 +3,7 @@ Downloads songs from your Spotify My Music collection(well, almost...)
 
 
 #Tell me more!
-I wanted an easy way to grab the songs present in my library so I can download it & use it offline(Spotify still hasn't launched here. Y U NO COME?). [spotify_to_mp3](https://github.com/frosas/spotify-to-mp3) worked well but it relied on rooveshark, which unfortunately is no more.
+I wanted an easy way to grab the songs present in my library so I can download it & use it offline(Spotify still hasn't launched here. Y U NO COME?). [spotify_to_mp3](https://github.com/frosas/spotify-to-mp3) worked well but it relied on grooveshark, which unfortunately is no more.
 
 So I wrote this script which mimics that library, but instead of downloading from grooveshark, it provides you with a file of youtube URLs which you can then plug into [youtube-dl](https://rg3.github.io/youtube-dl/)
 
