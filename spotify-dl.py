@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from scaffold import *
 from spotify import authenticate
 from spotify import fetch_saved_tracks

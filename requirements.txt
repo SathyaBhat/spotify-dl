@@ -1,0 +1,2 @@
+spotipy==2.3.7
+google-api-python-client==1.4.2
