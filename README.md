@@ -18,12 +18,12 @@ Pre-requisite: You need Python 3+
 5. Create your YouTube api & fetch the keys from [Google Developer Console](https://console.developers.google.com/apis/api/youtube/overview). Paste the keys in tokens.py.
 6. Run the script using `python spotify-dl`
 7. Click on the URL prompted to authenticate. Once logged in, paste the URL back in
-8. Once done, songs.txt should have list of YouTube URLs. Pass them to youtube-dl to have them downloaded. Please check [youtube-dl](https://rg3.github.io/youtube-dl/)) documentation for more details
+8. Once done, songs.txt should have list of YouTube URLs. Pass them to youtube-dl to have them downloaded. Please check [youtube-dl](https://rg3.github.io/youtube-dl/) documentation for more details
 
 ##To Do
 
 - Integrate youtube-dl in script
 - Skip songs already downloaded
 
-##Issues, Feeback, Contact details
+##Issues, Feedback, Contact details
 Feel free to raise any bugs/issues under Github issues. Pull requests are also more than welcome. You can reach me on twitter at [@sathyabhat](https://twitter.com/sathyabhat)
