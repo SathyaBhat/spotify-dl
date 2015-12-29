@@ -1,6 +1,11 @@
+from __future__ import unicode_literals
+
 import spotipy.util as util
 from scaffold import *
 from tokens import *
+
+
+import youtube_dl
 
 
 def authenticate():
@@ -30,3 +35,25 @@ def save_songs_to_file(songs):
     with open('songs.txt', 'a') as f:
         f.write('\n'.join(songs))
     f.close()
+
+def download_songs(songs):
+
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+
+    
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        for item in songs:
+            try:
+                ydl.download([item])
+                break
+            except Exception:
+                print('Failed to download: ' +item )
+                continue
+
