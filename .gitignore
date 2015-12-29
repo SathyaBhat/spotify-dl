@@ -3,3 +3,5 @@
 songs.txt
 __pycache__/
 *.pyc
+downloaded_songs.txt
+*.mp3

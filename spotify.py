@@ -36,10 +36,11 @@ def save_songs_to_file(songs):
         f.write('\n'.join(songs))
     f.close()
 
-def download_songs(songs):
 
+def download_songs(songs):
     ydl_opts = {
         'format': 'bestaudio/best',
+        'download_archive': 'downloaded_songs.txt',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
@@ -47,13 +48,12 @@ def download_songs(songs):
         }],
     }
 
-    
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         for item in songs:
             try:
                 ydl.download([item])
                 break
             except Exception:
-                print('Failed to download: ' +item )
+                print('Failed to download: {}'.format(item))
                 continue
 
