@@ -2,3 +2,4 @@
 .cache-sathyabhat
 songs.txt
 __pycache__/
+*.pyc

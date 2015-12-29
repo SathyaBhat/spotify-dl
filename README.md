@@ -18,7 +18,7 @@ Pre-requisite: You need Python 3+
 5. Create your YouTube api & fetch the keys from [Google Developer Console](https://console.developers.google.com/apis/api/youtube/overview). Paste the keys in tokens.py.
 6. Run the script using `python spotify-dl`
 7. Click on the URL prompted to authenticate. Once logged in, paste the URL back in
-8. Once done, songs.txt should have list of YouTube URLs. Pass them to youtube-dl to have them downloaded. Please check [youtube-dl](https://rg3.github.io/youtube-dl/) documentation for more details
+8. Once done, songs.txt should have list of YouTube URLs. Pass them to youtube-dl to have them downloaded. Please check [youtube-dl](https://rg3.github.io/youtube-dl/) documentation for more details. You also need ffmpeg or avconv installed. (`sudo apt-get install -y libav-tools`)
 
 ##To Do
 
