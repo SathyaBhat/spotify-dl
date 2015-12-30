@@ -47,12 +47,11 @@ def download_songs(songs):
             'preferredquality': '192',
         }],
     }
-
+    log.info('Songs to download: {}'.format(songs))
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         for item in songs:
             try:
                 ydl.download([item])
-                break
             except Exception:
                 print('Failed to download: {}'.format(item))
                 continue
