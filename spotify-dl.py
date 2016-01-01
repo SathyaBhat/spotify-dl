@@ -14,7 +14,10 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(prog='spotify-dl')
     parser.add_argument('-d', '--download', action='store_true', help='Download using youtube-dl')
+    parser.add_argument('-V', '--verbose', action='store_true', help='Show more information on what''s happening.')
     args = parser.parse_args()
+    if args.verbose:
+        log.setLevel(logging.DEBUG)
 
     token = authenticate()
     sp = spotipy.Spotify(auth=token)

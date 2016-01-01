@@ -9,5 +9,5 @@ def fetch_youtube_url(search_term):
     search_response = youtube.search().list(q=search_term, part='id, snippet').execute()
     for v in search_response['items']:
         if v['id']['kind'] == VIDEO:
-            log.info("Adding Video id {}".format(v['id']['videoId']))
+            log.debug("Adding Video id {}".format(v['id']['videoId']))
             return YOUTUBE_VIDEO_URL + v['id']['videoId']

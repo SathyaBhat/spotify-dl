@@ -13,15 +13,15 @@ def authenticate():
 
 
 def fetch_saved_tracks(sp):
-    log.info('Fetching saved tracks')
+    log.debug('Fetching saved tracks')
     offset = 0
     songs = []
     while True:
         results = sp.current_user_saved_tracks(limit=50, offset=offset)
-        log.info('Got result json {}'.format(results))
+        log.debug('Got result json {}'.format(results))
         for item in results['items']:
             track = item['track']
-            log.info('Appending {} to songs list'.format(track['name'] + ' - ' + track['artists'][0]['name']))
+            log.debug('Appending {} to songs list'.format(track['name'] + ' - ' + track['artists'][0]['name']))
             songs.append(track['name'] + ' - ' + track['artists'][0]['name'])
             offset += 1
 
@@ -48,7 +48,7 @@ def download_songs(songs):
             'preferredquality': '192',
         }],
     }
-    log.info('Songs to download: {}'.format(songs))
+    log.debug('Songs to download: {}'.format(songs))
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         for item in songs:
             try:
