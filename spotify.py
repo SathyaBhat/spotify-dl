@@ -32,7 +32,7 @@ def fetch_saved_tracks(sp):
 
 
 def save_songs_to_file(songs):
-    with open('songs.txt', 'a') as f:
+    with open('songs.txt', 'w') as f:
         f.write('\n'.join(songs))
     f.close()
 
