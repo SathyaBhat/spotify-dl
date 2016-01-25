@@ -24,7 +24,9 @@ if __name__ == '__main__':
     songs = fetch_saved_tracks(sp)
     url = []
     for s in songs:
-        url.append(fetch_youtube_url(s))
+        link = fetch_youtube_url(s)
+        if link:
+            url.append(link)
     save_songs_to_file(url)
     if args.download == True:
         download_songs(url)
