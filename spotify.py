@@ -9,7 +9,7 @@ import youtube_dl
 
 
 def authenticate():
-    return util.prompt_for_user_token(username,scope, CLIENT_ID, CLIENT_SECRET, REDIRECT_URL))
+    return util.prompt_for_user_token(username,scope, CLIENT_ID, CLIENT_SECRET, REDIRECT_URL)
 
 
 def fetch_saved_tracks(sp):
