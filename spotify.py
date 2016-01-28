@@ -9,7 +9,7 @@ import youtube_dl
 
 
 def authenticate():
-    return util.prompt_for_user_token(username,scope, CLIENT_ID, CLIENT_SECRET, REDIRECT_URL)
+    return util.prompt_for_user_token(username,scope, CLIENT_ID, CLIENT_SECRET)
 
 
 def fetch_saved_tracks(sp):
@@ -37,11 +37,11 @@ def save_songs_to_file(songs):
     f.close()
 
 
-def download_songs(songs):
+def download_songs(songs,download_directory):
     ydl_opts = {
         'format': 'bestaudio/best',
         'download_archive': 'downloaded_songs.txt',
-        'outtmpl': '~/Music/%(title)s.%(ext)s',
+        'outtmpl': download_directory+'%(title)s.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
