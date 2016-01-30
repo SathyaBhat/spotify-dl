@@ -13,27 +13,25 @@ Pre-requisite: You need Python 3+
 
 1. Clone [this repo](https://github.com/SathyaBhat/spotify-dl.git)
 2. Install dependencies using `pip install -r requirements.txt`
- +  *Optional* (Using Virtualenv) 
+ -  *Optional* (Using Virtualenv) 
      - `pip install virtualenv`
      - `cd my_project_folder` 
      - `virtualenv venv`
-     
      - `source venv/bin/activate`
 3. Enter your spotify userid in tokens.py
 4. Create your Spotify app & fetch the keys from [Spotify Developer Console](https://developer.spotify.com/my-applications/#!/applications). Paste the client id, secret, redirect URL in tokens.py. Note the redirect URL can be a valid URL, just ensure it matches with what you have entered in the developer console & in the script.
 5. Create your YouTube api & fetch the keys from [Google Developer Console](https://console.developers.google.com/apis/api/youtube/overview). Paste the keys in tokens.py.
-6. Run the script using `python spotify-dl.py`
+6. Run the script using `python spotify-dl.py`. 
+   - Note by default, this doesn't download the songs. To download, pass `-d` as well. Ex: `python spotify-dl.py -d`
+   - To download to a specific directory, pass the directory along with `-o`. Ex: `python spotify-dl.py -d -o c:\music`
 7. Click on the URL prompted to authenticate. Once logged in, paste the URL back in
-8. Once done, songs.txt should have list of YouTube URLs. Pass them to youtube-dl to have them downloaded. Please check [youtube-dl](https://rg3.github.io/youtube-dl/) documentation for more details. You also need ffmpeg or avconv installed.
-  - An example command to just get the mp3 from youtube-dl is
-    + `youtube-dl --extract-audio --audio-format mp3 -a songs.txt`
+8. To retrieve download songs as MP3, you will need to install ffmpeg. 
   - Linux users can get them by installing libav-tools by using apt-get (`sudo apt-get install -y libav-tools`) or a package manager which comes with your distro
-  - Windowns users can download FFMPEG pre-built binaries from [here](http://ffmpeg.zeranoe.com/builds/). Extract the file using [7-zip](http://7-zip.org/) to a foldrer and [add the folder to your PATH environment variable](http://www.wikihow.com/Install-FFmpeg-on-Windows) 
+  - Windows users can download FFMPEG pre-built binaries from [here](http://ffmpeg.zeranoe.com/builds/). Extract the file using [7-zip](http://7-zip.org/) to a foldrer and [add the folder to your PATH environment variable](http://www.wikihow.com/Install-FFmpeg-on-Windows) 
 
-##To Do
-
-- ~~Integrate youtube-dl in script~~ - Huge thanks to @rhnvrm for adding [this in](https://github.com/SathyaBhat/spotify-dl/pull/1)
-- ~~Skip songs already downloaded~~ - Turns out youtube-dl does. Yay!
+###Credits
+ - [rhnvrm](https://github.com/rhnvrm) for [adding in youtube-dl](https://github.com/SathyaBhat/spotify-dl/pull/1)
+ - [mr-karan](https://github.com/mr-karan) for [adding save to directory](https://github.com/SathyaBhat/spotify-dl/pull/6)
 
 ##Issues, Feedback, Contact details
-Feel free to raise any bugs/issues under Github issues. Pull requests are also more than welcome. You can reach me on twitter at [@sathyabhat](https://twitter.com/sathyabhat)
+Feel free to raise any bugs/issues under Github issues. Pull requests are also more than welcome. You can reach me on twitter at [@sathyabhat](https://twitter.com/sathyabhat) or drop a mail sathya at sathyasays dot com
