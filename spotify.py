@@ -37,11 +37,11 @@ def save_songs_to_file(songs):
     f.close()
 
 
-def download_songs(songs):
+def download_songs(songs,download_directory):
     ydl_opts = {
         'format': 'bestaudio/best',
         'download_archive': 'downloaded_songs.txt',
-        'outtmpl': '%(title)s.%(ext)s',
+        'outtmpl': download_directory+'%(title)s.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
