@@ -24,6 +24,7 @@ Pre-requisite: You need Python 3+
 6. Run the script using `python spotify-dl.py`. 
    - Note by default, this doesn't download the songs. To download, pass `-d` as well. Ex: `python spotify-dl.py -d`
    - To download to a specific directory, pass the directory along with `-o`. Ex: `python spotify-dl.py -d -o c:\music`
+   - To make the script act on a specific playlist of yours instead of saved tracks, use '-p' option along with playlist id. Ex: `python spotify-dl.py -p 18NLt215Rh58uE30QNLOiX`
 7. Click on the URL prompted to authenticate. Once logged in, paste the URL back in
 8. To retrieve download songs as MP3, you will need to install ffmpeg. 
   - Linux users can get them by installing libav-tools by using apt-get (`sudo apt-get install -y libav-tools`) or a package manager which comes with your distro
