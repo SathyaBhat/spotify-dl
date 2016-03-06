@@ -1,10 +1,8 @@
 from __future__ import unicode_literals
-
-import spotipy.util as util
 from scaffold import *
 from tokens import *
 
-
+import spotipy.util as util
 import youtube_dl
 
 
