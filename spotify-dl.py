@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 
 from scaffold import *
+from logging import DEBUG
 from spotify import authenticate
 from spotify import fetch_tracks
 from spotify import save_songs_to_file
 from spotify import download_songs
 from youtube import fetch_youtube_url
+
 import spotipy
 import argparse
 
 if __name__ == '__main__':
-    log.info('Starting spotify-dl')
 
     parser = argparse.ArgumentParser(prog='spotify-dl')
     parser.add_argument('-d', '--download', action='store_true', help='Download using youtube-dl')
@@ -18,8 +19,14 @@ if __name__ == '__main__':
     parser.add_argument('-V', '--verbose', action='store_true', help='Show more information on what''s happening.')
     parser.add_argument('-o', '--output', type=str, action='store', nargs='*', help='Specify download diretory.')
     args = parser.parse_args()
+
     if args.verbose:
-        log.setLevel(logging.DEBUG)
+        log.setLevel(DEBUG)
+
+    log.info('Starting spotify-dl')
+    log.debug('setting debug mode on spotify-dl')
+    if not check_for_tokens():
+        exit()
 
     token = authenticate()
     if args.output:
