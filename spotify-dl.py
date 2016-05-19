@@ -16,7 +16,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--download', action='store_true', help='Download using youtube-dl')
     parser.add_argument('-p', '--playlist', action='store', help='Download from playlist id instead of saved tracks')
     parser.add_argument('-V', '--verbose', action='store_true', help='Show more information on what''s happening.')
-    parser.add_argument('-o', '--output', type=str, action='store', nargs='*', help='Specify download diretory.')
+    parser.add_argument('-o', '--output', type=str, action='store', nargs='*', help='Specify download directory.')
     args = parser.parse_args()
     if args.verbose:
         log.setLevel(logging.DEBUG)
