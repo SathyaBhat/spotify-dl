@@ -17,6 +17,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--playlist', action='store', help='Download from playlist id instead of saved tracks')
     parser.add_argument('-V', '--verbose', action='store_true', help='Show more information on what''s happening.')
     parser.add_argument('-o', '--output', type=str, action='store', nargs='*', help='Specify download directory.')
+    parser.add_argument('-u', '--user_id', action='store', help='Specify the playlist owner\'s userid when it is different than your spotify userid')
     args = parser.parse_args()
     if args.verbose:
         log.setLevel(logging.DEBUG)
@@ -31,7 +32,7 @@ if __name__ == '__main__':
         download_directory = ''
 
     sp = spotipy.Spotify(auth=token)
-    songs = fetch_tracks(sp, args.playlist)
+    songs = fetch_tracks(sp, args.playlist, args.user_id)
     url = []
     for s in songs:
         link = fetch_youtube_url(s)

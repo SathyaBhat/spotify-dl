@@ -12,11 +12,14 @@ def authenticate():
     return util.prompt_for_user_token(username,scope, CLIENT_ID, CLIENT_SECRET, REDIRECT_URL)
 
 
-def fetch_tracks(sp, playlist):
+def fetch_tracks(sp, playlist, user_id):
     log.debug('Fetching saved tracks')
     offset = 0
     songs = []
-    current_user_id = sp.current_user()['id']
+    if user_id is None:
+        current_user_id = sp.current_user()['id']
+    else:
+        current_user_id = user_id
     while True:
         if playlist is None:
             results = sp.current_user_saved_tracks(limit=50, offset=offset)
