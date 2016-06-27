@@ -7,10 +7,16 @@ import youtube_dl
 
 
 def authenticate():
+    """Authenticates you to Spotify
+    """
     return util.prompt_for_user_token(username,scope, CLIENT_ID, CLIENT_SECRET, REDIRECT_URL)
 
 
 def fetch_tracks(sp, playlist):
+    """Fetches tracks from Spotify user's saved tracks or from playlist(if playlist parameter is passed
+       and saves song name and artist name to songs list
+    """
+
     log.debug('Fetching saved tracks')
     offset = 0
     songs = []
@@ -35,12 +41,20 @@ def fetch_tracks(sp, playlist):
 
 
 def save_songs_to_file(songs):
+    """Saves the songs fetched from fetch_tracks function to songs.txt file
+       to be downloaded from youtube-dl
+    """
+
     with open('songs.txt', 'w') as f:
         f.write('\n'.join(songs))
     f.close()
 
 
 def download_songs(songs,download_directory):
+    """Downloads songs from the YouTube URL passed to either
+       current directory or download_directory, is it is passed
+    """
+
     ydl_opts = {
         'format': 'bestaudio/best',
         'download_archive': 'downloaded_songs.txt',
