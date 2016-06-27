@@ -2,3 +2,6 @@ __pycache__/
 .idea/
 spotify-dl/.cache-
 spotify-dl/.cache-sathyabhat
+spotify_dl.egg-info/
+.cache-
+spotify_dl/.cache-sathyabhat

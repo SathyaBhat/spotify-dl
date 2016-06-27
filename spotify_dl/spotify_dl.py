@@ -11,9 +11,9 @@ from youtube import fetch_youtube_url
 import spotipy
 import argparse
 
-if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(prog='spotify-dl')
+def spotify_dl():
+    parser = argparse.ArgumentParser(prog='spotify_dl')
     parser.add_argument('-d', '--download', action='store_true', help='Download using youtube-dl')
     parser.add_argument('-p', '--playlist', action='store', help='Download from playlist id instead of saved tracks')
     parser.add_argument('-V', '--verbose', action='store_true', help='Show more information on what''s happening.')
@@ -23,8 +23,8 @@ if __name__ == '__main__':
     if args.verbose:
         log.setLevel(DEBUG)
 
-    log.info('Starting spotify-dl')
-    log.debug('setting debug mode on spotify-dl')
+    log.info('Starting spotify_dl')
+    log.debug('setting debug mode on spotify_dl')
     if not check_for_tokens():
         exit()
 
@@ -47,3 +47,7 @@ if __name__ == '__main__':
     save_songs_to_file(url)
     if args.download is True:
         download_songs(url, download_directory)
+
+
+if __name__ == '__main__':
+    spotify_dl()
