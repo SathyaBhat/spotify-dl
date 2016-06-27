@@ -4,6 +4,7 @@ from constants import YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, VIDEO, YOUT
 from scaffold import log
 
 def fetch_youtube_url(search_term):
+    """For each song name/artist name combo, fetch the YouTube URL and return the list of URLs"""
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=YOUTUBE_DEV_KEY)
     log.info("Searching for {}".format(search_term))
     search_response = youtube.search().list(q=search_term, part='id, snippet').execute()
