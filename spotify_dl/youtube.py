@@ -1,7 +1,7 @@
 from googleapiclient.discovery import build
-from tokens import YOUTUBE_DEV_KEY
-from constants import YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, VIDEO, YOUTUBE_VIDEO_URL
-from scaffold import log
+from spotify_dl.tokens import YOUTUBE_DEV_KEY
+from spotify_dl.constants import YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, VIDEO, YOUTUBE_VIDEO_URL
+from spotify_dl.scaffold import log
 
 def fetch_youtube_url(search_term):
     """For each song name/artist name combo, fetch the YouTube URL and return the list of URLs"""

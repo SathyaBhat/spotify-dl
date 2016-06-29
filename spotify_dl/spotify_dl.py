@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
-from scaffold import *
+from spotify_dl.scaffold import *
 from logging import DEBUG
-from spotify import authenticate
-from spotify import fetch_tracks
-from spotify import save_songs_to_file
-from spotify import download_songs
-from youtube import fetch_youtube_url
+from spotify_dl.spotify import authenticate
+from spotify_dl.spotify import fetch_tracks
+from spotify_dl.spotify import save_songs_to_file
+from spotify_dl.spotify import download_songs
+from spotify_dl.youtube import fetch_youtube_url
 
 import spotipy
 import argparse

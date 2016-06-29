@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
-from scaffold import *
-from tokens import *
+from spotify_dl.scaffold import *
+from spotify_dl.tokens import *
 
 import spotipy.util as util
 import youtube_dl
@@ -41,7 +41,9 @@ def fetch_tracks(sp, playlist):
 
 
 def save_songs_to_file(songs):
-    """Saves the songs fetched from fetch_tracks function to songs.txt file
+    """
+    :param songs
+    Saves the songs fetched from fetch_tracks function to songs.txt file
        to be downloaded from youtube-dl
     """
 
@@ -50,8 +52,9 @@ def save_songs_to_file(songs):
     f.close()
 
 
-def download_songs(songs,download_directory):
-    """Downloads songs from the YouTube URL passed to either
+def download_songs(songs, download_directory):
+    """
+    Downloads songs from the YouTube URL passed to either
        current directory or download_directory, is it is passed
     """
 
