@@ -1,6 +1,6 @@
 import logging
 import os
-import tokens
+import spotify_dl.tokens as tokens
 
 __all__ = ['log', 'check_for_tokens']
 
