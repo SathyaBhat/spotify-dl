@@ -1,26 +1,34 @@
 #!/usr/bin/env python
 
-from scaffold import *
-from spotify import authenticate
-from spotify import fetch_tracks
-from spotify import save_songs_to_file
-from spotify import download_songs
-from youtube import fetch_youtube_url
+from spotify_dl.scaffold import *
+from logging import DEBUG
+from spotify_dl.spotify import authenticate
+from spotify_dl.spotify import fetch_tracks
+from spotify_dl.spotify import save_songs_to_file
+from spotify_dl.spotify import download_songs
+from spotify_dl.youtube import fetch_youtube_url
+
 import spotipy
 import argparse
 
-if __name__ == '__main__':
-    log.info('Starting spotify-dl')
 
-    parser = argparse.ArgumentParser(prog='spotify-dl')
+def spotify_dl():
+    parser = argparse.ArgumentParser(prog='spotify_dl')
     parser.add_argument('-d', '--download', action='store_true', help='Download using youtube-dl')
     parser.add_argument('-p', '--playlist', action='store', help='Download from playlist id instead of saved tracks')
     parser.add_argument('-V', '--verbose', action='store_true', help='Show more information on what''s happening.')
     parser.add_argument('-o', '--output', type=str, action='store', nargs='*', help='Specify download directory.')
     parser.add_argument('-u', '--user_id', action='store', help='Specify the playlist owner\'s userid when it is different than your spotify userid')
+
     args = parser.parse_args()
+
     if args.verbose:
-        log.setLevel(logging.DEBUG)
+        log.setLevel(DEBUG)
+
+    log.info('Starting spotify_dl')
+    log.debug('setting debug mode on spotify_dl')
+    if not check_for_tokens():
+        exit()
 
     token = authenticate()
     if args.output:
@@ -41,3 +49,7 @@ if __name__ == '__main__':
     save_songs_to_file(url)
     if args.download is True:
         download_songs(url, download_directory)
+
+
+if __name__ == '__main__':
+    spotify_dl()

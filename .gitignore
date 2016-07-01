@@ -1,7 +1,7 @@
-.idea/
-.cache-sathyabhat
-songs.txt
 __pycache__/
-*.pyc
-downloaded_songs.txt
-*.mp3
+.idea/
+spotify-dl/.cache-
+spotify-dl/.cache-sathyabhat
+spotify_dl.egg-info/
+.cache-
+spotify_dl/.cache-sathyabhat
