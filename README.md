@@ -25,7 +25,7 @@ Pre-requisite: You need Python 3+
 
     Note the redirect URL can be a valid URL, just ensure it matches with what you have entered in the developer console & in the environment variable above.
 
-3. Create you YouTube API key & fetch the keys from [Google Developer Console](https://console.developers.google.com/apis/api/youtube/overview). Set the key as `YOUTUBE_DEV_KEY` environment variable as mentioned above.
+3. Create your YouTube API key & fetch the keys from [Google Developer Console](https://console.developers.google.com/apis/api/youtube/overview). Set the key as `YOUTUBE_DEV_KEY` environment variable as mentioned above.
 4. Run the script using `spotify_dl`. spotify_dl accepts different parameters, for more details run `spotify_dl -h`. 
    For most users `spotify_dl -d -p playlist_id -u user_name -o download_directory` should do where
    
