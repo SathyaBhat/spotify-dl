@@ -1,6 +1,5 @@
 import logging
-import os
-import spotify_dl.tokens as tokens
+from os import getenv
 
 __all__ = ['log', 'check_for_tokens']
 
@@ -12,12 +11,12 @@ log = logging.getLogger('sdl')
 
 def check_for_tokens():
     log.debug('Checking for tokens')
-    tokens.client_id = os.getenv('SPOTIPY_CLIENT_ID')
-    tokens.client_secret = os.getenv('SPOTIPY_CLIENT_SECRET')
-    tokens.redirect_url = os.getenv('SPOTIPY_REDIRECT_URI')
-    log.debug("Tokens fetched: {} {} {}".format(tokens.CLIENT_ID, tokens.CLIENT_SECRET, tokens.REDIRECT_URL))
+    CLIENT_ID = getenv('SPOTIPY_CLIENT_ID')
+    CLIENT_SECRET = getenv('SPOTIPY_CLIENT_SECRET')
+    REDIRECT_URL = getenv('SPOTIPY_REDIRECT_URI')
+    log.debug("Tokens fetched: {} {} {}".format(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL))
 
-    if tokens.client_id is None or tokens.client_secret is None or tokens.redirect_url is None:
+    if CLIENT_ID is None or CLIENT_SECRET is None or REDIRECT_URL is None:
         print('''
             You need to set your Spotify API credentials. You can do this by
             setting environment variables like so:
@@ -31,9 +30,9 @@ def check_for_tokens():
         ''')
         return False
 
-    tokens.youtube_dev_key = os.getenv('YOUTUBE_DEV_KEY')
-
-    if tokens.youtube_dev_key is None:
+    YOUTUBE_DEV_KEY = getenv('YOUTUBE_DEV_KEY')
+    log.debug("YouTube dev key: {}".format(YOUTUBE_DEV_KEY))
+    if YOUTUBE_DEV_KEY is None:
         print('''
             You need to setup Youtube Data API token. You cna do this by
             setting environment variables like so:

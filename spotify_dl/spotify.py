@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 from spotify_dl.scaffold import *
-from spotify_dl.tokens import *
-
 import spotipy.util as util
 import youtube_dl
 
@@ -9,7 +7,9 @@ import youtube_dl
 def authenticate():
     """Authenticates you to Spotify
     """
-    return util.prompt_for_user_token(username,scope, CLIENT_ID, CLIENT_SECRET, REDIRECT_URL)
+    scope = 'user-library-read'
+    username = ''
+    return util.prompt_for_user_token(username, scope)
 
 
 def fetch_tracks(sp, playlist, user_id):
