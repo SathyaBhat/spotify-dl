@@ -32,7 +32,6 @@ Pre-requisite: You need Python 3+
    - `playlist_id` is the id of the playlist where songs need to be downloaded. If this is skipped then it will download songs ftom your "My Music" collection
    - `user_name` is the user name who created the playlist. 
    - `download_directory` is the location where the songs must be downloaded to. 
-   - To make the script act on a specific playlist of yours instead of saved tracks, use '-p' option along with playlist id. Ex: `python spotify-dl.py -p 18NLt215Rh58uE30QNLOiX`
 5. A first time run will require authentication; you will need to click on the URL prompted to authenticate. Once logged in, paste the URL back in
 6. To retrieve download songs as MP3, you will need to install ffmpeg. 
   - Linux users can get them by installing libav-tools by using apt-get (`sudo apt-get install -y libav-tools`) or a package manager which comes with your distro
