@@ -5,3 +5,4 @@ spotify-dl/.cache-sathyabhat
 spotify_dl.egg-info/
 .cache-
 spotify_dl/.cache-sathyabhat
+build/
