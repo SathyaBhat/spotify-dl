@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 from spotify_dl.scaffold import *
 import spotipy.util as util
 import youtube_dl
+import re
+import os
 
 
 def authenticate():
@@ -42,14 +44,14 @@ def fetch_tracks(sp, playlist, user_id):
     return songs
 
 
-def save_songs_to_file(songs):
+def save_songs_to_file(songs, directory):
     """
     :param songs
     Saves the songs fetched from fetch_tracks function to songs.txt file
        to be downloaded from youtube-dl
     """
 
-    with open('songs.txt', 'w') as f:
+    with open(os.path.join(directory, 'songs.txt'), 'w') as f:
         f.write('\n'.join(songs))
     f.close()
 
@@ -59,11 +61,10 @@ def download_songs(songs, download_directory):
     Downloads songs from the YouTube URL passed to either
        current directory or download_directory, is it is passed
     """
-
     ydl_opts = {
         'format': 'bestaudio/best',
         'download_archive': 'downloaded_songs.txt',
-        'outtmpl': download_directory+'%(title)s.%(ext)s',
+        'outtmpl': download_directory + '%(title)s.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
@@ -75,7 +76,25 @@ def download_songs(songs, download_directory):
         for item in songs:
             try:
                 ydl.download([item])
-            except Exception:
+            except Exception as e:
+                log.debug(e)
                 print('Failed to download: {}'.format(item))
                 continue
 
+
+def extract_user_and_playlist_from_uri(uri):
+    playlist_re = re.compile("spotify:user:[\w,.]+:playlist:[\w]+")
+    for playlist_uri in playlist_re.findall(uri):
+        segments = playlist_uri.split(":")
+        user_id = segments[2]
+        log.info('List owner: ' + str(user_id))
+        playlist_id = segments[4]
+        log.info('List ID: ' + str(playlist_id))
+    return user_id, playlist_id
+
+
+def playlist_name(uri, sp):
+    user_id, playlist_id = extract_user_and_playlist_from_uri(uri)
+    playlist = sp.user_playlist(user_id, playlist_id, fields="tracks, next, name")
+    name = playlist['name']
+    return name
