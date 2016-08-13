@@ -34,7 +34,7 @@ def check_for_tokens():
     log.debug("YouTube dev key: {}".format(YOUTUBE_DEV_KEY))
     if YOUTUBE_DEV_KEY is None:
         print('''
-            You need to setup Youtube Data API token. You cna do this by
+            You need to setup Youtube Data API token. You can do this by
             setting environment variables like so:
 
             export YOUTUBE_DEV_KEY='your-youtube-dev-key'
