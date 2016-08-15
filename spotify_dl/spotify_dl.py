@@ -17,15 +17,23 @@ import argparse
 
 def spotify_dl():
     parser = argparse.ArgumentParser(prog='spotify_dl')
-    parser.add_argument('-d', '--download', action='store_true', help='Download using youtube-dl')
-    parser.add_argument('-p', '--playlist', action='store', help='Download from playlist id instead of saved tracks')
-    parser.add_argument('-V', '--verbose', action='store_true', help='Show more information on what''s happening.')
-    parser.add_argument('-o', '--output', type=str, action='store', nargs='*', help='Specify download directory.')
+    parser.add_argument('-d', '--download', action='store_true',
+                        help='Download using youtube-dl')
+    parser.add_argument('-p', '--playlist', action='store',
+                        help='Download from playlist id instead of'
+                        ' saved tracks')
+    parser.add_argument('-V', '--verbose', action='store_true',
+                        help='Show more information on what''s happening.')
+    parser.add_argument('-o', '--output', type=str, action='store',
+                        nargs='*', help='Specify download directory.')
     parser.add_argument('-u', '--user_id', action='store',
-                        help='Specify the playlist owner\'s userid when it is different than your spotify userid')
+                        help='Specify the playlist owner\'s userid when it'
+                        ' is different than your spotify userid')
     parser.add_argument('-s', '--save', action='store_true',
-                        help='Create on Desktop a folder named with the Playlist Name')
-    parser.add_argument('-i', '--uri', type=str, action='store', nargs='*', help='Given a URI, download it.')
+                        help='Create on Desktop a folder named'
+                        'with the Playlist Name')
+    parser.add_argument('-i', '--uri', type=str, action='store',
+                        nargs='*', help='Given a URI, download it.')
 
     args = parser.parse_args()
 
@@ -61,12 +69,12 @@ def spotify_dl():
         songs = fetch_tracks(sp, playlist_id, user_id)
     else:
         songs = fetch_tracks(sp, args.playlist, args.user_id)
-
     url = []
-    for s in songs:
-        link = fetch_youtube_url(s)
+    for song, artist in songs.items():
+        link = fetch_youtube_url(song + ' - ' + artist)
         if link:
-            url.append(link)
+            url.append((link, song, artist))
+            log.debug('URL ' + str(url))
     save_songs_to_file(url, download_directory)
     if args.download is True:
         download_songs(url, download_directory)

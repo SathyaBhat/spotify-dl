@@ -23,7 +23,8 @@ setup(
     include_package_data=True,
     url='https://github.com/SathyaBhat/spotify-dl/',
     license='MIT',
-    description='Downloads songs from Spotify My Music or Spotify Playlist that you provide',
+    description='Downloads songs from Spotify My Music'
+                'or Spotify Playlist that you provide',
     long_description=long_description,
     entry_points={
         'console_scripts': [

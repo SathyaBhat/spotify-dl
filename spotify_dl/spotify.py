@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from spotify_dl.scaffold import *
+from mutagen.mp3 import MP3
 import spotipy.util as util
 import youtube_dl
 import re
@@ -15,12 +16,14 @@ def authenticate():
 
 
 def fetch_tracks(sp, playlist, user_id):
-    """Fetches tracks from Spotify user's saved tracks or from playlist(if playlist parameter is passed
-       and saves song name and artist name to songs list
+    """Fetches tracks from Spotify user's saved
+        tracks or from playlist(if playlist parameter is passed
+        and saves song name and artist name to songs list
     """
     log.debug('Fetching saved tracks')
     offset = 0
     songs = []
+    songs_dict = {}
     if user_id is None:
         current_user_id = sp.current_user()['id']
     else:
@@ -29,19 +32,28 @@ def fetch_tracks(sp, playlist, user_id):
         if playlist is None:
             results = sp.current_user_saved_tracks(limit=50, offset=offset)
         else:
-            results = sp.user_playlist_tracks(current_user_id, playlist, None, limit=50, offset=offset)
+            results = sp.user_playlist_tracks(current_user_id, playlist, None,
+                                              limit=50, offset=offset)
 
         log.debug('Got result json {}'.format(results))
         for item in results['items']:
             track = item['track']
-            log.debug('Appending {} to songs list'.format(track['name'] + ' - ' + track['artists'][0]['name']))
+            track_name = str(track['name'])
+            track_artist = str(track['artists'][0]['name'])
+            log.debug('Appending {} to'
+                      'songs list'.format(track['name'] + ' - ' +
+                                          track['artists'][0]['name']))
+            songs_dict.update({track_name: track_artist})
+            log.debug('dict ' + str(songs_dict))
             songs.append(track['name'] + ' - ' + track['artists'][0]['name'])
             offset += 1
 
         if results.get('next') is None:
-            log.info('All pages fetched, time to leave. Added {} songs in total'.format(offset))
+            log.info('All pages fetched, time to leave.'
+                     ' Added {} songs in total'.format(offset))
             break
-    return songs
+    log.debug('dict2 ' + str(songs_dict))
+    return songs_dict
 
 
 def save_songs_to_file(songs, directory):
@@ -52,33 +64,41 @@ def save_songs_to_file(songs, directory):
     """
 
     with open(os.path.join(directory, 'songs.txt'), 'w') as f:
-        f.write('\n'.join(songs))
+        f.write(' '.join(str(songs)))
     f.close()
 
 
-def download_songs(songs, download_directory):
+def download_songs(info, download_directory):
     """
     Downloads songs from the YouTube URL passed to either
        current directory or download_directory, is it is passed
     """
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'download_archive': 'downloaded_songs.txt',
-        'outtmpl': download_directory + '%(title)s.%(ext)s',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-    }
-    log.debug('Songs to download: {}'.format(songs))
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        for item in songs:
+    for item in info:
+        log.debug('Songs to download: {}'.format(item))
+        url_, track_, artist_ = item
+        download_archive = download_directory + 'downloaded_songs.txt'
+        outtmpl = download_directory + '%(title)s.%(ext)s'
+        ydl_opts = {
+            'format': 'bestaudio/best',
+            'download_archive': download_archive,
+            'outtmpl': outtmpl,
+            'noplaylist': True,
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192',
+            },
+                {'key': 'FFmpegMetadata'},
+            ],
+            'postprocessor_args': ['-metadata', 'title=' + str(track_)],
+        }
+
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             try:
-                ydl.download([item])
+                log.debug(ydl.download([url_]))
             except Exception as e:
                 log.debug(e)
-                print('Failed to download: {}'.format(item))
+                print('Failed to download: {}'.format(url_))
                 continue
 
 
@@ -95,6 +115,14 @@ def extract_user_and_playlist_from_uri(uri):
 
 def playlist_name(uri, sp):
     user_id, playlist_id = extract_user_and_playlist_from_uri(uri)
-    playlist = sp.user_playlist(user_id, playlist_id, fields="tracks, next, name")
+    playlist = sp.user_playlist(user_id, playlist_id,
+                                fields="tracks, next, name")
     name = playlist['name']
     return name
+
+
+def id3_tags(path, track_name, track_artist):
+    audio = MP3(r'path')
+    audio['title'] = u'track_name'
+    audio['artist'] = u'track_artist'
+    audio.save()
