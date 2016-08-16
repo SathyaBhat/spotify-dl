@@ -35,7 +35,7 @@ def fetch_tracks(sp, playlist, user_id):
             results = sp.user_playlist_tracks(current_user_id, playlist, None,
                                               limit=50, offset=offset)
 
-        # log.debug('Got result json {}'.format(results))
+        log.debug('Got result json {}'.format(results))
         for item in results['items']:
             track = item['track']
             track_name = str(track['name'])
