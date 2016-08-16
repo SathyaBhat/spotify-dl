@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 from spotify_dl.scaffold import *
-from mutagen.mp3 import MP3
 import spotipy.util as util
 import youtube_dl
 import re
