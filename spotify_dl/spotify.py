@@ -21,7 +21,6 @@ def fetch_tracks(sp, playlist, user_id):
     """
     log.debug('Fetching saved tracks')
     offset = 0
-    songs = []
     songs_dict = {}
     if user_id is None:
         current_user_id = sp.current_user()['id']
@@ -43,15 +42,12 @@ def fetch_tracks(sp, playlist, user_id):
                       'songs list'.format(track['name'] + ' - ' +
                                           track['artists'][0]['name']))
             songs_dict.update({track_name: track_artist})
-            log.debug('dict ' + str(songs_dict))
-            songs.append(track['name'] + ' - ' + track['artists'][0]['name'])
             offset += 1
 
         if results.get('next') is None:
             log.info('All pages fetched, time to leave.'
                      ' Added {} songs in total'.format(offset))
             break
-    log.debug('dict2 ' + str(songs_dict))
     return songs_dict
 
 
