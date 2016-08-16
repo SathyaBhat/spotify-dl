@@ -71,11 +71,9 @@ def spotify_dl():
         songs = fetch_tracks(sp, args.playlist, args.user_id)
     url = []
     for song, artist in songs.items():
-        log.debug('SONG: ' + song + 'ARTIST: ' + artist)
         link = fetch_youtube_url(song + ' - ' + artist)
         if link:
             url.append((link, song, artist))
-            log.debug('URL ' + str(url))
 
     save_songs_to_file(url, download_directory)
     if args.download is True:
