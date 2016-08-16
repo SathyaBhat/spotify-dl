@@ -35,7 +35,7 @@ def fetch_tracks(sp, playlist, user_id):
             results = sp.user_playlist_tracks(current_user_id, playlist, None,
                                               limit=50, offset=offset)
 
-        log.debug('Got result json {}'.format(results))
+        # log.debug('Got result json {}'.format(results))
         for item in results['items']:
             track = item['track']
             track_name = str(track['name'])
@@ -75,6 +75,7 @@ def download_songs(info, download_directory):
     """
     for item in info:
         log.debug('Songs to download: {}'.format(item))
+<<<<<<< HEAD
         url_, track_, artist_ = item
         download_archive = download_directory + 'downloaded_songs.txt'
         outtmpl = download_directory + '%(title)s.%(ext)s'
@@ -82,6 +83,15 @@ def download_songs(info, download_directory):
             'format': 'bestaudio/best',
             'download_archive': download_archive,
             'outtmpl': outtmpl,
+=======
+        log.debug('ITEM: ' + str(item))
+        url_, track_, artist_ = item
+        log.debug('URL: ' + url_ + ' TRACK: ' + track_ + ' ARTIST: ' + artist_)
+        ydl_opts = {
+            'format': 'bestaudio/best',
+            'download_archive': download_directory + 'downloaded_songs.txt',
+            'outtmpl': download_directory + '%(title)s.%(ext)s',
+>>>>>>> d7b5f1bccf80d63d9acbd48f2283c7777aa6cd73
             'noplaylist': True,
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
@@ -121,7 +131,11 @@ def playlist_name(uri, sp):
     return name
 
 
+<<<<<<< HEAD
 def id3_tags(path, track_name, track_artist):
+=======
+def id3_tags(path):
+>>>>>>> d7b5f1bccf80d63d9acbd48f2283c7777aa6cd73
     audio = MP3(r'path')
     audio['title'] = u'track_name'
     audio['artist'] = u'track_artist'
