@@ -4,7 +4,8 @@ from os import getenv
 __all__ = ['log', 'check_for_tokens']
 
 logging.basicConfig(level=logging.INFO,
-               format='%(levelname)s: %(asctime)s - %(funcName)s - %(message)s')
+                    format='%(levelname)s: %(asctime)s -'
+                    ' %(funcName)s - %(message)s')
 
 log = logging.getLogger('sdl')
 
@@ -14,7 +15,8 @@ def check_for_tokens():
     CLIENT_ID = getenv('SPOTIPY_CLIENT_ID')
     CLIENT_SECRET = getenv('SPOTIPY_CLIENT_SECRET')
     REDIRECT_URL = getenv('SPOTIPY_REDIRECT_URI')
-    log.debug("Tokens fetched: {} {} {}".format(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL))
+    log.debug("Tokens fetched: {} {} {}".format(CLIENT_ID, CLIENT_SECRET,
+                                                REDIRECT_URL))
 
     if CLIENT_ID is None or CLIENT_SECRET is None or REDIRECT_URL is None:
         print('''
@@ -39,7 +41,8 @@ def check_for_tokens():
 
             export YOUTUBE_DEV_KEY='your-youtube-dev-key'
 
-            Generate the key from https://console.developers.google.com/apis/api/youtube/overview
+            Generate the key from
+            https://console.developers.google.com/apis/api/youtube/overview
             ''')
         return False
     return True
