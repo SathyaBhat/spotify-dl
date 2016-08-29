@@ -12,7 +12,7 @@ So I wrote this script which mimics that library, but instead of downloading fro
 Pre-requisite: You need Python 3+
 
 1. Install using pip 
-      `pip install spotify_dl`
+      `sudo pip install spotify_dl`
 2. Create your Spotify app & fetch the client id and client secret from [Spotify Developer Console](https://developer.spotify.com/my-applications/#!/applications). These keys then need to be assigned as `SPOTIPY_CLIENT_ID`, `SPOTIPY_CLIENT_SECRET` and `SPOTIPY_REDIRECT_URI` environment variables. 
 
     You can set environment variables in Linux like so:
