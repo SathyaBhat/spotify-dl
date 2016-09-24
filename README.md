@@ -1,5 +1,5 @@
 # spotify_dl
-Downloads songs from your Spotify My Music collection or any Spotify playlist
+Downloads songs from any Spotify playlist or from your "My Music" collection.
 
 
 #Tell me more!
@@ -12,7 +12,9 @@ So I wrote this script which mimics that library, but instead of downloading fro
 Pre-requisite: You need Python 3+
 
 1. Install using pip 
-      `sudo pip install spotify_dl`
+      `sudo pip3 install spotify_dl` 
+  (use `pip` if your distro natively provides Python 3)
+
 2. Create your Spotify app & fetch the client id and client secret from [Spotify Developer Console](https://developer.spotify.com/my-applications/#!/applications). These keys then need to be assigned as `SPOTIPY_CLIENT_ID`, `SPOTIPY_CLIENT_SECRET` and `SPOTIPY_REDIRECT_URI` environment variables. 
 
     You can set environment variables in Linux like so:
@@ -32,7 +34,7 @@ Pre-requisite: You need Python 3+
    - `playlist_id` is the id of the playlist where songs need to be downloaded. If this is skipped then it will download songs ftom your "My Music" collection
    - `user_name` is the user name who created the playlist. 
    - `download_directory` is the location where the songs must be downloaded to. 
-5. A first time run will require authentication; you will need to click on the URL prompted to authenticate. Once logged in, paste the URL back in
+5. A first time run will require authentication; you will need to click on the URL prompted to authenticate. Once logged in, paste the URL back in.
 6. To retrieve download songs as MP3, you will need to install ffmpeg. 
   - Linux users can get them by installing libav-tools by using apt-get (`sudo apt-get install -y libav-tools`) or a package manager which comes with your distro
   - Windows users can download FFMPEG pre-built binaries from [here](http://ffmpeg.zeranoe.com/builds/). Extract the file using [7-zip](http://7-zip.org/) to a foldrer and [add the folder to your PATH environment variable](http://www.wikihow.com/Install-FFmpeg-on-Windows) 
@@ -43,6 +45,7 @@ Pre-requisite: You need Python 3+
  - [shantanugoel](https://github.com/SathyaBhat/spotify-dl/issues?q=is%3Apr+is%3Aopen+author%3Ashantanugoel) for adding in [User playlist support](https://github.com/SathyaBhat/spotify-dl/pull/7)
  - [sildur](https://github.com/sildur) for adding any [user playlist support and other fixes](https://github.com/SathyaBhat/spotify-dl/pulls?q=is%3Apr+author%3Asildur+is%3Aclosed)
  - [avinassh](https://github.com/avinassh) for being a [Rockstar](https://github.com/avinassh/rockstar) and not teleporting over to my house to kill me when I innundated him with questions
+ - [doulwyi](https://github.com/doulwyi) for adding id3 tagging and ability to parse Spotify URI
 
 ##Issues, Feedback, Contact details
 Feel free to raise any bugs/issues under Github issues. Pull requests are also more than welcome. You can reach me on twitter at [@sathyabhat](https://twitter.com/sathyabhat) or drop a mail sathya at sathyasays dot com
