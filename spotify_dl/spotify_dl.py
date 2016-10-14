@@ -29,9 +29,6 @@ def spotify_dl():
     parser.add_argument('-u', '--user_id', action='store',
                         help='Specify the playlist owner\'s userid when it'
                         ' is different than your spotify userid')
-    parser.add_argument('-s', '--save', action='store_true',
-                        help='Create on Desktop a folder named'
-                        'with the Playlist Name')
     parser.add_argument('-i', '--uri', type=str, action='store',
                         nargs='*', help='Given a URI, download it.')
 
@@ -49,14 +46,10 @@ def spotify_dl():
     sp = spotipy.Spotify(auth=token)
 
     if args.output:
-        download_directory = args.output[0]
-        # Check whether directory has a trailing slash or not
-        if len(download_directory) >= 0 and download_directory[-1] != '/':
-            download_directory += '/'
-    elif args.save is True:
         uri = args.uri[0]
         playlist = playlist_name(uri, sp)
-        download_directory = os.path.expanduser('~/Desktop') + '/' + playlist
+        download_directory = args.output[0] + '/' +playlist
+        # Check whether directory has a trailing slash or not
         if len(download_directory) >= 0 and download_directory[-1] != '/':
             download_directory += '/'
         if not os.path.exists(download_directory):
