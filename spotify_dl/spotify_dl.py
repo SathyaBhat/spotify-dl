@@ -10,6 +10,7 @@ from spotify_dl.spotify import download_songs
 from spotify_dl.spotify import playlist_name
 from spotify_dl.youtube import fetch_youtube_url
 from spotify_dl.spotify import extract_user_and_playlist_from_uri
+from spotify_dl.spotify import get_playlist_name_from_id
 
 import spotipy
 import argparse
@@ -18,7 +19,7 @@ import argparse
 def spotify_dl():
     parser = argparse.ArgumentParser(prog='spotify_dl')
     parser.add_argument('-d', '--download', action='store_true',
-                        help='Download using youtube-dl')
+                        help='Download using youtube-dl', default=True)
     parser.add_argument('-p', '--playlist', action='store',
                         help='Download from playlist id instead of'
                         ' saved tracks')
@@ -45,9 +46,22 @@ def spotify_dl():
     token = authenticate()
     sp = spotipy.Spotify(auth=token)
 
+    if args.uri:
+        current_user_id, playlist_id = extract_user_and_playlist_from_uri(args.uri[0])
+    else:
+        if args.user_id is None:
+            current_user_id = sp.current_user()['id']
+        else:
+            current_user_id = args.user_id
+
     if args.output:
-        uri = args.uri[0]
-        playlist = playlist_name(uri, sp)
+        if args.uri:
+            uri = args.uri[0]
+            playlist = playlist_name(uri, sp)
+        else:
+            playlist = get_playlist_name_from_id(args.playlist, current_user_id, sp)
+        
+        log.info("Saving songs to: {}".format(playlist))
         download_directory = args.output[0] + '/' +playlist
         # Check whether directory has a trailing slash or not
         if len(download_directory) >= 0 and download_directory[-1] != '/':
@@ -58,10 +72,9 @@ def spotify_dl():
         download_directory = ''
 
     if args.uri:
-        user_id, playlist_id = extract_user_and_playlist_from_uri(args.uri[0])
-        songs = fetch_tracks(sp, playlist_id, user_id)
+        songs = fetch_tracks(sp, playlist_id, current_user_id)
     else:
-        songs = fetch_tracks(sp, args.playlist, args.user_id)
+        songs = fetch_tracks(sp, args.playlist, current_user_id)
     url = []
     for song, artist in songs.items():
         link = fetch_youtube_url(song + ' - ' + artist)

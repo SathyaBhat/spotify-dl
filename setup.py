@@ -6,12 +6,12 @@ try:
     import pypandoc
     long_description = pypandoc.convert('README.md', 'rst')
 except (IOError, ImportError):
-    long_description = open('README.rst').read()
+    long_description = open('README.rst', encoding="utf8").read()
 
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-version = '2.0.0'
+version = '2.1.0'
 
 setup(
     name='spotify_dl',

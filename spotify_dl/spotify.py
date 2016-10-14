@@ -110,6 +110,10 @@ def extract_user_and_playlist_from_uri(uri):
 
 def playlist_name(uri, sp):
     user_id, playlist_id = extract_user_and_playlist_from_uri(uri)
+    return get_playlist_name_from_id(playlist_id, user_id, sp)
+
+
+def get_playlist_name_from_id(playlist_id, user_id, sp):
     playlist = sp.user_playlist(user_id, playlist_id,
                                 fields="tracks, next, name")
     name = playlist['name']
