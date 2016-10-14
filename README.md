@@ -46,6 +46,7 @@ Pre-requisite: You need Python 3+
  - [sildur](https://github.com/sildur) for adding any [user playlist support and other fixes](https://github.com/SathyaBhat/spotify-dl/pulls?q=is%3Apr+author%3Asildur+is%3Aclosed)
  - [avinassh](https://github.com/avinassh) for being a [Rockstar](https://github.com/avinassh/rockstar) and not teleporting over to my house to kill me when I innundated him with questions
  - [doulwyi](https://github.com/doulwyi) for adding id3 tagging and ability to parse Spotify URI
+ - [Gowtham](https://github.com/HackToHell) for [create playlist in download](https://github.com/SathyaBhat/spotify-dl/pull/23) directory
 
 ##Issues, Feedback, Contact details
 Feel free to raise any bugs/issues under Github issues. Pull requests are also more than welcome. You can reach me on twitter at [@sathyabhat](https://twitter.com/sathyabhat) or drop a mail sathya at sathyasays dot com
