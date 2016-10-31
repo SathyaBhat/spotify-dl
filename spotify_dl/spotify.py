@@ -1,9 +1,11 @@
 from __future__ import unicode_literals
-from spotify_dl.scaffold import *
-import spotipy.util as util
-import youtube_dl
 import re
 import os
+
+import spotipy.util as util
+import youtube_dl
+
+from spotify_dl.scaffold import *
 
 
 def authenticate():
