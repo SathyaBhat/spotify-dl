@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import os
 from logging import DEBUG
+import argparse
+
+import spotipy
 
 from spotify_dl.scaffold import *
 from spotify_dl.spotify import authenticate
@@ -11,9 +14,6 @@ from spotify_dl.spotify import playlist_name
 from spotify_dl.youtube import fetch_youtube_url
 from spotify_dl.spotify import extract_user_and_playlist_from_uri
 from spotify_dl.spotify import get_playlist_name_from_id
-
-import spotipy
-import argparse
 
 
 def spotify_dl():
