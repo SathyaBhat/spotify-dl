@@ -60,9 +60,9 @@ def spotify_dl():
             playlist = playlist_name(uri, sp)
         else:
             playlist = get_playlist_name_from_id(args.playlist, current_user_id, sp)
-        
+
         log.info("Saving songs to: {}".format(playlist))
-        download_directory = args.output[0] + '/' +playlist
+        download_directory = args.output[0] + '/' + playlist
         # Check whether directory has a trailing slash or not
         if len(download_directory) >= 0 and download_directory[-1] != '/':
             download_directory += '/'
@@ -84,6 +84,7 @@ def spotify_dl():
     save_songs_to_file(url, download_directory)
     if args.download is True:
         download_songs(url, download_directory)
+
 
 if __name__ == '__main__':
     spotify_dl()
