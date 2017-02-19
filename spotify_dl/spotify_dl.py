@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import os
 from logging import DEBUG
+import argparse
+
+import spotipy
 
 from spotify_dl.scaffold import *
 from spotify_dl.spotify import authenticate
@@ -11,9 +14,6 @@ from spotify_dl.spotify import playlist_name
 from spotify_dl.youtube import fetch_youtube_url
 from spotify_dl.spotify import extract_user_and_playlist_from_uri
 from spotify_dl.spotify import get_playlist_name_from_id
-
-import spotipy
-import argparse
 
 
 def spotify_dl():
@@ -60,9 +60,9 @@ def spotify_dl():
             playlist = playlist_name(uri, sp)
         else:
             playlist = get_playlist_name_from_id(args.playlist, current_user_id, sp)
-        
+
         log.info("Saving songs to: {}".format(playlist))
-        download_directory = args.output[0] + '/' +playlist
+        download_directory = args.output[0] + '/' + playlist
         # Check whether directory has a trailing slash or not
         if len(download_directory) >= 0 and download_directory[-1] != '/':
             download_directory += '/'
@@ -84,6 +84,7 @@ def spotify_dl():
     save_songs_to_file(url, download_directory)
     if args.download is True:
         download_songs(url, download_directory)
+
 
 if __name__ == '__main__':
     spotify_dl()

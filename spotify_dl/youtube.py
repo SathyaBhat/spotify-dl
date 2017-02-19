@@ -1,10 +1,12 @@
+from os import getenv
+
 from googleapiclient.discovery import build
+
 from spotify_dl.constants import YOUTUBE_API_SERVICE_NAME
 from spotify_dl.constants import YOUTUBE_API_VERSION
 from spotify_dl.constants import VIDEO
 from spotify_dl.constants import YOUTUBE_VIDEO_URL
 from spotify_dl.scaffold import log
-from os import getenv
 
 
 def fetch_youtube_url(search_term):

@@ -29,6 +29,7 @@ Pre-requisite: You need Python 3+
 
 3. Create your YouTube API key & fetch the keys from [Google Developer Console](https://console.developers.google.com/apis/api/youtube/overview). Set the key as `YOUTUBE_DEV_KEY` environment variable as mentioned above.
 4. Run the script using `spotify_dl`. spotify_dl accepts different parameters, for more details run `spotify_dl -h`. 
+
    For most users `spotify_dl -i spotify_URI -o download_directory` should do where
    
    - `spotify_URI` is Spotify's unique identifier. You can get it from the 3-dot menu. 
