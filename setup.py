@@ -11,7 +11,7 @@ except (IOError, ImportError):
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-version = '2.1.0'
+version = '2.1.1'
 
 setup(
     name='spotify_dl',
