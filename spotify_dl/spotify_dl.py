@@ -14,6 +14,7 @@ from spotify_dl.spotify import playlist_name
 from spotify_dl.youtube import fetch_youtube_url
 from spotify_dl.spotify import extract_user_and_playlist_from_uri
 from spotify_dl.spotify import get_playlist_name_from_id
+from spotify_dl.constants import VERSION
 
 
 def spotify_dl():
@@ -25,6 +26,8 @@ def spotify_dl():
                         ' saved tracks')
     parser.add_argument('-V', '--verbose', action='store_true',
                         help='Show more information on what''s happening.')
+    parser.add_argument('-v', '--version', action='store_true',
+                        help='Shows current version of the program')
     parser.add_argument('-o', '--output', type=str, action='store',
                         nargs='*', help='Specify download directory.')
     parser.add_argument('-u', '--user_id', action='store',
@@ -35,13 +38,18 @@ def spotify_dl():
 
     args = parser.parse_args()
 
+    if args.version:
+        print("spotify_dl v{}".format(VERSION))
+        exit(0)
+
     if args.verbose:
         log.setLevel(DEBUG)
 
     log.info('Starting spotify_dl')
     log.debug('setting debug mode on spotify_dl')
+    
     if not check_for_tokens():
-        exit()
+        exit(1)
 
     token = authenticate()
     sp = spotipy.Spotify(auth=token)
