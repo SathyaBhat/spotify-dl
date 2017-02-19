@@ -14,7 +14,8 @@ def fetch_youtube_url(search_term):
         and return the list of URLs"""
     YOUTUBE_DEV_KEY = getenv('YOUTUBE_DEV_KEY')
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-                    developerKey=YOUTUBE_DEV_KEY)
+                    developerKey=YOUTUBE_DEV_KEY,
+                    cache_discovery=False)
     log.info(u"Searching for {}".format(search_term))
     search_response = youtube.search().list(q=search_term,
                                             part='id, snippet').execute()
