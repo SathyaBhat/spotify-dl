@@ -38,12 +38,21 @@ def fetch_tracks(sp, playlist, user_id):
         log.debug('Got result json {}'.format(results))
         for item in results['items']:
             track = item['track']
-            track_name = str(track['name'])
-            track_artist = str(track['artists'][0]['name'])
+
+            if track['name'] is not None:
+                track_name = str(track['name'])
+
+            if track['artists'][0]['name'] is not None:
+                track_artist = str(track['artists'][0]['name'])
+
             log.debug('Appending {} to'
                       'songs list'.format(track['name'] + ' - ' +
                                           track['artists'][0]['name']))
-            songs_dict.update({track_name: track_artist})
+            if (track['name'] is None) or (track['artists'][0]['name'] is None):
+                log.warning("Track/artist name for {} not found, skipping").format(track)
+            else:
+                songs_dict.update({track_name: track_artist})
+
             offset += 1
 
         if results.get('next') is None:
