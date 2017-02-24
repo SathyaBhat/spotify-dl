@@ -35,29 +35,24 @@ def fetch_tracks(sp, playlist, user_id):
             results = sp.user_playlist_tracks(current_user_id, playlist, None,
                                               limit=50, offset=offset)
 
-        log.debug('Got result json {}'.format(results))
+        log.debug('Got result json %s', results)
         for item in results['items']:
             track = item['track']
 
-            if track['name'] is not None:
+            if track is not None:
                 track_name = str(track['name'])
-
-            if track['artists'][0]['name'] is not None:
                 track_artist = str(track['artists'][0]['name'])
-
-            log.debug('Appending {} to'
-                      'songs list'.format(track['name'] + ' - ' +
-                                          track['artists'][0]['name']))
-            if (track['name'] is None) or (track['artists'][0]['name'] is None):
-                log.warning("Track/artist name for {} not found, skipping").format(track)
-            else:
+                log.debug('Appending %s to'
+                        'songs list', (track['name'] + ' - ' + track['artists'][0]['name']))
                 songs_dict.update({track_name: track_artist})
+            else:
+                log.warning("Track/artist name for %s not found, skipping", track)
 
             offset += 1
 
         if results.get('next') is None:
             log.info('All pages fetched, time to leave.'
-                     ' Added {} songs in total'.format(offset))
+                     ' Added %s songs in total', offset)
             break
     return songs_dict
 
@@ -80,7 +75,7 @@ def download_songs(info, download_directory):
        current directory or download_directory, is it is passed
     """
     for item in info:
-        log.debug('Songs to download: {}'.format(item))
+        log.debug('Songs to download: %s', item)
         url_, track_, artist_ = item
         download_archive = download_directory + 'downloaded_songs.txt'
         outtmpl = download_directory + '%(title)s.%(ext)s'
