@@ -38,7 +38,10 @@ def fetch_tracks(sp, playlist, user_id):
         log.debug('Got result json {}'.format(results))
         for item in results['items']:
             track = item['track']
-            track_name = str(track['name'])
+            try:
+                track_name = str(track['name'])
+            except TypeError:
+                continue
             track_artist = str(track['artists'][0]['name'])
             log.debug('Appending {} to'
                       'songs list'.format(track['name'] + ' - ' +
