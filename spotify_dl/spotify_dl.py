@@ -35,6 +35,11 @@ def spotify_dl():
                         ' is different than your spotify userid')
     parser.add_argument('-i', '--uri', type=str, action='store',
                         nargs='*', help='Given a URI, download it.')
+    parser.add_argument('-f', '--format_str', type=str, action='store',
+                        nargs='*', help='Specify youtube-dl format string.',
+                        default=['bestaudio/best'])
+    parser.add_argument('-m', '--mp3', action='store_true',
+                        help='Convert downloaded songs to mp3')
 
     args = parser.parse_args()
 
@@ -91,7 +96,7 @@ def spotify_dl():
 
     save_songs_to_file(url, download_directory)
     if args.download is True:
-        download_songs(url, download_directory)
+        download_songs(url, download_directory, args.format_str[0], args.mp3)
 
 
 if __name__ == '__main__':
