@@ -69,7 +69,7 @@ def save_songs_to_file(songs, directory):
     f.close()
 
 
-def download_songs(info, download_directory):
+def download_songs(info, download_directory, format_string, convert_to_mp3):
     """
     Downloads songs from the YouTube URL passed to either
        current directory or download_directory, is it is passed
@@ -80,19 +80,22 @@ def download_songs(info, download_directory):
         download_archive = download_directory + 'downloaded_songs.txt'
         outtmpl = download_directory + '%(title)s.%(ext)s'
         ydl_opts = {
-            'format': 'bestaudio/best',
+            'format': format_string,
             'download_archive': download_archive,
             'outtmpl': outtmpl,
             'noplaylist': True,
             'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
-            },
-                {'key': 'FFmpegMetadata'},
+                'key': 'FFmpegMetadata'},
             ],
             'postprocessor_args': ['-metadata', 'title=' + str(track_)],
         }
+        if convert_to_mp3:
+            mp3_postprocess_opts = {
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192',
+            }
+            ydl_opts['postprocessors'].append(mp3_postprocess_opts.copy())
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             try:
