@@ -38,8 +38,8 @@ def spotify_dl():
     parser.add_argument('-f', '--format_str', type=str, action='store',
                         nargs='*', help='Specify youtube-dl format string.',
                         default=['bestaudio/best'])
-    parser.add_argument('-m', '--mp3', action='store_true',
-                        help='Convert downloaded songs to mp3')
+    parser.add_argument('-m', '--skip_mp3', action='store_true',
+                        help='Don\'t convert downloaded songs to mp3')
 
     args = parser.parse_args()
 
@@ -52,7 +52,7 @@ def spotify_dl():
 
     log.info('Starting spotify_dl')
     log.debug('setting debug mode on spotify_dl')
-    
+
     if not check_for_tokens():
         exit(1)
 
@@ -96,7 +96,7 @@ def spotify_dl():
 
     save_songs_to_file(url, download_directory)
     if args.download is True:
-        download_songs(url, download_directory, args.format_str[0], args.mp3)
+        download_songs(url, download_directory, args.format_str[0], args.skip_mp3)
 
 
 if __name__ == '__main__':

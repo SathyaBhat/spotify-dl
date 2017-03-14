@@ -69,7 +69,7 @@ def save_songs_to_file(songs, directory):
     f.close()
 
 
-def download_songs(info, download_directory, format_string, convert_to_mp3):
+def download_songs(info, download_directory, format_string, skip_mp3):
     """
     Downloads songs from the YouTube URL passed to either
        current directory or download_directory, is it is passed
@@ -89,7 +89,7 @@ def download_songs(info, download_directory, format_string, convert_to_mp3):
             ],
             'postprocessor_args': ['-metadata', 'title=' + str(track_)],
         }
-        if convert_to_mp3:
+        if not skip_mp3:
             mp3_postprocess_opts = {
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
