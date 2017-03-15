@@ -84,10 +84,8 @@ def download_songs(info, download_directory, format_string, skip_mp3):
             'download_archive': download_archive,
             'outtmpl': outtmpl,
             'noplaylist': True,
-            'postprocessors': [{
-                'key': 'FFmpegMetadata'},
-            ],
-            'postprocessor_args': ['-metadata', 'title=' + str(track_)],
+            'postprocessor_args': ['-metadata', 'title=' + str(track_),
+                                   '-metadata', 'artist=' + str(artist_)],
         }
         if not skip_mp3:
             mp3_postprocess_opts = {
@@ -95,7 +93,7 @@ def download_songs(info, download_directory, format_string, skip_mp3):
                 'preferredcodec': 'mp3',
                 'preferredquality': '192',
             }
-            ydl_opts['postprocessors'].append(mp3_postprocess_opts.copy())
+            ydl_opts['postprocessors'] = [mp3_postprocess_opts.copy()]
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             try:
