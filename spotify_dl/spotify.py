@@ -93,7 +93,7 @@ def download_songs(info, download_directory, format_string, skip_mp3):
                 'preferredcodec': 'mp3',
                 'preferredquality': '192',
             }
-            ydl_opts['postprocessors'].append(mp3_postprocess_opts.copy())
+            ydl_opts['postprocessors'] = [mp3_postprocess_opts.copy()]
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             try:
