@@ -19,7 +19,7 @@ URLs which you can then plug into
 `youtube-dl <https://rg3.github.io/youtube-dl/>`__
 
 How do I get this thing running?
---------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Pre-requisite: You need Python 3+
 
@@ -54,8 +54,10 @@ Pre-requisite: You need Python 3+
    Set the key as ``YOUTUBE_DEV_KEY`` environment variable as mentioned
    above.
 4. Run the script using ``spotify_dl``. spotify\_dl accepts different
-   parameters, for more details run ``spotify_dl -h``. For most users
-   ``spotify_dl -i spotify_URI -o download_directory`` should do where
+   parameters, for more details run ``spotify_dl -h``.
+
+For most users ``spotify_dl -i spotify_URI -o download_directory``
+should do where
 
 -  ``spotify_URI`` is Spotify's unique identifier. You can get it from
    the 3-dot menu.
@@ -85,6 +87,8 @@ also work
    on the URL prompted to authenticate. Once logged in, paste the URL
    back in.
 6. To retrieve download songs as MP3, you will need to install ffmpeg.
+   If you prefer to skip MP3 conversion, pass ``-m`` or ``--skip_mp3``
+   as a parameter when running the script
 
 -  Linux users can get them by installing libav-tools by using apt-get
    (``sudo apt-get install -y libav-tools``) or a package manager which
@@ -96,15 +100,18 @@ also work
    variable <http://www.wikihow.com/Install-FFmpeg-on-Windows>`__
 
 Credits
--------
+~~~~~~~
 
 -  `rhnvrm <https://github.com/rhnvrm>`__ for `adding in
    youtube-dl <https://github.com/SathyaBhat/spotify-dl/pull/1>`__
 -  `mr-karan <https://github.com/mr-karan>`__ for `adding save to
    directory <https://github.com/SathyaBhat/spotify-dl/pull/6>`__
 -  `shantanugoel <https://github.com/SathyaBhat/spotify-dl/issues?q=is%3Apr+is%3Aopen+author%3Ashantanugoel>`__
-   for adding in `User playlist
-   support <https://github.com/SathyaBhat/spotify-dl/pull/7>`__
+   for adding in `User
+   playlist <https://github.com/SathyaBhat/spotify-dl/pull/7>`__, [skip
+   MP3 conversion]https://github.com/SathyaBhat/spotify-dl/pull/34() and
+   `Ability to use custom format string
+   support <https://github.com/SathyaBhat/spotify-dl/pull/34>`__
 -  `sildur <https://github.com/sildur>`__ for adding any `user playlist
    support and other
    fixes <https://github.com/SathyaBhat/spotify-dl/pulls?q=is%3Apr+author%3Asildur+is%3Aclosed>`__
