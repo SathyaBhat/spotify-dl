@@ -59,4 +59,4 @@ Pre-requisite: You need Python 3+
  - [Gowtham](https://github.com/HackToHell) for [create playlist in download](https://github.com/SathyaBhat/spotify-dl/pull/23) directory
 
 ## Issues, Feedback, Contact details
-Feel free to raise any bugs/issues under Github issues. Pull requests are also more than welcome. You can reach me on twitter at [@sathyabhat](https://twitter.com/sathyabhat) or drop a mail sathya at sathyasays dot com
+Feel free to raise any bugs/issues under Github issues. Pull requests are also more than welcome. You can reach me on twitter at [@sathyabhat](https://twitter.com/sathyabhat) or drop an email [sathya@sathyasays.com](mailto:sathya@sathyasays.com)
