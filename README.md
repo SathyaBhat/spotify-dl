@@ -7,7 +7,7 @@ I wanted an easy way to grab the songs present in my library so I can download i
 
 So I wrote this script which mimics that library, but instead of downloading from grooveshark, it provides you with a file of youtube URLs which you can then plug into [youtube-dl](https://rg3.github.io/youtube-dl/)
 
-###How do I get this thing running?
+### How do I get this thing running?
 
 Pre-requisite: You need Python 3+
 
