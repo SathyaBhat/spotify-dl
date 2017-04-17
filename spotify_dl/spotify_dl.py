@@ -40,6 +40,7 @@ def spotify_dl():
                         default=['bestaudio/best'])
     parser.add_argument('-m', '--skip_mp3', action='store_true',
                         help='Don\'t convert downloaded songs to mp3')
+    parser.add_argument("--url", action="store_true", help="Convert playlist link to uri first")
 
     args = parser.parse_args()
 
@@ -51,7 +52,7 @@ def spotify_dl():
         log.setLevel(DEBUG)
 
     log.info('Starting spotify_dl')
-    log.debug('setting debug mode on spotify_dl')
+    log.debug('Setting debug mode on spotify_dl')
 
     if not check_for_tokens():
         exit(1)
@@ -59,6 +60,18 @@ def spotify_dl():
     token = authenticate()
     sp = spotipy.Spotify(auth=token)
 
+    if args.url:
+        url = args.uri[0]
+        try:
+            url = url.split("http://open.spotify.com/")[1]
+        except:
+            url = url.split("https://open.spotify.com/")[1]
+        url = url.split("/")
+        uri = "spotify"
+        for i in range(len(url)):
+            uri = uri + ":" + url[i]
+        args.uri = []
+        args.uri.append(uri)
     if args.uri:
         current_user_id, playlist_id = extract_user_and_playlist_from_uri(args.uri[0])
     else:
