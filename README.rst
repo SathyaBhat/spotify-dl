@@ -56,21 +56,22 @@ Pre-requisite: You need Python 3+
 4. Run the script using ``spotify_dl``. spotify\_dl accepts different
    parameters, for more details run ``spotify_dl -h``.
 
-For most users ``spotify_dl -i spotify_URI -o download_directory``
-should do where
+For most users
+``spotify_dl -l spotify_playlist_link -o download_directory`` should do
+where
 
--  ``spotify_URI`` is Spotify's unique identifier. You can get it from
-   the 3-dot menu.
+-  ``spotify_playlist_link`` is a link to Spotify's playlist. You can
+   get it from the 3-dot menu.
 
-.. figure:: https://cloud.githubusercontent.com/assets/25424/23104884/35962330-f6fc-11e6-91c6-2f0ce074b27c.png
+.. figure:: https://cloud.githubusercontent.com/assets/25424/25472453/f256c94a-2b48-11e7-8f91-7bfa1ce232c2.png
    :alt: image
 
    image
 
-If the Spotify URI is skipped then it will download songs from your "My
-Music" collection - ``download_directory`` is the location where the
-songs must be downloaded to. If you give a ``.`` then it will download
-to the current directory.
+If the Spotify playlist link is skipped then it will download songs from
+your "My Music" collection - ``download_directory`` is the location
+where the songs must be downloaded to. If you give a ``.`` then it will
+download to the current directory.
 
 Alternatively,
 ``spotify_dl -p playlist_id -u user_name -o download_directory`` will
@@ -106,10 +107,10 @@ Credits
    youtube-dl <https://github.com/SathyaBhat/spotify-dl/pull/1>`__
 -  `mr-karan <https://github.com/mr-karan>`__ for `adding save to
    directory <https://github.com/SathyaBhat/spotify-dl/pull/6>`__
--  `shantanugoel <https://github.com/SathyaBhat/spotify-dl/issues?q=is%3Apr+is%3Aopen+author%3Ashantanugoel>`__
-   for adding in `User
-   playlist <https://github.com/SathyaBhat/spotify-dl/pull/7>`__, [skip
-   MP3 conversion]https://github.com/SathyaBhat/spotify-dl/pull/34() and
+-  `shantanugoel <https://github.com/shantanugoel>`__ for adding in
+   `User playlist <https://github.com/SathyaBhat/spotify-dl/pull/7>`__,
+   `skip MP3
+   conversion <https://github.com/SathyaBhat/spotify-dl/pull/34>`__ and
    `Ability to use custom format string
    support <https://github.com/SathyaBhat/spotify-dl/pull/34>`__
 -  `sildur <https://github.com/sildur>`__ for adding any `user playlist
@@ -130,5 +131,5 @@ Issues, Feedback, Contact details
 
 Feel free to raise any bugs/issues under Github issues. Pull requests
 are also more than welcome. You can reach me on twitter at
-[@sathyabhat](https://twitter.com/sathyabhat) or drop a mail sathya at
-sathyasays dot com
+[@sathyabhat](https://twitter.com/sathyabhat) or drop an email
+sathya@sathyasays.com

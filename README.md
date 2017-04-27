@@ -30,13 +30,13 @@ Pre-requisite: You need Python 3+
 3. Create your YouTube API key & fetch the keys from [Google Developer Console](https://console.developers.google.com/apis/api/youtube/overview). Set the key as `YOUTUBE_DEV_KEY` environment variable as mentioned above.
 4. Run the script using `spotify_dl`. spotify_dl accepts different parameters, for more details run `spotify_dl -h`. 
 
-   For most users `spotify_dl -i spotify_URI -o download_directory` should do where
+   For most users `spotify_dl -l spotify_playlist_link -o download_directory` should do where
    
-   - `spotify_URI` is Spotify's unique identifier. You can get it from the 3-dot menu. 
+   - `spotify_playlist_link` is a link to Spotify's playlist. You can get it from the 3-dot menu. 
 
-   ![image](https://cloud.githubusercontent.com/assets/25424/23104884/35962330-f6fc-11e6-91c6-2f0ce074b27c.png)
+   ![image](https://cloud.githubusercontent.com/assets/25424/25472453/f256c94a-2b48-11e7-8f91-7bfa1ce232c2.png)
 
-   If the Spotify URI is skipped then it will download songs from your "My Music" collection 
+   If the Spotify playlist link is skipped then it will download songs from your "My Music" collection 
    - `download_directory` is the location where the songs must be downloaded to. If you give a `.` then it will download to the current directory.
    
    Alternatively, `spotify_dl -p playlist_id -u user_name -o download_directory` will also work
