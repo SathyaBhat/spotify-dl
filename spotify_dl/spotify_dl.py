@@ -2,7 +2,7 @@
 import os
 from logging import DEBUG
 import argparse
-
+import json
 import spotipy
 
 from spotify_dl.scaffold import *
@@ -18,99 +18,105 @@ from spotify_dl.constants import VERSION
 
 
 def spotify_dl():
-    parser = argparse.ArgumentParser(prog='spotify_dl')
-    parser.add_argument('-d', '--download', action='store_true',
-                        help='Download using youtube-dl', default=True)
-    parser.add_argument('-p', '--playlist', action='store',
-                        help='Download from playlist id instead of'
-                        ' saved tracks')
-    parser.add_argument('-V', '--verbose', action='store_true',
-                        help='Show more information on what''s happening.')
-    parser.add_argument('-v', '--version', action='store_true',
-                        help='Shows current version of the program')
-    parser.add_argument('-o', '--output', type=str, action='store',
-                        nargs='*', help='Specify download directory.')
-    parser.add_argument('-u', '--user_id', action='store',
-                        help='Specify the playlist owner\'s userid when it'
-                        ' is different than your spotify userid')
-    parser.add_argument('-i', '--uri', type=str, action='store',
-                        nargs='*', help='Given a URI, download it.')
-    parser.add_argument('-f', '--format_str', type=str, action='store',
-                        nargs='*', help='Specify youtube-dl format string.',
-                        default=['bestaudio/best'])
-    parser.add_argument('-m', '--skip_mp3', action='store_true',
-                        help='Don\'t convert downloaded songs to mp3')
-    parser.add_argument("--url", action="store_true", help="Convert playlist link to uri first")
+	parser = argparse.ArgumentParser(prog='spotify_dl')
+	parser.add_argument('-d', '--download', action='store_true',
+						help='Download using youtube-dl', default=True)
+	parser.add_argument('-p', '--playlist', action='store',
+						help='Download from playlist id instead of'
+						' saved tracks')
+	parser.add_argument('-V', '--verbose', action='store_true',
+						help='Show more information on what''s happening.')
+	parser.add_argument('-v', '--version', action='store_true',
+						help='Shows current version of the program')
+	parser.add_argument('-o', '--output', type=str, action='store',
+						nargs='*', help='Specify download directory.')
+	parser.add_argument('-u', '--user_id', action='store',
+						help='Specify the playlist owner\'s userid when it'
+						' is different than your spotify userid')
+	parser.add_argument('-i', '--uri', type=str, action='store',
+						nargs='*', help='Given a URI, download it.')
+	parser.add_argument('-f', '--format_str', type=str, action='store',
+						nargs='*', help='Specify youtube-dl format string.',
+						default=['bestaudio/best'])
+	parser.add_argument('-m', '--skip_mp3', action='store_true',
+						help='Don\'t convert downloaded songs to mp3')
+	parser.add_argument('-l', '--url', action="store",
+						help="Spotify Playlist link URL")
 
-    args = parser.parse_args()
+	args = parser.parse_args()
 
-    if args.version:
-        print("spotify_dl v{}".format(VERSION))
-        exit(0)
+	if args.version:
+		print("spotify_dl v{}".format(VERSION))
+		exit(0)
 
-    if args.verbose:
-        log.setLevel(DEBUG)
+	if os.path.isfile(os.path.expanduser('~/.spotify_dl_settings')):
+		with open(os.path.expanduser('~/.spotify_dl_settings')) as file:
+			config = json.loads(file.read())
 
-    log.info('Starting spotify_dl')
-    log.debug('Setting debug mode on spotify_dl')
+		for key in config:
+			value = config[key]
+			if value and (value.lower() == 'true' or value.lower() == 't'):
+				setattr(args, key, True)
+			else:
+				setattr(args, key, value)
 
-    if not check_for_tokens():
-        exit(1)
+	if args.verbose:
+		log.setLevel(DEBUG)
 
-    token = authenticate()
-    sp = spotipy.Spotify(auth=token)
+	log.info('Starting spotify_dl')
+	log.debug('Setting debug mode on spotify_dl')
 
-    if args.url:
-        url = args.uri[0]
-        try:
-            url = url.split("http://open.spotify.com/")[1]
-        except:
-            url = url.split("https://open.spotify.com/")[1]
-        url = url.split("/")
-        uri = "spotify"
-        for i in range(len(url)):
-            uri = uri + ":" + url[i]
-        args.uri = []
-        args.uri.append(uri)
-    if args.uri:
-        current_user_id, playlist_id = extract_user_and_playlist_from_uri(args.uri[0])
-    else:
-        if args.user_id is None:
-            current_user_id = sp.current_user()['id']
-        else:
-            current_user_id = args.user_id
+	if not check_for_tokens():
+		exit(1)
 
-    if args.output:
-        if args.uri:
-            uri = args.uri[0]
-            playlist = playlist_name(uri, sp)
-        else:
-            playlist = get_playlist_name_from_id(args.playlist, current_user_id, sp)
+	token = authenticate()
+	sp = spotipy.Spotify(auth=token)
+	log.debug('Arguments: {}'.format(args))
+	if args.url is not None:
+		url = args.url.split("open.spotify.com/")[1].split("/")
+		uri = ":".join(url)
+		uri = "spotify:" + uri
+		args.uri = []
+		args.uri.append(uri)
+	if args.uri:
+		current_user_id, playlist_id = extract_user_and_playlist_from_uri(args.uri[0])
+	else:
+		if args.user_id is None:
+			current_user_id = sp.current_user()['id']
+		else:
+			current_user_id = args.user_id
 
-        log.info("Saving songs to: {}".format(playlist))
-        download_directory = args.output[0] + '/' + playlist
-        # Check whether directory has a trailing slash or not
-        if len(download_directory) >= 0 and download_directory[-1] != '/':
-            download_directory += '/'
-        if not os.path.exists(download_directory):
-            os.makedirs(download_directory)
-    else:
-        download_directory = ''
+	if args.output:
+		if args.uri:
+			uri = args.uri[0]
+			playlist = playlist_name(uri, sp)
+		else:
+			playlist = get_playlist_name_from_id(args.playlist, current_user_id, sp)
 
-    if args.uri:
-        songs = fetch_tracks(sp, playlist_id, current_user_id)
-    else:
-        songs = fetch_tracks(sp, args.playlist, current_user_id)
-    url = []
-    for song, artist in songs.items():
-        link = fetch_youtube_url(song + ' - ' + artist)
-        if link:
-            url.append((link, song, artist))
+		log.info("Saving songs to: {}".format(playlist))
+		download_directory = args.output + '/' + playlist
+		# Check whether directory has a trailing slash or not
+		if len(download_directory) >= 0 and download_directory[-1] != '/':
+			download_directory += '/'
+		if not os.path.exists(download_directory):
+			os.makedirs(download_directory)
+	else:
+		download_directory = ''
 
-    save_songs_to_file(url, download_directory)
-    if args.download is True:
-        download_songs(url, download_directory, args.format_str[0], args.skip_mp3)
+	if args.uri:
+		songs = fetch_tracks(sp, playlist_id, current_user_id)
+	else:
+		songs = fetch_tracks(sp, args.playlist, current_user_id)
+	url = []
+	for song, artist in songs.items():
+		link = fetch_youtube_url(song + ' - ' + artist)
+		if link:
+			url.append((link, song, artist))
+
+	save_songs_to_file(url, download_directory)
+	if args.download is True:
+		download_songs(url, download_directory, args.format_str[0], args.skip_mp3)
 
 
 if __name__ == '__main__':
-    spotify_dl()
+	spotify_dl()
