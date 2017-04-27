@@ -60,8 +60,7 @@ def spotify_dl():
 
     token = authenticate()
     sp = spotipy.Spotify(auth=token)
-    log.info('Arguments: {}'.format(args))
-    log.info('URL: {} {}'.format(args.url, args.url[0]))
+    log.debug('Arguments: {}'.format(args))
     if args.url is not None:
         url = args.url.split("open.spotify.com/")[1].split("/")
         uri = ":".join(url)
