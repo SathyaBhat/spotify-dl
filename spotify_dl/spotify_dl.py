@@ -53,8 +53,7 @@ def spotify_dl():
         with open(os.path.expanduser('~/.spotify_dl_settings')) as file:
             config = json.loads(file.read())
 
-        for key in config:
-            value = config[key]
+        for key,value in config.items():
             if value and (value.lower() == 'true' or value.lower() == 't'):
                 setattr(args, key, True)
             else:
