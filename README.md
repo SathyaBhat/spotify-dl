@@ -48,7 +48,15 @@ Pre-requisite: You need Python 3+
 6. To retrieve download songs as MP3, you will need to install ffmpeg. If you prefer to skip MP3 conversion, pass `-m` or `--skip_mp3` as a parameter when running the script
   - Linux users can get them by installing libav-tools by using apt-get (`sudo apt-get install -y libav-tools`) or a package manager which comes with your distro
   - Windows users can download FFMPEG pre-built binaries from [here](http://ffmpeg.zeranoe.com/builds/). Extract the file using [7-zip](http://7-zip.org/) to a foldrer and [add the folder to your PATH environment variable](http://www.wikihow.com/Install-FFmpeg-on-Windows) 
-
+### How do I set defaults?
+You can set defaults per user by creating a file at `~/.spotify_dl_settings`. Create a key with value for every argument you want a default for. Example:
+``` json
+{
+      "output" : "/home/foo/spotify-dl-output"
+      , "verbose" : "true"
+      , "skip_mp3" : "t"
+}
+```
 ### Credits
  - [rhnvrm](https://github.com/rhnvrm) for [adding in youtube-dl](https://github.com/SathyaBhat/spotify-dl/pull/1)
  - [mr-karan](https://github.com/mr-karan) for [adding save to directory](https://github.com/SathyaBhat/spotify-dl/pull/6)
