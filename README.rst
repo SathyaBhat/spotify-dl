@@ -100,6 +100,21 @@ also work
    your PATH environment
    variable <http://www.wikihow.com/Install-FFmpeg-on-Windows>`__
 
+How do I set defaults?
+~~~~~~~~~~~~~~~~~~~~~~
+
+You can set defaults per user by creating a file at
+``~/.spotify_dl_settings``. Create a key with value for every argument
+you want a default for. Example:
+
+.. code:: json
+
+    {
+          "output" : "/home/foo/spotify-dl-output"
+          , "verbose" : "true"
+          , "skip_mp3" : "t"
+    }
+
 Credits
 ~~~~~~~
 
@@ -125,6 +140,10 @@ Credits
 -  `Gowtham <https://github.com/HackToHell>`__ for `create playlist in
    download <https://github.com/SathyaBhat/spotify-dl/pull/23>`__
    directory
+-  `alvierahman90 <https://github.com/alvierahman90>`__ for `config file
+   support <https://github.com/SathyaBhat/spotify-dl/pull/42>`__ and
+   `Spotify playlist URL
+   support <https://github.com/SathyaBhat/spotify-dl/pull/41>`__
 
 Issues, Feedback, Contact details
 ---------------------------------
