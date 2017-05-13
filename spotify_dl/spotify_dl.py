@@ -2,7 +2,7 @@
 import os
 from logging import DEBUG
 import argparse
-
+import json
 import spotipy
 
 from spotify_dl.scaffold import *
@@ -49,6 +49,16 @@ def spotify_dl():
         print("spotify_dl v{}".format(VERSION))
         exit(0)
 
+    if os.path.isfile(os.path.expanduser('~/.spotify_dl_settings')):
+        with open(os.path.expanduser('~/.spotify_dl_settings')) as file:
+            config = json.loads(file.read())
+
+        for key,value in config.items():
+            if value and (value.lower() == 'true' or value.lower() == 't'):
+                setattr(args, key, True)
+            else:
+                setattr(args, key, value)
+
     if args.verbose:
         log.setLevel(DEBUG)
 
@@ -83,7 +93,7 @@ def spotify_dl():
             playlist = get_playlist_name_from_id(args.playlist, current_user_id, sp)
 
         log.info("Saving songs to: {}".format(playlist))
-        download_directory = args.output[0] + '/' + playlist
+        download_directory = args.output + '/' + playlist
         # Check whether directory has a trailing slash or not
         if len(download_directory) >= 0 and download_directory[-1] != '/':
             download_directory += '/'

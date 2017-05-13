@@ -1,0 +1,5 @@
+{
+	"output" : "/home/foo/spotify-dl-output"
+	, "verbose" : "true"
+	, "skip_mp3" : "t"
+}
