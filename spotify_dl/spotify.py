@@ -64,7 +64,7 @@ def save_songs_to_file(songs, directory):
        to be downloaded from youtube-dl
     """
 
-    with open(os.path.join(directory, 'songs.txt'), 'w') as f:
+    with open(os.path.join(directory, 'songs.txt'), 'w', encoding="utf-8") as f:
         f.write(' '.join(str(songs)))
     f.close()
 
