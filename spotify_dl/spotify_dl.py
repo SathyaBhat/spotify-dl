@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import re
 from logging import DEBUG
 import argparse
 import json
@@ -29,21 +30,23 @@ def spotify_dl():
     parser.add_argument('-v', '--version', action='store_true',
                         help='Shows current version of the program')
     parser.add_argument('-o', '--output', type=str, action='store',
-                        nargs='*', help='Specify download directory.')
+                        help='Specify download directory.')
     parser.add_argument('-u', '--user_id', action='store',
                         help='Specify the playlist owner\'s userid when it'
                         ' is different than your spotify userid')
     parser.add_argument('-i', '--uri', type=str, action='store',
                         nargs='*', help='Given a URI, download it.')
     parser.add_argument('-f', '--format_str', type=str, action='store',
-                        nargs='*', help='Specify youtube-dl format string.',
-                        default=['bestaudio/best'])
+                        help='Specify youtube-dl format string.',
+                        default='bestaudio/best')
     parser.add_argument('-m', '--skip_mp3', action='store_true',
                         help='Don\'t convert downloaded songs to mp3')
     parser.add_argument('-l', '--url', action="store",
                         help="Spotify Playlist link URL")
 
     args = parser.parse_args()
+
+    playlist_url_pattern = re.compile(r'^https://open.spotify.com/(.+)$')
 
     if args.version:
         print("spotify_dl v{}".format(VERSION))
@@ -71,12 +74,13 @@ def spotify_dl():
     token = authenticate()
     sp = spotipy.Spotify(auth=token)
     log.debug('Arguments: {}'.format(args))
-    if args.url is not None:
-        url = args.url.split("open.spotify.com/")[1].split("/")
-        uri = ":".join(url)
-        uri = "spotify:" + uri
-        args.uri = []
-        args.uri.append(uri)
+
+    url_match = playlist_url_pattern.match(args.url)
+    if args.url and url_match and len(url_match.groups()) > 0:
+        uri = "spotify:" + url_match.groups()[0].replace('/', ':')
+        args.uri = [uri]
+    else:
+        raise Exception('Invalid playlist URL ')
     if args.uri:
         current_user_id, playlist_id = extract_user_and_playlist_from_uri(args.uri[0])
     else:
@@ -93,10 +97,8 @@ def spotify_dl():
             playlist = get_playlist_name_from_id(args.playlist, current_user_id, sp)
 
         log.info("Saving songs to: {}".format(playlist))
-        download_directory = args.output + '/' + playlist
-        # Check whether directory has a trailing slash or not
-        if len(download_directory) >= 0 and download_directory[-1] != '/':
-            download_directory += '/'
+        download_directory = os.path.join(args.output, playlist)
+
         if not os.path.exists(download_directory):
             os.makedirs(download_directory)
     else:
@@ -114,7 +116,7 @@ def spotify_dl():
 
     save_songs_to_file(url, download_directory)
     if args.download is True:
-        download_songs(url, download_directory, args.format_str[0], args.skip_mp3)
+        download_songs(url, download_directory, args.format_str, args.skip_mp3)
 
 
 if __name__ == '__main__':
