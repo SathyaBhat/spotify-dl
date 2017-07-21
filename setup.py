@@ -16,6 +16,7 @@ version = '2.6.0'
 setup(
     name='spotify_dl',
     version=version,
+    python_requires='>=3',
     install_requires=requirements,
     author='Sathya Bhat',
     author_email='sathya@sathyasays.com',
