@@ -97,7 +97,9 @@ def spotify_dl():
             playlist = get_playlist_name_from_id(args.playlist, current_user_id, sp)
 
         log.info("Saving songs to: {}".format(playlist))
-        download_directory = os.path.join(args.output, playlist)
+        download_directory = args.output + '/' + playlist
+        if len(download_directory) >= 0 and download_directory[-1] != '/':
+            download_directory += '/'
 
         if not os.path.exists(download_directory):
             os.makedirs(download_directory)
