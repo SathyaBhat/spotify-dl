@@ -67,6 +67,7 @@ You can set defaults per user by creating a file at `~/.spotify_dl_settings`. Cr
  - [doulwyi](https://github.com/doulwyi) for adding id3 tagging and ability to parse Spotify URI
  - [Gowtham](https://github.com/HackToHell) for [create playlist in download](https://github.com/SathyaBhat/spotify-dl/pull/23) directory
  - [alvierahman90](https://github.com/alvierahman90) for [config file support](https://github.com/SathyaBhat/spotify-dl/pull/42) and [Spotify playlist URL support](https://github.com/SathyaBhat/spotify-dl/pull/41)
+ - [Bibhas](https://github.com/iambibhas) for fixing [can only concatenate list (not "str") to list error](https://github.com/SathyaBhat/spotify-dl/issues/44)
 
 ## Issues, Feedback, Contact details
 Feel free to raise any bugs/issues under Github issues. Pull requests are also more than welcome. You can reach me on twitter at [@sathyabhat](https://twitter.com/sathyabhat) or drop an email [sathya@sathyasays.com](mailto:sathya@sathyasays.com)
