@@ -11,7 +11,7 @@ except (IOError, ImportError):
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-version = '2.6.0'
+version = '3.0.0'
 
 setup(
     name='spotify_dl',
@@ -24,7 +24,7 @@ setup(
     include_package_data=True,
     url='https://github.com/SathyaBhat/spotify-dl/',
     license='MIT',
-    description='Downloads songs from Spotify My Music'
+    description='Downloads songs from Spotify My Music '
                 'or Spotify Playlist that you provide',
     long_description=long_description,
     entry_points={

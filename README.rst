@@ -144,6 +144,9 @@ Credits
    support <https://github.com/SathyaBhat/spotify-dl/pull/42>`__ and
    `Spotify playlist URL
    support <https://github.com/SathyaBhat/spotify-dl/pull/41>`__
+-  `Bibhas <https://github.com/iambibhas>` for fixing `can only
+   concatenate list (not "str") to list
+   error <https://github.com/SathyaBhat/spotify-dl/issues/44>`__
 
 Issues, Feedback, Contact details
 ---------------------------------
