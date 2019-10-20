@@ -2,16 +2,13 @@
 
 from setuptools import setup, find_packages
 
-try:
-    import pypandoc
-    long_description = pypandoc.convert('README.md', 'rst')
-except (IOError, ImportError):
-    long_description = open('README.rst', encoding="utf8").read()
+with open('README.md') as f:
+    long_description = f.read()
 
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-version = '3.0.1'
+version = '3.3.0'
 
 setup(
     name='spotify_dl',
@@ -24,9 +21,10 @@ setup(
     include_package_data=True,
     url='https://github.com/SathyaBhat/spotify-dl/',
     license='MIT',
-    description='Downloads songs from Spotify My Music '
-                'or Spotify Playlist that you provide',
+    description='Downloads songs from a '
+                'Spotify Playlist that you provide',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     entry_points={
         'console_scripts': [
             'spotify_dl=spotify_dl.spotify_dl:spotify_dl',
