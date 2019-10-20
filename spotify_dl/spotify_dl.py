@@ -82,7 +82,7 @@ def spotify_dl():
     else:
         raise Exception('Invalid playlist URL ')
     if args.uri:
-        current_user_id, playlist_id = extract_user_and_playlist_from_uri(args.uri[0])
+        current_user_id, playlist_id = extract_user_and_playlist_from_uri(args.uri[0], sp)
     else:
         if args.user_id is None:
             current_user_id = sp.current_user()['id']

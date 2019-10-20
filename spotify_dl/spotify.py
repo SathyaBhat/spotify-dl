@@ -104,19 +104,24 @@ def download_songs(info, download_directory, format_string, skip_mp3):
                 continue
 
 
-def extract_user_and_playlist_from_uri(uri):
-    playlist_re = re.compile("spotify:user:[\w,.]+:playlist:[\w]+")
-    for playlist_uri in playlist_re.findall(uri):
+def extract_user_and_playlist_from_uri(uri, sp):
+    playlist_re = re.compile("(spotify)(:user:[\w,.]+)?(:playlist:[\w]+)")
+    user_id = sp.current_user()['id']
+    for playlist_uri in ["".join(x) for x in playlist_re.findall(uri)]:
         segments = playlist_uri.split(":")
-        user_id = segments[2]
-        log.info('List owner: ' + str(user_id))
-        playlist_id = segments[4]
-        log.info('List ID: ' + str(playlist_id))
+        if len(segments) >= 4:
+            user_id = segments[2]
+            playlist_id = segments[4]
+            log.info('List ID: ' + str(playlist_id))
+        else:
+            playlist_id = segments[2]
+            log.info('List ID: ' + str(playlist_id))
+    log.info('List owner: ' + str(user_id))
     return user_id, playlist_id
 
 
 def playlist_name(uri, sp):
-    user_id, playlist_id = extract_user_and_playlist_from_uri(uri)
+    user_id, playlist_id = extract_user_and_playlist_from_uri(uri, sp)
     return get_playlist_name_from_id(playlist_id, user_id, sp)
 
 
