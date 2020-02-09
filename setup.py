@@ -8,7 +8,7 @@ with open('README.md') as f:
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-version = '3.3.0'
+version = '3.5.0'
 
 setup(
     name='spotify_dl',
