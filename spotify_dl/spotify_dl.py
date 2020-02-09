@@ -75,12 +75,13 @@ def spotify_dl():
     sp = spotipy.Spotify(auth=token)
     log.debug('Arguments: {}'.format(args))
 
-    url_match = playlist_url_pattern.match(args.url)
-    if args.url and url_match and len(url_match.groups()) > 0:
-        uri = "spotify:" + url_match.groups()[0].replace('/', ':')
-        args.uri = [uri]
-    else:
-        raise Exception('Invalid playlist URL ')
+    if args.url:
+        url_match = playlist_url_pattern.match(args.url)
+        if url_match and len(url_match.groups()) > 0:
+            uri = "spotify:" + url_match.groups()[0].replace('/', ':')
+            args.uri = [uri]
+        else:
+            raise Exception('Invalid playlist URL ')
     if args.uri:
         current_user_id, playlist_id = extract_user_and_playlist_from_uri(args.uri[0], sp)
     else:
