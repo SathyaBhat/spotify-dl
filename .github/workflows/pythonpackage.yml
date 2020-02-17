@@ -31,5 +31,7 @@ jobs:
       env:
         YOUTUBE_DEV_KEY:  ${{ secrets.YOUTUBE_DEV_KEY }}
       run: |
+        ls -lah
+        pwd
         pip install pytest pytest-cov
         pytest --cov=spotify_dl tests/
