@@ -1,6 +1,6 @@
 name: spotify-dl tests
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
