@@ -19,7 +19,7 @@ So I wrote this script which mimics that library, but instead of downloading fro
 
 ### How do I get this thing running?
 
-Pre-requisite: You need Python 3+
+Pre-requisite: You need Python 3.6+
 
 1. Install using pip 
       `sudo pip3 install spotify_dl` 

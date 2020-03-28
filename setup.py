@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from setuptools import setup, find_packages
+from spotify_dl.constants import VERSION
 
 with open('README.md') as f:
     long_description = f.read()
@@ -8,11 +9,9 @@ with open('README.md') as f:
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-version = '3.5.0'
-
 setup(
     name='spotify_dl',
-    version=version,
+    version=VERSION,
     python_requires='>=3',
     install_requires=requirements,
     author='Sathya Bhat',
@@ -38,9 +37,9 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Internet',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
