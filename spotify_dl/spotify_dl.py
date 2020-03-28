@@ -16,7 +16,7 @@ from spotify_dl.youtube import fetch_youtube_url
 from spotify_dl.spotify import extract_user_and_playlist_from_uri
 from spotify_dl.spotify import get_playlist_name_from_id
 from spotify_dl.constants import VERSION
-
+from spotify_dl.youtube import get_youtube_dev_key
 
 def spotify_dl():
     parser = argparse.ArgumentParser(prog='spotify_dl')
@@ -113,7 +113,7 @@ def spotify_dl():
         songs = fetch_tracks(sp, args.playlist, current_user_id)
     url = []
     for song, artist in songs.items():
-        link = fetch_youtube_url(song + ' - ' + artist)
+        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key())
         if link:
             url.append((link, song, artist))
 

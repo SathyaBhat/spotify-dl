@@ -70,6 +70,14 @@ You can set defaults per user by creating a file at `~/.spotify_dl_settings`. Cr
 }
 ```
 
+### Running tests
+
+At the moment, there are barely any tests but PRs always welcome to improve this. Tests are setup and run with pytest, run 
+
+    make tests
+
+to run the tests with [Make](https://www.gnu.org/software/make/)
+
 ### Credits
 
  - [rhnvrm](https://github.com/rhnvrm) for [adding in youtube-dl](https://github.com/SathyaBhat/spotify-dl/pull/1)
