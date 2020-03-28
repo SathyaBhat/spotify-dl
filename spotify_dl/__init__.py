@@ -7,3 +7,4 @@ def signal_handler(sig, frame):
     print('\nCaught interrupt(did you press Ctrl+C?), stopping spotify_dl')
     sys.exit(0)
 
+signal.signal(signal.SIGINT, signal_handler)

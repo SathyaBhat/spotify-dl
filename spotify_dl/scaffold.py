@@ -9,7 +9,6 @@ logging.basicConfig(level=logging.INFO,
                     ' %(funcName)s - %(message)s')
 
 log = logging.getLogger('sdl')
-signal.signal(signal.SIGINT, signal_handler)
 sentry_sdk.init("https://7d74a39472c9449dac51eb24bb33bdc3@sentry.io/2383261")
 
 
