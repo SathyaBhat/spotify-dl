@@ -86,12 +86,13 @@ def download_songs(info, download_directory, format_string, skip_mp3):
             'noplaylist': True,
             'postprocessor_args': ['-metadata', 'title=' + str(track_),
                                    '-metadata', 'artist=' + str(artist_)],
+            'ffmpeg_location': os.environ.get('FFMPEG_PATH','/usr/local/bin/ffmpeg'),
         }
         if not skip_mp3:
             mp3_postprocess_opts = {
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
-                'preferredquality': '192',
+                'preferredquality': '320',
             }
             ydl_opts['postprocessors'] = [mp3_postprocess_opts.copy()]
 

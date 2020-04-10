@@ -16,8 +16,11 @@ from spotify_dl.youtube import fetch_youtube_url
 from spotify_dl.spotify import extract_user_and_playlist_from_uri
 from spotify_dl.spotify import get_playlist_name_from_id
 from spotify_dl.constants import VERSION
-from spotify_dl.youtube import get_youtube_dev_key
+import string
+import numpy
 
+
+remove_punctuation_map = dict((ord(char), None) for char in string.punctuation)
 def spotify_dl():
     parser = argparse.ArgumentParser(prog='spotify_dl')
     parser.add_argument('-d', '--download', action='store_true',
@@ -112,11 +115,17 @@ def spotify_dl():
     else:
         songs = fetch_tracks(sp, args.playlist, current_user_id)
     url = []
+    lfile = [f[:-3].translate(remove_punctuation_map) for f in os.listdir(download_directory) if 'mp3' in f]
     for song, artist in songs.items():
-        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key())
+        s=song.translate(remove_punctuation_map)
+        a=[sum([w in f for w in s.split()])/len(s.split()) for f in lfile]
+        if len(a) > 0 and max(a) > 0.6:
+            continue
+        link = fetch_youtube_url("+".join(("{} {}".format(song,artist)).split()))
         if link:
             url.append((link, song, artist))
-
+    with open(os.path.join(download_directory, "links.txt"), "w") as fh:
+        fh.write("\n".join(["{}-{}-{}".format(u[0],u[1],u[2]) for u in url]))
     save_songs_to_file(url, download_directory)
     if args.download is True:
         download_songs(url, download_directory, args.format_str, args.skip_mp3)
