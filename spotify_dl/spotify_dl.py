@@ -41,6 +41,8 @@ def spotify_dl():
                         default='bestaudio/best')
     parser.add_argument('-m', '--skip_mp3', action='store_true',
                         help='Don\'t convert downloaded songs to mp3')
+    parser.add_argument('-c', '--add_cover', action='store_true', default=False,
+                        help='Add album cover from Spotify to downloaded songs')
     parser.add_argument('-l', '--url', action="store",
                         help="Spotify Playlist link URL")
 
@@ -112,14 +114,14 @@ def spotify_dl():
     else:
         songs = fetch_tracks(sp, args.playlist, current_user_id)
     url = []
-    for song, artist in songs.items():
-        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key())
+    for name, artist, cover in songs:
+        link = fetch_youtube_url(name + ' - ' + artist, get_youtube_dev_key())
         if link:
-            url.append((link, song, artist))
+            url.append((link, name, artist, cover))
 
     save_songs_to_file(url, download_directory)
     if args.download is True:
-        download_songs(url, download_directory, args.format_str, args.skip_mp3)
+        download_songs(url, download_directory, args.format_str, args.skip_mp3, args.add_cover)
 
 
 if __name__ == '__main__':

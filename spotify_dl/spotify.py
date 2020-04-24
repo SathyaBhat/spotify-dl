@@ -4,6 +4,8 @@ import os
 
 import spotipy.util as util
 import youtube_dl
+import eyed3
+import urllib.request
 
 from spotify_dl.scaffold import *
 
@@ -19,11 +21,11 @@ def authenticate():
 def fetch_tracks(sp, playlist, user_id):
     """Fetches tracks from Spotify user's saved
         tracks or from playlist(if playlist parameter is passed
-        and saves song name and artist name to songs list
+        and saves song name, artist name & album cover to songs list
     """
     log.debug('Fetching saved tracks')
     offset = 0
-    songs_dict = {}
+    songs_list = []
     if user_id is None:
         current_user_id = sp.current_user()['id']
     else:
@@ -42,9 +44,10 @@ def fetch_tracks(sp, playlist, user_id):
             if track is not None:
                 track_name = str(track['name'])
                 track_artist = str(track['artists'][0]['name'])
+                track_cover = str(track['album']['images'][0]['url'])
                 log.debug('Appending %s to'
                         'songs list', (track['name'] + ' - ' + track['artists'][0]['name']))
-                songs_dict.update({track_name: track_artist})
+                songs_list.append((track_name, track_artist, track_cover))
             else:
                 log.warning("Track/artist name for %s not found, skipping", track)
 
@@ -54,7 +57,7 @@ def fetch_tracks(sp, playlist, user_id):
             log.info('All pages fetched, time to leave.'
                      ' Added %s songs in total', offset)
             break
-    return songs_dict
+    return songs_list
 
 
 def save_songs_to_file(songs, directory):
@@ -69,16 +72,32 @@ def save_songs_to_file(songs, directory):
     f.close()
 
 
-def download_songs(info, download_directory, format_string, skip_mp3):
+def add_song_cover(filepath, download_directory, cover):
+    """
+    Download the album cover from Spotify and add it to the ID3 metadata.
+    """
+    filepath = filepath.replace('%(ext)s', 'mp3')
+    file = eyed3.load(filepath)
+    image_file = os.path.join(download_directory, 'cover.jpg')
+
+    log.debug('Downloading cover for: %s', filepath)
+    urllib.request.urlretrieve(cover, image_file)
+    imagedata = open(image_file,"rb").read()
+    file.tag.images.set(0, imagedata, "image/jpeg", u"")
+    file.tag.save()
+    os.remove(image_file)
+
+
+def download_songs(info, download_directory, format_string, skip_mp3, add_cover):
     """
     Downloads songs from the YouTube URL passed to either
        current directory or download_directory, is it is passed
     """
     for item in info:
         log.debug('Songs to download: %s', item)
-        url_, track_, artist_ = item
+        url_, track_, artist_, cover_ = item
         download_archive = download_directory + 'downloaded_songs.txt'
-        outtmpl = download_directory + '%(title)s.%(ext)s'
+        outtmpl = download_directory + '{} - {}.%(ext)s'.format(artist_, track_)
         ydl_opts = {
             'format': format_string,
             'download_archive': download_archive,
@@ -98,6 +117,8 @@ def download_songs(info, download_directory, format_string, skip_mp3):
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             try:
                 log.debug(ydl.download([url_]))
+                if add_cover:
+                    add_song_cover(outtmpl, download_directory, cover_)
             except Exception as e:
                 log.debug(e)
                 print('Failed to download: {}'.format(url_))
