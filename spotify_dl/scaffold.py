@@ -5,8 +5,7 @@ import sentry_sdk
 __all__ = ['log', 'check_for_tokens']
 
 logging.basicConfig(level=logging.INFO,
-                    format='%(levelname)s: %(asctime)s -'
-                    ' %(funcName)s - %(message)s')
+                    format='%(message)s')
 
 log = logging.getLogger('sdl')
 sentry_sdk.init("https://7d74a39472c9449dac51eb24bb33bdc3@sentry.io/2383261")
