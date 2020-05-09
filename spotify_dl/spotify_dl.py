@@ -19,6 +19,7 @@ from spotify_dl.constants import VERSION
 from spotify_dl.youtube import get_youtube_dev_key
 from spotify_dl.models import db, Song
 
+
 def spotify_dl():
     parser = argparse.ArgumentParser(prog='spotify_dl')
     parser.add_argument('-d', '--download', action='store_true',
@@ -45,7 +46,7 @@ def spotify_dl():
     parser.add_argument('-l', '--url', action="store",
                         help="Spotify Playlist link URL")
     parser.add_argument('-s', '--scrape', action="store",
-                        help="Use HTML Scraper for YouTube Search")
+                        help="Use HTML Scraper for YouTube Search", default=True)
 
     args = parser.parse_args()
 
