@@ -4,6 +4,7 @@ from os import path
 
 db = SqliteDatabase(path.expanduser('~/.songs.db')) 
 
+
 class Song(Model):
     search_term = TextField()
     video_id = TextField()
