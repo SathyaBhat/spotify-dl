@@ -1,5 +1,4 @@
-from json import dump, load
-from spotify_dl.models import db, Song
+from spotify_dl.models import Song
 from peewee import DoesNotExist
 
 def check_if_in_cache(search_term):
