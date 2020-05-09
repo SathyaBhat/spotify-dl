@@ -20,7 +20,7 @@ import re
 from click import secho
 
 
-def fetch_youtube_url(search_term, dev_key=None, scrape=False):
+def fetch_youtube_url(search_term, dev_key=None):
     """For each song name/artist name combo, fetch the YouTube URL
         and return the list of URLs"""
     log.info(f"Searching for {search_term}")

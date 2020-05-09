@@ -119,7 +119,7 @@ def spotify_dl():
         songs = fetch_tracks(sp, args.playlist, current_user_id)
     url = []
     for song, artist in songs.items():
-        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key(), scrape=args.scrape)
+        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key())
         if link:
             url.append((link, song, artist))
 

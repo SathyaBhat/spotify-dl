@@ -7,5 +7,5 @@ def test_fetch_youtube_url(capsys):
     assert song_link == 'https://www.youtube.com/watch?v=Sb5aq5HcS1A'
 
 def test_fetch_youtube_url_wth_scrape(capsys):
-    song_link = fetch_youtube_url("Red Hot Chili Peppers - Dani California [Official Music Video]", dev_key=None, scrape=True)
+    song_link = fetch_youtube_url("Red Hot Chili Peppers - Dani California [Official Music Video]", dev_key=None)
     assert song_link == 'https://www.youtube.com/watch?v=Sb5aq5HcS1A'
