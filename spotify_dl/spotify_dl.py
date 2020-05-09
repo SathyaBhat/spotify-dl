@@ -6,12 +6,9 @@ import argparse
 import json
 import spotipy
 
-from spotify_dl.scaffold import *
-from spotify_dl.spotify import authenticate
-from spotify_dl.spotify import fetch_tracks
-from spotify_dl.spotify import save_songs_to_file
-from spotify_dl.spotify import download_songs
-from spotify_dl.spotify import playlist_name
+from spotify_dl.scaffold import log, check_for_tokens
+from spotify_dl.spotify import authenticate, fetch_tracks, save_songs_to_file
+from spotify_dl.spotify import download_songs, playlist_name
 from spotify_dl.youtube import fetch_youtube_url
 from spotify_dl.spotify import extract_user_and_playlist_from_uri
 from spotify_dl.spotify import get_playlist_name_from_id
