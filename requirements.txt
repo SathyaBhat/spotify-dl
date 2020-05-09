@@ -4,3 +4,5 @@ youtube-dl>=2015.12.23
 sentry-sdk==0.14.1
 colorama==0.4.3
 click==7.0
+lxml>=4.2
+wheel==0.34.2

@@ -43,6 +43,8 @@ def spotify_dl():
                         help='Don\'t convert downloaded songs to mp3')
     parser.add_argument('-l', '--url', action="store",
                         help="Spotify Playlist link URL")
+    parser.add_argument('-s', '--scrape', action="store",
+                        help="Use HTML Scraper for YouTube Search")
 
     args = parser.parse_args()
 
@@ -68,7 +70,7 @@ def spotify_dl():
     log.info('Starting spotify_dl')
     log.debug('Setting debug mode on spotify_dl')
 
-    if not check_for_tokens():
+    if not check_for_tokens(args):
         exit(1)
 
     token = authenticate()
@@ -113,7 +115,7 @@ def spotify_dl():
         songs = fetch_tracks(sp, args.playlist, current_user_id)
     url = []
     for song, artist in songs.items():
-        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key())
+        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key(), scrape=args.scrape)
         if link:
             url.append((link, song, artist))
 
