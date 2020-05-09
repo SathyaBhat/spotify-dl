@@ -28,7 +28,7 @@ def fetch_youtube_url(search_term, dev_key=None, scrape=False):
     if in_cache:
         log.info(f"Found id {video_id} for {search_term} in cache")
         return YOUTUBE_VIDEO_URL + video_id
-    if dev_key:
+    if not dev_key:
         YOUTUBE_SEARCH_BASE = "https://www.youtube.com/results?search_query="
         try:
             response = requests.get(YOUTUBE_SEARCH_BASE + search_term).content
