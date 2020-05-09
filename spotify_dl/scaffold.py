@@ -33,11 +33,11 @@ def check_for_tokens(args=None):
         ''')
         return False
 
-    YOUTUBE_DEV_KEY = getenv('YOUTUBE_DEV_KEY')
+    YOUTUBE_DEV_KEY = getenv('YOUTUBE_DEVsd_KEY')
     log.debug("YouTube dev key: {}".format(YOUTUBE_DEV_KEY))
-    if YOUTUBE_DEV_KEY is None:
+    if YOUTUBE_DEV_KEY is None and not args.scrape:
         print('''
-            You need to setup Youtube Data API token. You can do this by
+            Youtube Data API token has not been setup. You can do this by
             setting environment variables like so:
 
             export YOUTUBE_DEV_KEY='your-youtube-dev-key'
@@ -45,9 +45,6 @@ def check_for_tokens(args=None):
             Generate the key from
             https://console.developers.google.com/apis/api/youtube/overview
             
-            Or use the HTML Scraper by specifying -s True
+            Using HTML Scraper as a fallback.
             ''')
-        if args.scrape:
-            return True
-        return False
     return True
