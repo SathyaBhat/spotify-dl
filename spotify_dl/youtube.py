@@ -40,9 +40,8 @@ def fetch_youtube_url(search_term, dev_key=None, scrape=False):
             capture_exception(e)
             return None
     else:
-        YOUTUBE_DEV_KEY = dev_key
         youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-                        developerKey=YOUTUBE_DEV_KEY,
+                        developerKey=dev_key,
                         cache_discovery=False)
         try:
             search_response = youtube.search().list(q=search_term,
