@@ -11,7 +11,7 @@ log = logging.getLogger('sdl')
 sentry_sdk.init("https://7d74a39472c9449dac51eb24bb33bdc3@sentry.io/2383261")
 
 
-def check_for_tokens(args=None):
+def check_for_tokens():
     log.debug('Checking for tokens')
     CLIENT_ID = getenv('SPOTIPY_CLIENT_ID')
     CLIENT_SECRET = getenv('SPOTIPY_CLIENT_SECRET')

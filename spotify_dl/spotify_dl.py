@@ -74,7 +74,7 @@ def spotify_dl():
     log.info('Starting spotify_dl')
     log.debug('Setting debug mode on spotify_dl')
 
-    if not check_for_tokens(args):
+    if not check_for_tokens():
         exit(1)
 
     token = authenticate()
