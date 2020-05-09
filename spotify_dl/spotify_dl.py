@@ -17,6 +17,7 @@ from spotify_dl.spotify import extract_user_and_playlist_from_uri
 from spotify_dl.spotify import get_playlist_name_from_id
 from spotify_dl.constants import VERSION
 from spotify_dl.youtube import get_youtube_dev_key
+from spotify_dl.models import db, Song
 
 def spotify_dl():
     parser = argparse.ArgumentParser(prog='spotify_dl')
@@ -54,6 +55,8 @@ def spotify_dl():
         print("spotify_dl v{}".format(VERSION))
         exit(0)
 
+    db.connect()
+    db.create_tables([Song])
     if os.path.isfile(os.path.expanduser('~/.spotify_dl_settings')):
         with open(os.path.expanduser('~/.spotify_dl_settings')) as file:
             config = json.loads(file.read())

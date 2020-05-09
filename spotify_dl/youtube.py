@@ -10,6 +10,7 @@ from spotify_dl.constants import YOUTUBE_API_VERSION
 from spotify_dl.constants import VIDEO
 from spotify_dl.constants import YOUTUBE_VIDEO_URL
 from spotify_dl.scaffold import log
+from spotify_dl.cache import check_if_in_cache, save_to_cache
 from json import loads
 import requests
 from lxml import html
@@ -18,10 +19,15 @@ import re
 
 from click import secho
 
+
 def fetch_youtube_url(search_term, dev_key=None, scrape=False):
     """For each song name/artist name combo, fetch the YouTube URL
         and return the list of URLs"""
     log.info(f"Searching for {search_term}")
+    in_cache, video_id = check_if_in_cache(search_term)
+    if in_cache:
+        log.info(f"Found id {video_id} for {search_term} in cache")
+        return YOUTUBE_VIDEO_URL + video_id
     if dev_key:
         YOUTUBE_SEARCH_BASE = "https://www.youtube.com/results?search_query="
         try:
@@ -30,13 +36,14 @@ def fetch_youtube_url(search_term, dev_key=None, scrape=False):
             video = html_response.xpath("//a[contains(@class, 'yt-uix-tile-link')]/@href")
             video_id = re.search("((\?v=)[a-zA-Z0-9_-]{4,15})", video[0]).group(0)[3:]
             log.debug(f"Found video id {video_id} for search term {search_term}")
+            _ = save_to_cache(search_term=search_term, video_id=video_id)
             return YOUTUBE_VIDEO_URL + video_id
         except AttributeError as e:
             log.warn(f"Could not find scrape details for {search_term}")
             capture_exception(e)
             return None
         except IndexError as e:
-            log.warn(f"Could not perform scrape search for {search_term}, diff HTML")
+            log.warn(f"Could not perform scrape search for {search_term}, got a different HTML")
             capture_exception(e)
             return None
     else:
