@@ -33,9 +33,9 @@ def check_for_tokens(args=None):
         ''')
         return False
 
-    YOUTUBE_DEV_KEY = getenv('YOUTUBE_DEVsd_KEY')
+    YOUTUBE_DEV_KEY = getenv('YOUTUBE_DEV_KEY')
     log.debug("YouTube dev key: {}".format(YOUTUBE_DEV_KEY))
-    if YOUTUBE_DEV_KEY is None and not args.scrape:
+    if YOUTUBE_DEV_KEY is None:
         print('''
             Youtube Data API token has not been setup. You can do this by
             setting environment variables like so:
