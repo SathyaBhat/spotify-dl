@@ -18,6 +18,9 @@ from spotify_dl.models import db, Song
 
 
 def spotify_dl():
+    """
+    Main entry point of the script.
+    """
     parser = argparse.ArgumentParser(prog='spotify_dl')
     parser.add_argument('-d', '--download', action='store_true',
                         help='Download using youtube-dl', default=True)

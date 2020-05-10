@@ -21,8 +21,12 @@ from click import secho
 
 
 def fetch_youtube_url(search_term, dev_key=None):
-    """For each song name/artist name combo, fetch the YouTube URL
-        and return the list of URLs"""
+    """
+    For each song name/artist name combo, fetch the YouTube URL
+    and return the list of URLs
+    :param search_term: Search term to be looked up on YouTube
+    :param dev_key: Youtube API key
+    """
     log.info(f"Searching for {search_term}")
     in_cache, video_id = check_if_in_cache(search_term)
     if in_cache:
