@@ -6,19 +6,19 @@ import argparse
 import json
 import spotipy
 
-from spotify_dl.scaffold import *
-from spotify_dl.spotify import authenticate
-from spotify_dl.spotify import fetch_tracks
-from spotify_dl.spotify import save_songs_to_file
-from spotify_dl.spotify import download_songs
-from spotify_dl.spotify import playlist_name
+from spotify_dl.scaffold import log, check_for_tokens
+from spotify_dl.spotify import authenticate, fetch_tracks, save_songs_to_file
+from spotify_dl.spotify import download_songs, playlist_name
 from spotify_dl.youtube import fetch_youtube_url
 from spotify_dl.spotify import extract_user_and_playlist_from_uri
 from spotify_dl.spotify import get_playlist_name_from_id
 from spotify_dl.constants import VERSION
 from spotify_dl.youtube import get_youtube_dev_key
+from spotify_dl.models import db, Song
+
 
 def spotify_dl():
+    """Main entry point of the script."""
     parser = argparse.ArgumentParser(prog='spotify_dl')
     parser.add_argument('-d', '--download', action='store_true',
                         help='Download using youtube-dl', default=True)
@@ -44,7 +44,7 @@ def spotify_dl():
     parser.add_argument('-l', '--url', action="store",
                         help="Spotify Playlist link URL")
     parser.add_argument('-s', '--scrape', action="store",
-                        help="Use HTML Scraper for YouTube Search")
+                        help="Use HTML Scraper for YouTube Search", default=True)
 
     args = parser.parse_args()
 
@@ -54,6 +54,8 @@ def spotify_dl():
         print("spotify_dl v{}".format(VERSION))
         exit(0)
 
+    db.connect()
+    db.create_tables([Song])
     if os.path.isfile(os.path.expanduser('~/.spotify_dl_settings')):
         with open(os.path.expanduser('~/.spotify_dl_settings')) as file:
             config = json.loads(file.read())
@@ -70,7 +72,7 @@ def spotify_dl():
     log.info('Starting spotify_dl')
     log.debug('Setting debug mode on spotify_dl')
 
-    if not check_for_tokens(args):
+    if not check_for_tokens():
         exit(1)
 
     token = authenticate()
@@ -115,7 +117,7 @@ def spotify_dl():
         songs = fetch_tracks(sp, args.playlist, current_user_id)
     url = []
     for song, artist in songs.items():
-        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key(), scrape=args.scrape)
+        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key())
         if link:
             url.append((link, song, artist))
 

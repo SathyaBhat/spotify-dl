@@ -1,4 +1,4 @@
-__pycache__/
+**/__pycache__/**
 .idea/
 spotify-dl/.cache-
 spotify-dl/.cache-sathyabhat
@@ -10,3 +10,7 @@ dist/
 downloaded_songs.txt
 songs.txt
 unins
+*.pyc
+*.mp3
+.coverage
+.vscode/**
