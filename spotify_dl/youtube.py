@@ -43,11 +43,11 @@ def fetch_youtube_url(search_term, dev_key=None):
             _ = save_to_cache(search_term=search_term, video_id=video_id)
             return YOUTUBE_VIDEO_URL + video_id
         except AttributeError as e:
-            log.warn(f"Could not find scrape details for {search_term}")
+            log.warning(f"Could not find scrape details for {search_term}")
             capture_exception(e)
             return None
         except IndexError as e:
-            log.warn(f"Could not perform scrape search for {search_term}, got a different HTML")
+            log.warning(f"Could not perform scrape search for {search_term}, got a different HTML")
             capture_exception(e)
             return None
     else:
