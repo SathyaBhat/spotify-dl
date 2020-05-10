@@ -13,13 +13,13 @@ from spotify_dl.scaffold import log
 from spotify_dl.cache import check_if_in_cache, save_to_cache
 from json import loads
 import requests
-from lxml import html
+from lxml import html # skipcq: BAN-B410
 import re
 
 
 from click import secho
 
-
+# skipcq: PYL-R1710
 def fetch_youtube_url(search_term, dev_key=None):
     """
     For each song name/artist name combo, fetch the YouTube URL
