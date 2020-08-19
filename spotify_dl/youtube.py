@@ -86,33 +86,39 @@ def get_youtube_dev_key():
     return getenv('YOUTUBE_DEV_KEY')
 
 def invidious_get_response(search_term):
-	instances = [
-		"https://invidio.us/",
-		"https://invidious.snopyta.org/",
-		"https://yewtu.be/",
-		"https://invidious.tube/",
-		"https://invidious.13ad.de/",
-		"https://invidious.site/",
-		"https://vid.mint.lgbt/",
-		"https://yt.iswleuven.be/",
-		"https://inviou.site/",
-		"https://watch.nettohikari.com/",
-		"https://invidous.fdn.fr/",
-		"https://invidious.toot.koeln/",
-	]
+    """
+    Goes through the most reliant instances (as of August 2020) and sends first response
+    """
+    instances = [
+        "https://invidio.us/",
+        "https://invidious.snopyta.org/",
+        "https://yewtu.be/",
+        "https://invidious.tube/",
+        "https://invidious.13ad.de/",
+        "https://invidious.site/",
+        "https://vid.mint.lgbt/",
+        "https://yt.iswleuven.be/",
+        "https://inviou.site/",
+        "https://watch.nettohikari.com/",
+        "https://invidous.fdn.fr/",
+        "https://invidious.toot.koeln/",
+    ]
 
-	for url in instances:
-		response = requests.get(url + "api/v1/search", params={'q':search_term})
-		if response.status_code == 200:
-			return loads(response.content)
-	return None
+    for url in instances:
+        response = requests.get(url + "api/v1/search", params={'q' : search_term})
+        if response.status_code == 200:
+            return loads(response.content)
+    return None
 
 def invidious(search_term):
-	
-	data = invidious_get_response(search_term)
+    """
+    Gets youtube link using Invidious Api
+    """
 
-	if data is not None:
-		for i in data:
-			if i["type"] == "video":
-				return i["videoId"]
-	return None
+    data = invidious_get_response(search_term)
+
+    if data is not None:
+        for i in data:
+            if i["type"] == "video":
+                return i["videoId"]
+    return None
