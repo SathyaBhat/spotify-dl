@@ -45,6 +45,8 @@ def spotify_dl():
                         help="Spotify Playlist link URL")
     parser.add_argument('-s', '--scrape', action="store",
                         help="Use HTML Scraper for YouTube Search", default=True)
+    parser.add_argument('-I', '--invidious', action="store_true",
+                        help="Use Invidious for YouTube Search")
 
     args = parser.parse_args()
 
@@ -117,7 +119,7 @@ def spotify_dl():
         songs = fetch_tracks(sp, args.playlist, current_user_id)
     url = []
     for song, artist in songs.items():
-        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key())
+        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key(), invidious_flag=args.invidious)
         if link:
             url.append((link, song, artist))
 

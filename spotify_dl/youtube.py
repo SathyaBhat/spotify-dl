@@ -20,7 +20,7 @@ import re
 from click import secho
 
 # skipcq: PYL-R1710
-def fetch_youtube_url(search_term, dev_key=None):
+def fetch_youtube_url(search_term, dev_key=None, invidious_flag=False):
     """
     For each song name/artist name combo, fetch the YouTube URL
     and return the list of URLs
@@ -32,10 +32,11 @@ def fetch_youtube_url(search_term, dev_key=None):
     if in_cache:
         log.info(f"Found id {video_id} for {search_term} in cache")
         return YOUTUBE_VIDEO_URL + video_id
-
-    video_id = invidious(search_term)
-    if video_id is not None:
-        return YOUTUBE_VIDEO_URL + video_id
+    
+    if invidious_flag:
+        video_id = invidious(search_term)
+        if video_id is not None:
+            return YOUTUBE_VIDEO_URL + video_id
 
     if not dev_key:
         YOUTUBE_SEARCH_BASE = "https://www.youtube.com/results?search_query="
