@@ -32,6 +32,11 @@ def fetch_youtube_url(search_term, dev_key=None):
     if in_cache:
         log.info(f"Found id {video_id} for {search_term} in cache")
         return YOUTUBE_VIDEO_URL + video_id
+
+    video_id = invidious(search_term)
+    if video_id is not None:
+        return YOUTUBE_VIDEO_URL + video_id
+
     if not dev_key:
         YOUTUBE_SEARCH_BASE = "https://www.youtube.com/results?search_query="
         try:
@@ -79,3 +84,35 @@ def fetch_youtube_url(search_term, dev_key=None):
     
 def get_youtube_dev_key():
     return getenv('YOUTUBE_DEV_KEY')
+
+def invidious_get_response(search_term):
+	instances = [
+		"https://invidio.us/",
+		"https://invidious.snopyta.org/",
+		"https://yewtu.be/",
+		"https://invidious.tube/",
+		"https://invidious.13ad.de/",
+		"https://invidious.site/",
+		"https://vid.mint.lgbt/",
+		"https://yt.iswleuven.be/",
+		"https://inviou.site/",
+		"https://watch.nettohikari.com/",
+		"https://invidous.fdn.fr/",
+		"https://invidious.toot.koeln/",
+	]
+
+	for url in instances:
+		response = requests.get(url + "api/v1/search", params={'q':search_term})
+		if response.status_code == 200:
+			return loads(response.content)
+	return None
+
+def invidious(search_term):
+	
+	data = invidious_get_response(search_term)
+
+	if data is not None:
+		for i in data:
+			if i["type"] == "video":
+				return i["videoId"]
+	return None
