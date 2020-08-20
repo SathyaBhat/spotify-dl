@@ -20,7 +20,7 @@ import re
 from click import secho
 
 # skipcq: PYL-R1710
-def fetch_youtube_url(search_term, dev_key=None, invidious_flag=False):
+def fetch_youtube_url(search_term, dev_key=None, use_invidious=False):
     """
     For each song name/artist name combo, fetch the YouTube URL
     and return the list of URLs
@@ -120,6 +120,9 @@ def invidious(search_term):
 
     if data is not None:
         for i in data:
-            if i["type"] == "video":
-                return i["videoId"]
+            try:
+                if i["type"] == "video":
+                    return i["videoId"]
+            except KeyError:
+                continue
     return None
