@@ -33,7 +33,7 @@ def fetch_youtube_url(search_term, dev_key=None, use_invidious=False):
         log.info(f"Found id {video_id} for {search_term} in cache")
         return YOUTUBE_VIDEO_URL + video_id
     
-    if invidious_flag:
+    if use_invidious:
         video_id = invidious(search_term)
         if video_id is not None:
             return YOUTUBE_VIDEO_URL + video_id
