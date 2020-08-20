@@ -54,7 +54,7 @@ def spotify_dl():
 
     if args.version:
         print("spotify_dl v{}".format(VERSION))
-        sys.exit(0)
+        exit(0)
 
     db.connect()
     db.create_tables([Song])
@@ -75,7 +75,7 @@ def spotify_dl():
     log.debug('Setting debug mode on spotify_dl')
 
     if not check_for_tokens():
-        sys.exit(1)
+        exit(1)
 
     token = authenticate()
     sp = spotipy.Spotify(auth=token)
