@@ -9,3 +9,7 @@ def test_fetch_youtube_url(capsys):
 def test_fetch_youtube_url_wth_scrape(capsys):
     song_link = fetch_youtube_url("Red Hot Chili Peppers - Dani California [Official Music Video]", dev_key=None)
     assert song_link == 'https://www.youtube.com/watch?v=Sb5aq5HcS1A'
+
+def test_fetch_youtube_url_with_invidious(capsys):
+    song_link = fetch_youtube_url("Red Hot Chili Peppers - Dani California [Official Music Video]", use_invidious=True)
+    assert song_link == 'https://www.youtube.com/watch?v=Sb5aq5HcS1A'
