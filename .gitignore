@@ -12,6 +12,8 @@ songs.txt
 unins
 *.pyc
 *.mp3
+*.m4a
+*.webm
 .coverage
 .vscode/**
 .venv/*

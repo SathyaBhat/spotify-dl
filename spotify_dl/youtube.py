@@ -30,7 +30,6 @@ def fetch_youtube_url(search_term, dev_key=None):
     log.info(f"Searching for {search_term}")
     in_cache, video_id = check_if_in_cache(search_term)
     if in_cache:
-        log.info(f"Found id {video_id} for {search_term} in cache")
         return YOUTUBE_VIDEO_URL + video_id
     if not dev_key:
         YOUTUBE_SEARCH_BASE = "https://www.youtube.com/results?search_query="
@@ -58,14 +57,14 @@ def fetch_youtube_url(search_term, dev_key=None):
             in_cache, video_id = check_if_in_cache(search_term)
 
             if not in_cache:
-                log.info("Couldn't find in cache, fetching from YT API")
                 search_response = youtube.search().list(q=search_term,
                                                         part='id, snippet').execute()
             for v in search_response['items']:
                 if v['id']['kind'] == VIDEO:
-                    log.debug("Adding Video id {}".format(v['id']['videoId']))
-                    _ = save_to_cache(search_term=search_term, video_id=video_id)
-                    return YOUTUBE_VIDEO_URL + v['id']['videoId']
+                    video_id = v['id']['videoId']
+                    log.debug(f"Adding Video id {video_id}")
+                    _ = save_to_cache(search_term=search_term, video_id=video_id)     
+            return YOUTUBE_VIDEO_URL + video_id
         except HttpError as err:
             err_details = loads(err.content.decode('utf-8')).get('error').get('errors')
             secho("Couldn't complete search due to following errors: ", fg='red')

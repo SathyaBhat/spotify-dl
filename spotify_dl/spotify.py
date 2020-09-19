@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 import re
-import os
 
 import spotipy.util as util
 import youtube_dl
@@ -55,18 +54,6 @@ def fetch_tracks(sp, playlist, user_id):
                      ' Added %s songs in total', offset)
             break
     return songs_dict
-
-
-def save_songs_to_file(songs, directory):
-    """
-    :param songs
-    Saves the songs fetched from fetch_tracks function to songs.txt file
-       to be downloaded from youtube-dl
-    """
-
-    with open(os.path.join(directory, 'songs.txt'), 'w', encoding="utf-8") as f:
-        f.write(' '.join(str(songs)))
-    f.close()
 
 
 def download_songs(info, download_directory, format_string, skip_mp3):

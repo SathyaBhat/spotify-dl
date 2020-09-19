@@ -2,6 +2,7 @@ from spotify_dl.models import Song
 from peewee import DoesNotExist
 from spotify_dl.scaffold import log
 
+
 def check_if_in_cache(search_term):
     """
     Checks if the specified search term is in the local database cache

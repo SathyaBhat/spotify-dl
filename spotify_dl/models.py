@@ -1,8 +1,11 @@
 from peewee import SqliteDatabase
 from peewee import Model, TextField
 from os import path
+from pathlib import Path
+from spotify_dl.constants import SAVE_PATH
 
-db = SqliteDatabase(path.expanduser('~/.songs.db'))
+Path(path.expanduser(SAVE_PATH)).mkdir(exist_ok=True)
+db = SqliteDatabase(path.expanduser(f"{SAVE_PATH}/songs.db"))
 
 
 class Song(Model):
