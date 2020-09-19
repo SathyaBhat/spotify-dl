@@ -7,7 +7,7 @@ import json
 import spotipy
 
 from spotify_dl.scaffold import log, check_for_tokens
-from spotify_dl.spotify import authenticate, fetch_tracks, save_songs_to_file
+from spotify_dl.spotify import authenticate, fetch_tracks
 from spotify_dl.spotify import download_songs, playlist_name
 from spotify_dl.youtube import fetch_youtube_url
 from spotify_dl.spotify import extract_user_and_playlist_from_uri
@@ -121,7 +121,6 @@ def spotify_dl():
         if link:
             url.append((link, song, artist))
 
-    save_songs_to_file(url, download_directory)
     if args.download is True:
         download_songs(url, download_directory, args.format_str, args.skip_mp3)
 
