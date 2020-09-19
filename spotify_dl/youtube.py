@@ -63,8 +63,7 @@ def fetch_youtube_url(search_term, dev_key=None):
                 if v['id']['kind'] == VIDEO:
                     video_id = v['id']['videoId']
                     log.debug(f"Adding Video id {video_id}")
-                    _ = save_to_cache(search_term=search_term, video_id=video_id)
-            
+                    _ = save_to_cache(search_term=search_term, video_id=video_id)     
             return YOUTUBE_VIDEO_URL + video_id
         except HttpError as err:
             err_details = loads(err.content.decode('utf-8')).get('error').get('errors')

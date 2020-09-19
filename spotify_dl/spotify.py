@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 import re
-import os
 
 import spotipy.util as util
 import youtube_dl
