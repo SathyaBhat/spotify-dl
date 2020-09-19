@@ -57,7 +57,6 @@ def fetch_youtube_url(search_term, dev_key=None):
             in_cache, video_id = check_if_in_cache(search_term)
 
             if not in_cache:
-                log.info("Couldn't find in cache, fetching from YT API")
                 search_response = youtube.search().list(q=search_term,
                                                         part='id, snippet').execute()
             for v in search_response['items']:
