@@ -1,6 +1,6 @@
 from spotify_dl.models import Song
 from peewee import DoesNotExist
-
+from spotify_dl.scaffold import log
 
 def check_if_in_cache(search_term):
     """
@@ -11,8 +11,10 @@ def check_if_in_cache(search_term):
     """
     try:
         song = Song.get(search_term=search_term)
+        log.info(f"Found id {song.video_id} for {search_term} in cache")
         return True, song.video_id
     except DoesNotExist:
+        log.info(f"Couldn't find id for {search_term} in cache")
         return False, None
 
 
@@ -23,5 +25,6 @@ def save_to_cache(search_term, video_id):
     :param video_id: Video id to be saved to in the cache
     :return Video id saved in the cache
     """
-    song_info, _ = Song.get_or_create(search_term=search_term, video_id=video_id)
+    song_info, saved = Song.get_or_create(search_term=search_term, video_id=video_id)
+    log.info(f"Saved: {saved} video id {song_info.video_id} in cache")
     return song_info.video_id

@@ -14,3 +14,4 @@ unins
 *.mp3
 .coverage
 .vscode/**
+.venv/*
