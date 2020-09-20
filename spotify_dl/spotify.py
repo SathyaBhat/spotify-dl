@@ -61,7 +61,7 @@ def download_songs(info, download_directory, format_string, skip_mp3):
     Downloads songs from the YouTube URL passed to either
        current directory or download_directory, is it is passed
     """
-    for item in info:
+    for number, item in enumerate(info):
         log.debug('Songs to download: %s', item)
         url_, track_, artist_ = item
         download_archive = download_directory + 'downloaded_songs.txt'
@@ -72,7 +72,8 @@ def download_songs(info, download_directory, format_string, skip_mp3):
             'outtmpl': outtmpl,
             'noplaylist': True,
             'postprocessor_args': ['-metadata', 'title=' + str(track_),
-                                   '-metadata', 'artist=' + str(artist_)],
+                                   '-metadata', 'artist=' + str(artist_),
+                                   '-metadata', 'track=' + str(number + 1)]
         }
         if not skip_mp3:
             mp3_postprocess_opts = {
