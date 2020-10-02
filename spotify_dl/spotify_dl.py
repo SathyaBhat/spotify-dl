@@ -7,14 +7,15 @@ import json
 import spotipy
 
 from spotify_dl.scaffold import log, check_for_tokens
-from spotify_dl.spotify import authenticate, fetch_tracks
+from spotify_dl.spotify import fetch_tracks
 from spotify_dl.spotify import download_songs, playlist_name
 from spotify_dl.youtube import fetch_youtube_url
 from spotify_dl.spotify import extract_user_and_playlist_from_uri
 from spotify_dl.spotify import get_playlist_name_from_id
-from spotify_dl.constants import VERSION
+from spotify_dl.constants import VERSION, SCOPE
 from spotify_dl.youtube import get_youtube_dev_key
 from spotify_dl.models import db, Song
+from spotipy.oauth2 import SpotifyOAuth
 
 
 def spotify_dl():
@@ -75,8 +76,8 @@ def spotify_dl():
     if not check_for_tokens():
         exit(1)
 
-    token = authenticate()
-    sp = spotipy.Spotify(auth=token)
+
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=SCOPE))
     log.debug('Arguments: {}'.format(args))
 
     if args.url:

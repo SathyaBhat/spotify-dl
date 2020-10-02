@@ -1,4 +1,4 @@
-spotipy==2.3.8
+spotipy==2.16
 google-api-python-client==1.6.2
 youtube-dl>=2015.12.23
 sentry-sdk==0.14.3
