@@ -1,19 +1,9 @@
 from __future__ import unicode_literals
 import re
 
-import spotipy.util as util
 import youtube_dl
 
 from spotify_dl.scaffold import *
-
-
-def authenticate():
-    """Authenticates you to Spotify
-    """
-    scope = 'user-library-read'
-    username = ''
-    return util.prompt_for_user_token(username, scope)
-
 
 def fetch_tracks(sp, playlist, user_id):
     """Fetches tracks from Spotify user's saved
@@ -34,7 +24,7 @@ def fetch_tracks(sp, playlist, user_id):
             results = sp.user_playlist_tracks(current_user_id, playlist, None,
                                               limit=50, offset=offset)
 
-        log.debug('Got result json %s', results)
+        log.debug(f'Got result json keys {results.keys()}', )
         for item in results['items']:
             track = item['track']
 
