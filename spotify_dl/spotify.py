@@ -25,7 +25,7 @@ def fetch_tracks(sp, playlist, user_id):
                                               limit=50, offset=offset)
 
         log.debug(f'Got result json keys {results.keys()}', )
-        for item in results['items']:
+        for item in results['tracks']['items']:
             track = item['track']
 
             if track is not None:
