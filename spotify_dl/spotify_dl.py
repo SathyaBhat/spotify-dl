@@ -76,7 +76,7 @@ def spotify_dl():
         type, id = parse_spotify_url(args.url)
         directory_name = get_item_name(sp, type, id)
         path = Path(PurePath.joinpath(args.output, directory_name))
-        Path.mkdir(parents=True, exist_ok=True)
+        path.mkdir(parents=True, exist_ok=True)
         log.info("Saving songs to: {}".format(directory_name))
 
 
