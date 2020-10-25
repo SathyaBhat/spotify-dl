@@ -81,30 +81,22 @@ def download_songs(info, download_directory, format_string, skip_mp3):
                 print('Failed to download: {}'.format(url_))
                 continue
 
+def parse_spotify_url(url):
+    parsed_url = url.replace("https://open.spotify.com/","")
+    type = parsed_url.split("/")[0]
+    id = parsed_url.split("/")[1]
+    return type, id
 
-def extract_user_and_playlist_from_uri(uri, sp):
-    playlist_re = re.compile("(spotify)(:user:[\w,.]+)?(:playlist:[\w]+)")
-    user_id = sp.current_user()['id']
-    for playlist_uri in ["".join(x) for x in playlist_re.findall(uri)]:
-        segments = playlist_uri.split(":")
-        if len(segments) >= 4:
-            user_id = segments[2]
-            playlist_id = segments[4]
-            log.info('List ID: ' + str(playlist_id))
-        else:
-            playlist_id = segments[2]
-            log.info('List ID: ' + str(playlist_id))
-    log.info('List owner: ' + str(user_id))
-    return user_id, playlist_id
+def get_item_name(sp, item_type, id):
 
+    # TODO: Find better way to call this?
+    if item_type == 'playlist':
+        name = sp.playlist(playlist_id=id, fields='name').get('name')
 
-def playlist_name(uri, sp):
-    user_id, playlist_id = extract_user_and_playlist_from_uri(uri, sp)
-    return get_playlist_name_from_id(playlist_id, user_id, sp)
+    if item_type == 'album':
+        name = sp.album(album_id=id).get('name')
 
-
-def get_playlist_name_from_id(playlist_id, user_id, sp):
-    playlist = sp.user_playlist(user_id, playlist_id,
-                                fields="tracks, next, name")
-    name = playlist['name']
+    if item_type == 'track':
+        name = sp.track(track_id=id).get('name')
+    
     return name
