@@ -100,3 +100,6 @@ def get_item_name(sp, item_type, id):
         name = sp.track(track_id=id).get('name')
     
     return name
+
+def validate_spotify_url(url):
+    pass

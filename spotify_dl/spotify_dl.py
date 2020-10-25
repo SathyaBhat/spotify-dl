@@ -7,7 +7,7 @@ import json
 import spotipy
 
 from spotify_dl.scaffold import log, check_for_tokens
-from spotify_dl.spotify import fetch_tracks, download_songs, parse_spotify_url
+from spotify_dl.spotify import fetch_tracks, download_songs, parse_spotify_url, validate_spotify_url
 from spotify_dl.youtube import fetch_youtube_url, get_youtube_dev_key
 from spotify_dl.constants import VERSION, SCOPE
 from spotify_dl.models import db, Song
