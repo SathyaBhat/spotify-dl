@@ -8,7 +8,7 @@ Pre-requisite: You need Python 3.6+
 
 2. Login to [Spotify developer console](https://developer.spotify.com/my-applications/#!/applications) and click on "Create an App". Fill in details for name and description
     - Click on "Edit Settings"
-    - Under "Redirect URIs", enter `https://spotifydl.sathyabh.at`
+    - Under "Redirect URIs", enter `https://spotifydl.sathyabh.at/`
     - Click on "Save".
 
 3. Make a note of Client ID and Client Secret. These values need to be then set `SPOTIPY_CLIENT_ID`, `SPOTIPY_CLIENT_SECRET` environment variables respectively. Also `SPOTIPY_REDIRECT_URI` environment variable to `https://spotifydl.sathyabh.at/`
