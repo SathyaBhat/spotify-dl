@@ -30,6 +30,8 @@ jobs:
     - name: Test with pytest
       env:
         YOUTUBE_DEV_KEY:  ${{ secrets.YOUTUBE_DEV_KEY }}
+        SPOTIPY_CLIENT_ID:  ${{ secrets.SPOTIPY_CLIENT_ID }}
+        SPOTIPY_CLIENT_SECRET:  ${{ secrets.SPOTIPY_CLIENT_SECRET }}
       run: |
         pip install pytest pytest-cov
         pytest --cov=spotify_dl tests/
