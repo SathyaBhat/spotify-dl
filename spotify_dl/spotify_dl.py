@@ -7,11 +7,11 @@ import json
 import spotipy
 
 from spotify_dl.scaffold import log, check_for_tokens
-from spotify_dl.spotify import fetch_tracks, download_songs, parse_spotify_url, validate_spotify_url
+from spotify_dl.spotify import fetch_tracks, download_songs, parse_spotify_url, validate_spotify_url, get_item_name
 from spotify_dl.youtube import fetch_youtube_url, get_youtube_dev_key
-from spotify_dl.constants import VERSION, SCOPE
+from spotify_dl.constants import VERSION
 from spotify_dl.models import db, Song
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
 
 from pathlib import Path, PurePath
 
@@ -19,9 +19,9 @@ def spotify_dl():
     """Main entry point of the script."""
     parser = argparse.ArgumentParser(prog='spotify_dl')
     parser.add_argument('-l', '--url', action="store",
-                        help="Spotify Playlist link URL", nargs=1, required=True)
+                        help="Spotify Playlist link URL", type=str, required=True)
     parser.add_argument('-o', '--output', type=str, action='store',
-                        help='Specify download directory.', nargs=1, required=True)
+                        help='Specify download directory.', required=True)
     parser.add_argument('-d', '--download', action='store_true',
                         help='Download using youtube-dl', default=True)
     
@@ -66,7 +66,7 @@ def spotify_dl():
     if not check_for_tokens():
         exit(1)
 
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=SCOPE))
+    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
     log.debug('Arguments: {}'.format(args))
 
     if args.url:
@@ -75,15 +75,11 @@ def spotify_dl():
     if args.output:
         type, id = parse_spotify_url(args.url)
         directory_name = get_item_name(sp, type, id)
-        path = Path(PurePath.joinpath(args.output, directory_name))
+        path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
         path.mkdir(parents=True, exist_ok=True)
         log.info("Saving songs to: {}".format(directory_name))
 
-
-    # if args.uri:
-    #     songs = fetch_tracks(sp, playlist_id, current_user_id)
-    # else:
-    #     songs = fetch_tracks(sp, args.playlist, current_user_id)
+    songs = fetch_tracks(sp, type, args.url)
     url = []
     for song, artist in songs.items():
         link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key())

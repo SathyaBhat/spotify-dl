@@ -1,5 +1,5 @@
 ## spotify_dl
-Downloads songs from any Spotify playlist or from your "My Music" collection.
+Downloads songs from any Spotify playlist, album or track.
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![PyPI download month](https://img.shields.io/pypi/dm/spotify_dl.svg)](https://pypi.python.org/pypi/spotify_dl/)

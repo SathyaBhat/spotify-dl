@@ -5,46 +5,49 @@ import youtube_dl
 
 from spotify_dl.scaffold import *
 
-def fetch_tracks(sp, playlist, user_id):
-    """Fetches tracks from Spotify user's saved
-        tracks or from playlist(if playlist parameter is passed
-        and saves song name and artist name to songs list
+def fetch_tracks(sp, type, url):
+    """ 
+    Fetches tracks from the provided URL
+    :param sp: Spotify client
+    :param type: Type of item being requested for: album/playlist/track
+    :param url: URL of the item
+    :return Dictionary of song and artist
     """
-    log.debug('Fetching saved tracks')
-    offset = 0
     songs_dict = {}
-    if user_id is None:
-        current_user_id = sp.current_user()['id']
-    else:
-        current_user_id = user_id
-    while True:
-        if playlist is None:
-            results = sp.current_user_saved_tracks(limit=50, offset=offset)
-        else:
-            results = sp.user_playlist_tracks(current_user_id, playlist, None,
-                                              limit=50, offset=offset)
+    offset = 0
 
-        log.debug(f'Got result json keys {results.keys()}', )
-        for item in results['tracks']['items']:
-            track = item['track']
-
-            if track is not None:
-                track_name = str(track['name'])
-                track_artist = str(track['artists'][0]['name'])
-                log.debug('Appending %s to'
-                        'songs list', (track['name'] + ' - ' + track['artists'][0]['name']))
+    if type=='playlist':
+        items = sp.playlist_items(playlist_id=url, fields='items.track.name,items.track.artists(name),items.track.album(name),total,next,offset', additional_types=['track'])
+        while True:
+            for item in items['items']:
+                track_name = item['track']['name']
+                track_artist = " ".join([artist['name'] for artist in item['track']['artists']])
                 songs_dict.update({track_name: track_artist})
-            else:
-                log.warning("Track/artist name for %s not found, skipping", track)
+                offset += 1
 
-            offset += 1
+            if items.get('next') is None:
+                log.info('All pages fetched, time to leave. Added %s songs in total', offset)
+                break
+    elif type=='album':
+        items = sp.album_tracks(album_id=url)
+        while True:
+            for item in items['items']:
+                
+                track_name = item['name']
+                track_artist = " ".join([artist['name'] for artist in item['artists']])
+                songs_dict.update({track_name: track_artist})
+                offset += 1
 
-        if results.get('next') is None:
-            log.info('All pages fetched, time to leave.'
-                     ' Added %s songs in total', offset)
-            break
+            if items.get('next') is None:
+                log.info('All pages fetched, time to leave. Added %s songs in total', offset)
+                break
+    elif type=='track':
+        items = sp.track(track_id=url)
+        track_name = items['name']
+        track_artist = " ".join([artist['name'] for artist in items['artists']])
+        songs_dict.update({track_name: track_artist})
+
     return songs_dict
-
 
 def download_songs(info, download_directory, format_string, skip_mp3):
     """
@@ -102,4 +105,9 @@ def get_item_name(sp, item_type, id):
     return name
 
 def validate_spotify_url(url):
-    pass
+    type, id = parse_spotify_url(url)
+    log.debug(f"Got type {type} and id {id}")
+    if type not in ['album', 'track', 'playlist']:
+        log.error("Only albums/tracks/playlists are supported")
+    if id is None:
+        log.error("Couldn't get a valid id")
