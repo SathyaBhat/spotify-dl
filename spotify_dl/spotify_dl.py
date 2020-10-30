@@ -10,7 +10,7 @@ from spotify_dl.spotify import fetch_tracks, download_songs, parse_spotify_url, 
 from spotify_dl.youtube import fetch_youtube_url, get_youtube_dev_key
 from spotify_dl.constants import VERSION
 from spotify_dl.models import db, Song
-from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyClientCredentials
 from pathlib import Path, PurePath
 
 
@@ -65,7 +65,10 @@ def spotify_dl():
     log.debug('Arguments: {}'.format(args))
 
     if args.url:
-        validate_spotify_url(args.url)
+        valid_item = validate_spotify_url(args.url)
+
+    if not valid_item:
+        exit(1)
 
     if args.output:
         type, id = parse_spotify_url(args.url)

@@ -1,4 +1,4 @@
-from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyClientCredentials
 from spotify_dl.spotify import fetch_tracks
 import spotipy
 

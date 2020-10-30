@@ -3,7 +3,7 @@ from spotify_dl.scaffold import *
 
 
 def fetch_tracks(sp, item_type, url):
-    """ 
+    """
     Fetches tracks from the provided URL.
     :param sp: Spotify client
     :param type: Type of item being requested for: album/playlist/track
@@ -47,12 +47,15 @@ def fetch_tracks(sp, item_type, url):
     return songs_dict
 
 
-def download_songs(info, download_directory, format_string, skip_mp3):
+def download_songs(songs_dict, download_directory, format_string, skip_mp3):
     """
     Downloads songs from the YouTube URL passed to either current directory or download_directory, is it is passed.
-    
+    :param songs_dict: Dictionary of songs and associated artist
+    :param download_directory: Location where to save
+    :param format_string: format string for the file conversion
+    :param skip_mp3: Whether to skip conversion to MP3
     """
-    for number, item in enumerate(info):
+    for number, item in enumerate(songs_dict):
         log.debug('Songs to download: %s', item)
         url_, track_, artist_ = item
         download_archive = download_directory + 'downloaded_songs.txt'
@@ -84,6 +87,13 @@ def download_songs(info, download_directory, format_string, skip_mp3):
 
 
 def parse_spotify_url(url):
+    """
+    Parse the provided Spotify playlist URL and determine if it is a playlist, track or album
+    :param url: URL to be parsed
+    :param download_directory: Location where to save
+    :param format_string: format string for the file conversion
+    :return tuple indicating the type and id of the item
+    """
     parsed_url = url.replace("https://open.spotify.com/", "")
     item_type = parsed_url.split("/")[0]
     item_id = parsed_url.split("/")[1]
@@ -91,6 +101,13 @@ def parse_spotify_url(url):
 
 
 def get_item_name(sp, item_type, item_id):
+    """
+    Fetch the name of the item
+    :param sp: Spotify Client
+    :param item_type: Type of the item
+    :param item_id: id of the item
+    :return String indicating the name of the item
+    """
     if item_type == 'playlist':
         name = sp.playlist(playlist_id=item_id, fields='name').get('name')
     elif item_type == 'album':
@@ -101,9 +118,16 @@ def get_item_name(sp, item_type, item_id):
 
 
 def validate_spotify_url(url):
+    """
+    Validate the URL and determine if the item type is supported
+    :return Boolean indicating whether or not item is supported
+    """
     item_type, item_id = parse_spotify_url(url)
-    log.debug(f"Got item type {item_type} and item_ d {item_id}")
+    log.debug(f"Got item type {item_type} and item_id {item_id}")
     if item_type not in ['album', 'track', 'playlist']:
         log.error("Only albums/tracks/playlists are supported")
+        return False
     if item_id is None:
         log.error("Couldn't get a valid id")
+        return False
+    return True
