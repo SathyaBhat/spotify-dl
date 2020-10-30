@@ -4,6 +4,7 @@ from logging import DEBUG
 import argparse
 import json
 import spotipy
+import sys
 
 from spotify_dl.scaffold import log, check_for_tokens
 from spotify_dl.spotify import fetch_tracks, download_songs, parse_spotify_url, validate_spotify_url, get_item_name
@@ -68,16 +69,16 @@ def spotify_dl():
         valid_item = validate_spotify_url(args.url)
 
     if not valid_item:
-        exit(1)
+        sys.exit(1)
 
     if args.output:
-        type, id = parse_spotify_url(args.url)
-        directory_name = get_item_name(sp, type, id)
+        item_type, item_id = parse_spotify_url(args.url)
+        directory_name = get_item_name(sp, item_type, item_id)
         path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
         path.mkdir(parents=True, exist_ok=True)
         log.info("Saving songs to: {}".format(directory_name))
 
-    songs = fetch_tracks(sp, type, args.url)
+    songs = fetch_tracks(sp, item_type, args.url)
     url = []
     for song, artist in songs.items():
         link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key())

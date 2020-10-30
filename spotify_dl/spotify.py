@@ -88,7 +88,7 @@ def download_songs(songs_dict, download_directory, format_string, skip_mp3):
 
 def parse_spotify_url(url):
     """
-    Parse the provided Spotify playlist URL and determine if it is a playlist, track or album
+    Parse the provided Spotify playlist URL and determine if it is a playlist, track or album.
     :param url: URL to be parsed
     :param download_directory: Location where to save
     :param format_string: format string for the file conversion
@@ -102,7 +102,7 @@ def parse_spotify_url(url):
 
 def get_item_name(sp, item_type, item_id):
     """
-    Fetch the name of the item
+    Fetch the name of the item.
     :param sp: Spotify Client
     :param item_type: Type of the item
     :param item_id: id of the item
@@ -119,7 +119,7 @@ def get_item_name(sp, item_type, item_id):
 
 def validate_spotify_url(url):
     """
-    Validate the URL and determine if the item type is supported
+    Validate the URL and determine if the item type is supported.
     :return Boolean indicating whether or not item is supported
     """
     item_type, item_id = parse_spotify_url(url)

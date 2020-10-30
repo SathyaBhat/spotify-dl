@@ -23,7 +23,7 @@ from click import secho
 def fetch_youtube_url(search_term, dev_key=None):
     """
     For each song name/artist name combo, fetch the YouTube URL
-    and return the list of URLs
+    and return the list of URLs.
     :param search_term: Search term to be looked up on YouTube
     :param dev_key: Youtube API key
     """
