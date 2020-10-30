@@ -1,13 +1,10 @@
-from __future__ import unicode_literals
-import re
-
 import youtube_dl
-
 from spotify_dl.scaffold import *
 
-def fetch_tracks(sp, type, url):
+
+def fetch_tracks(sp, item_type, url):
     """ 
-    Fetches tracks from the provided URL
+    Fetches tracks from the provided URL.
     :param sp: Spotify client
     :param type: Type of item being requested for: album/playlist/track
     :param url: URL of the item
@@ -16,7 +13,7 @@ def fetch_tracks(sp, type, url):
     songs_dict = {}
     offset = 0
 
-    if type=='playlist':
+    if item_type == 'playlist':
         items = sp.playlist_items(playlist_id=url, fields='items.track.name,items.track.artists(name),items.track.album(name),total,next,offset', additional_types=['track'])
         while True:
             for item in items['items']:
@@ -28,11 +25,11 @@ def fetch_tracks(sp, type, url):
             if items.get('next') is None:
                 log.info('All pages fetched, time to leave. Added %s songs in total', offset)
                 break
-    elif type=='album':
+
+    elif item_type == 'album':
         items = sp.album_tracks(album_id=url)
         while True:
             for item in items['items']:
-                
                 track_name = item['name']
                 track_artist = " ".join([artist['name'] for artist in item['artists']])
                 songs_dict.update({track_name: track_artist})
@@ -41,18 +38,19 @@ def fetch_tracks(sp, type, url):
             if items.get('next') is None:
                 log.info('All pages fetched, time to leave. Added %s songs in total', offset)
                 break
-    elif type=='track':
+
+    elif item_type == 'track':
         items = sp.track(track_id=url)
         track_name = items['name']
         track_artist = " ".join([artist['name'] for artist in items['artists']])
         songs_dict.update({track_name: track_artist})
-
     return songs_dict
+
 
 def download_songs(info, download_directory, format_string, skip_mp3):
     """
-    Downloads songs from the YouTube URL passed to either
-       current directory or download_directory, is it is passed
+    Downloads songs from the YouTube URL passed to either current directory or download_directory, is it is passed.
+    
     """
     for number, item in enumerate(info):
         log.debug('Songs to download: %s', item)
@@ -84,30 +82,28 @@ def download_songs(info, download_directory, format_string, skip_mp3):
                 print('Failed to download: {}'.format(url_))
                 continue
 
+
 def parse_spotify_url(url):
-    parsed_url = url.replace("https://open.spotify.com/","")
-    type = parsed_url.split("/")[0]
-    id = parsed_url.split("/")[1]
-    return type, id
+    parsed_url = url.replace("https://open.spotify.com/", "")
+    item_type = parsed_url.split("/")[0]
+    item_id = parsed_url.split("/")[1]
+    return item_type, item_id
 
-def get_item_name(sp, item_type, id):
 
-    # TODO: Find better way to call this?
+def get_item_name(sp, item_type, item_id):
     if item_type == 'playlist':
-        name = sp.playlist(playlist_id=id, fields='name').get('name')
-
-    if item_type == 'album':
-        name = sp.album(album_id=id).get('name')
-
-    if item_type == 'track':
-        name = sp.track(track_id=id).get('name')
-    
+        name = sp.playlist(playlist_id=item_id, fields='name').get('name')
+    elif item_type == 'album':
+        name = sp.album(album_id=item_id).get('name')
+    elif item_type == 'track':
+        name = sp.track(track_id=item_id).get('name')
     return name
 
+
 def validate_spotify_url(url):
-    type, id = parse_spotify_url(url)
-    log.debug(f"Got type {type} and id {id}")
-    if type not in ['album', 'track', 'playlist']:
+    item_type, item_id = parse_spotify_url(url)
+    log.debug(f"Got item type {item_type} and item_ d {item_id}")
+    if item_type not in ['album', 'track', 'playlist']:
         log.error("Only albums/tracks/playlists are supported")
-    if id is None:
+    if item_id is None:
         log.error("Couldn't get a valid id")

@@ -27,7 +27,6 @@ def fetch_youtube_url(search_term, dev_key=None):
     :param search_term: Search term to be looked up on YouTube
     :param dev_key: Youtube API key
     """
-    log.info(f"Searching for {search_term}")
     in_cache, video_id = check_if_in_cache(search_term)
     if in_cache:
         return YOUTUBE_VIDEO_URL + video_id

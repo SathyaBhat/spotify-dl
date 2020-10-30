@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import os
-import re
 from logging import DEBUG
 import argparse
 import json
@@ -12,8 +11,8 @@ from spotify_dl.youtube import fetch_youtube_url, get_youtube_dev_key
 from spotify_dl.constants import VERSION
 from spotify_dl.models import db, Song
 from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
-
 from pathlib import Path, PurePath
+
 
 def spotify_dl():
     """Main entry point of the script."""
@@ -24,21 +23,17 @@ def spotify_dl():
                         help='Specify download directory.', required=True)
     parser.add_argument('-d', '--download', action='store_true',
                         help='Download using youtube-dl', default=True)
-    
     parser.add_argument('-f', '--format_str', type=str, action='store',
                         help='Specify youtube-dl format string.',
                         default='bestaudio/best')
     parser.add_argument('-m', '--skip_mp3', action='store_true',
                         help='Don\'t convert downloaded songs to mp3')
-
     parser.add_argument('-s', '--scrape', action="store",
                         help="Use HTML Scraper for YouTube Search", default=True)
-
     parser.add_argument('-V', '--verbose', action='store_true',
                         help='Show more information on what''s happening.')
     parser.add_argument('-v', '--version', action='store_true',
                         help='Shows current version of the program')
-    
     args = parser.parse_args()
 
     if args.version:
