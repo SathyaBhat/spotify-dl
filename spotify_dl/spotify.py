@@ -1,5 +1,6 @@
 import youtube_dl
 from spotify_dl.scaffold import *
+from spotify_dl.utils import sanitize
 
 
 def fetch_tracks(sp, item_type, url):
@@ -117,7 +118,7 @@ def get_item_name(sp, item_type, item_id):
         name = sp.album(album_id=item_id).get('name')
     elif item_type == 'track':
         name = sp.track(track_id=item_id).get('name')
-    return name
+    return sanitize(name)
 
 
 def validate_spotify_url(url):
