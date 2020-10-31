@@ -7,4 +7,3 @@ click==7.0
 lxml>=4.2
 wheel==0.34.2
 peewee==3.13.3
-sanitize-filename==1.2.0

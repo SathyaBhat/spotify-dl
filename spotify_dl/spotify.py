@@ -1,6 +1,6 @@
 import youtube_dl
 from spotify_dl.scaffold import *
-from sanitize_filename import sanitize
+from spotify_dl.utils import sanitize
 
 def fetch_tracks(sp, item_type, url):
     """
