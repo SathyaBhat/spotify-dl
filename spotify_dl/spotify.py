@@ -55,8 +55,11 @@ def download_songs(songs_dict, download_directory, format_string, skip_mp3):
     :param format_string: format string for the file conversion
     :param skip_mp3: Whether to skip conversion to MP3
     """
+    download_directory = f"{download_directory}\\"
+    log.debug(f"Downloading to {download_directory}")
     for number, item in enumerate(songs_dict):
         log.debug('Songs to download: %s', item)
+        
         url_, track_, artist_ = item
         download_archive = download_directory + 'downloaded_songs.txt'
         outtmpl = download_directory + '%(title)s.%(ext)s'
