@@ -1,58 +1,65 @@
-from __future__ import unicode_literals
-import re
-
 import youtube_dl
-
 from spotify_dl.scaffold import *
 
-def fetch_tracks(sp, playlist, user_id):
-    """Fetches tracks from Spotify user's saved
-        tracks or from playlist(if playlist parameter is passed
-        and saves song name and artist name to songs list
+
+def fetch_tracks(sp, item_type, url):
     """
-    log.debug('Fetching saved tracks')
-    offset = 0
+    Fetches tracks from the provided URL.
+    :param sp: Spotify client
+    :param type: Type of item being requested for: album/playlist/track
+    :param url: URL of the item
+    :return Dictionary of song and artist
+    """
     songs_dict = {}
-    if user_id is None:
-        current_user_id = sp.current_user()['id']
-    else:
-        current_user_id = user_id
-    while True:
-        if playlist is None:
-            results = sp.current_user_saved_tracks(limit=50, offset=offset)
-        else:
-            results = sp.user_playlist_tracks(current_user_id, playlist, None,
-                                              limit=50, offset=offset)
+    offset = 0
 
-        log.debug(f'Got result json keys {results.keys()}', )
-        for item in results['tracks']['items']:
-            track = item['track']
-
-            if track is not None:
-                track_name = str(track['name'])
-                track_artist = str(track['artists'][0]['name'])
-                log.debug('Appending %s to'
-                        'songs list', (track['name'] + ' - ' + track['artists'][0]['name']))
+    if item_type == 'playlist':
+        items = sp.playlist_items(playlist_id=url, fields='items.track.name,items.track.artists(name),items.track.album(name),total,next,offset', additional_types=['track'])
+        while True:
+            for item in items['items']:
+                track_name = item['track']['name']
+                track_artist = " ".join([artist['name'] for artist in item['track']['artists']])
                 songs_dict.update({track_name: track_artist})
-            else:
-                log.warning("Track/artist name for %s not found, skipping", track)
+                offset += 1
 
-            offset += 1
+            if items.get('next') is None:
+                log.info('All pages fetched, time to leave. Added %s songs in total', offset)
+                break
 
-        if results.get('next') is None:
-            log.info('All pages fetched, time to leave.'
-                     ' Added %s songs in total', offset)
-            break
+    elif item_type == 'album':
+        items = sp.album_tracks(album_id=url)
+        while True:
+            for item in items['items']:
+                track_name = item['name']
+                track_artist = " ".join([artist['name'] for artist in item['artists']])
+                songs_dict.update({track_name: track_artist})
+                offset += 1
+
+            if items.get('next') is None:
+                log.info('All pages fetched, time to leave. Added %s songs in total', offset)
+                break
+
+    elif item_type == 'track':
+        items = sp.track(track_id=url)
+        track_name = items['name']
+        track_artist = " ".join([artist['name'] for artist in items['artists']])
+        songs_dict.update({track_name: track_artist})
     return songs_dict
 
 
-def download_songs(info, download_directory, format_string, skip_mp3):
+def download_songs(songs_dict, download_directory, format_string, skip_mp3):
     """
-    Downloads songs from the YouTube URL passed to either
-       current directory or download_directory, is it is passed
+    Downloads songs from the YouTube URL passed to either current directory or download_directory, is it is passed.
+    :param songs_dict: Dictionary of songs and associated artist
+    :param download_directory: Location where to save
+    :param format_string: format string for the file conversion
+    :param skip_mp3: Whether to skip conversion to MP3
     """
-    for number, item in enumerate(info):
+    download_directory = f"{download_directory}\\"
+    log.debug(f"Downloading to {download_directory}")
+    for number, item in enumerate(songs_dict):
         log.debug('Songs to download: %s', item)
+        
         url_, track_, artist_ = item
         download_archive = download_directory + 'downloaded_songs.txt'
         outtmpl = download_directory + '%(title)s.%(ext)s'
@@ -82,29 +89,48 @@ def download_songs(info, download_directory, format_string, skip_mp3):
                 continue
 
 
-def extract_user_and_playlist_from_uri(uri, sp):
-    playlist_re = re.compile("(spotify)(:user:[\w,.]+)?(:playlist:[\w]+)")
-    user_id = sp.current_user()['id']
-    for playlist_uri in ["".join(x) for x in playlist_re.findall(uri)]:
-        segments = playlist_uri.split(":")
-        if len(segments) >= 4:
-            user_id = segments[2]
-            playlist_id = segments[4]
-            log.info('List ID: ' + str(playlist_id))
-        else:
-            playlist_id = segments[2]
-            log.info('List ID: ' + str(playlist_id))
-    log.info('List owner: ' + str(user_id))
-    return user_id, playlist_id
+def parse_spotify_url(url):
+    """
+    Parse the provided Spotify playlist URL and determine if it is a playlist, track or album.
+    :param url: URL to be parsed
+    :param download_directory: Location where to save
+    :param format_string: format string for the file conversion
+    :return tuple indicating the type and id of the item
+    """
+    parsed_url = url.replace("https://open.spotify.com/", "")
+    item_type = parsed_url.split("/")[0]
+    item_id = parsed_url.split("/")[1]
+    return item_type, item_id
 
 
-def playlist_name(uri, sp):
-    user_id, playlist_id = extract_user_and_playlist_from_uri(uri, sp)
-    return get_playlist_name_from_id(playlist_id, user_id, sp)
-
-
-def get_playlist_name_from_id(playlist_id, user_id, sp):
-    playlist = sp.user_playlist(user_id, playlist_id,
-                                fields="tracks, next, name")
-    name = playlist['name']
+def get_item_name(sp, item_type, item_id):
+    """
+    Fetch the name of the item.
+    :param sp: Spotify Client
+    :param item_type: Type of the item
+    :param item_id: id of the item
+    :return String indicating the name of the item
+    """
+    if item_type == 'playlist':
+        name = sp.playlist(playlist_id=item_id, fields='name').get('name')
+    elif item_type == 'album':
+        name = sp.album(album_id=item_id).get('name')
+    elif item_type == 'track':
+        name = sp.track(track_id=item_id).get('name')
     return name
+
+
+def validate_spotify_url(url):
+    """
+    Validate the URL and determine if the item type is supported.
+    :return Boolean indicating whether or not item is supported
+    """
+    item_type, item_id = parse_spotify_url(url)
+    log.debug(f"Got item type {item_type} and item_id {item_id}")
+    if item_type not in ['album', 'track', 'playlist']:
+        log.error("Only albums/tracks/playlists are supported")
+        return False
+    if item_id is None:
+        log.error("Couldn't get a valid id")
+        return False
+    return True
