@@ -15,19 +15,15 @@ def check_for_tokens():
     log.debug('Checking for tokens')
     CLIENT_ID = getenv('SPOTIPY_CLIENT_ID')
     CLIENT_SECRET = getenv('SPOTIPY_CLIENT_SECRET')
-    REDIRECT_URL = getenv('SPOTIPY_REDIRECT_URI')
-    log.debug("Tokens fetched: {} {} {}".format(CLIENT_ID, CLIENT_SECRET,
-                                                REDIRECT_URL))
+    log.debug("Tokens fetched: {} {}".format(CLIENT_ID, CLIENT_SECRET))
 
-    if CLIENT_ID is None or CLIENT_SECRET is None or REDIRECT_URL is None:
+    if CLIENT_ID is None or CLIENT_SECRET is None:
         print('''
             You need to set your Spotify API credentials. You can do this by
             setting environment variables like so:
 
             export SPOTIPY_CLIENT_ID='your-spotify-client-id'
             export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
-            export SPOTIPY_REDIRECT_URI='your-app-redirect-url'
-
             Get your credentials at
                 https://developer.spotify.com/my-applications
         ''')
