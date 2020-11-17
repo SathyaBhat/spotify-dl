@@ -1,4 +1,3 @@
-import youtube_dl
 from spotify_dl.scaffold import *
 from spotify_dl.utils import sanitize
 
@@ -19,7 +18,8 @@ def fetch_tracks(sp, item_type, url):
         while True:
             for item in items['items']:
                 track_name = item['track']['name']
-                track_artist = " ".join([artist['name'] for artist in item['track']['artists']])
+                log.debug("Artist: {}".format(item['track']['artists']))
+                track_artist = ", ".join([artist['name'] for artist in item['track']['artists']])
                 songs_dict.update({track_name: track_artist})
                 offset += 1
 
@@ -46,48 +46,6 @@ def fetch_tracks(sp, item_type, url):
         track_artist = " ".join([artist['name'] for artist in items['artists']])
         songs_dict.update({track_name: track_artist})
     return songs_dict
-
-
-def download_songs(songs_dict, download_directory, format_string, skip_mp3):
-    """
-    Downloads songs from the YouTube URL passed to either current directory or download_directory, is it is passed.
-    :param songs_dict: Dictionary of songs and associated artist
-    :param download_directory: Location where to save
-    :param format_string: format string for the file conversion
-    :param skip_mp3: Whether to skip conversion to MP3
-    """
-    download_directory = f"{download_directory}\\"
-    log.debug(f"Downloading to {download_directory}")
-    for number, item in enumerate(songs_dict):
-        log.debug('Songs to download: %s', item)
-        
-        url_, track_, artist_ = item
-        download_archive = download_directory + 'downloaded_songs.txt'
-        outtmpl = download_directory + '%(title)s.%(ext)s'
-        ydl_opts = {
-            'format': format_string,
-            'download_archive': download_archive,
-            'outtmpl': outtmpl,
-            'noplaylist': True,
-            'postprocessor_args': ['-metadata', 'title=' + str(track_),
-                                   '-metadata', 'artist=' + str(artist_),
-                                   '-metadata', 'track=' + str(number + 1)]
-        }
-        if not skip_mp3:
-            mp3_postprocess_opts = {
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
-            }
-            ydl_opts['postprocessors'] = [mp3_postprocess_opts.copy()]
-
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            try:
-                log.debug(ydl.download([url_]))
-            except Exception as e:
-                log.debug(e)
-                print('Failed to download: {}'.format(url_))
-                continue
 
 
 def parse_spotify_url(url):

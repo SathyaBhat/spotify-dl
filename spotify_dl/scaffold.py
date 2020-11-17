@@ -12,6 +12,11 @@ sentry_sdk.init("https://7d74a39472c9449dac51eb24bb33bdc3@sentry.io/2383261")
 
 
 def check_for_tokens():
+    """
+    Checks if the required API keys for Spotify has been set.
+    :param name: Name to be cleaned up
+    :return string containing the cleaned name
+    """
     log.debug('Checking for tokens')
     CLIENT_ID = getenv('SPOTIPY_CLIENT_ID')
     CLIENT_SECRET = getenv('SPOTIPY_CLIENT_SECRET')
@@ -28,19 +33,4 @@ def check_for_tokens():
                 https://developer.spotify.com/my-applications
         ''')
         return False
-
-    YOUTUBE_DEV_KEY = getenv('YOUTUBE_DEV_KEY')
-    log.debug("YouTube dev key: {}".format(YOUTUBE_DEV_KEY))
-    if YOUTUBE_DEV_KEY is None:
-        print('''
-            Youtube Data API token has not been setup. You can do this by
-            setting environment variables like so:
-
-            export YOUTUBE_DEV_KEY='your-youtube-dev-key'
-
-            Generate the key from
-            https://console.developers.google.com/apis/api/youtube/overview
-            
-            Using HTML Scraper as a fallback.
-            ''')
     return True

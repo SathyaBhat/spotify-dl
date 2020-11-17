@@ -7,8 +7,8 @@ import spotipy
 import sys
 
 from spotify_dl.scaffold import log, check_for_tokens
-from spotify_dl.spotify import fetch_tracks, download_songs, parse_spotify_url, validate_spotify_url, get_item_name
-from spotify_dl.youtube import fetch_youtube_url, get_youtube_dev_key
+from spotify_dl.spotify import fetch_tracks, parse_spotify_url, validate_spotify_url, get_item_name
+from spotify_dl.youtube import download_songs
 from spotify_dl.constants import VERSION
 from spotify_dl.models import db, Song
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -74,19 +74,13 @@ def spotify_dl():
     if args.output:
         item_type, item_id = parse_spotify_url(args.url)
         directory_name = get_item_name(sp, item_type, item_id)
-        path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
-        path.mkdir(parents=True, exist_ok=True)
+        save_path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
+        save_path.mkdir(parents=True, exist_ok=True)
         log.info("Saving songs to: {}".format(directory_name))
 
     songs = fetch_tracks(sp, item_type, args.url)
-    url = []
-    for song, artist in songs.items():
-        link = fetch_youtube_url(song + ' - ' + artist, get_youtube_dev_key())
-        if link:
-            url.append((link, song, artist))
-
     if args.download is True:
-        download_songs(url, str(path), args.format_str, args.skip_mp3)
+        download_songs(songs, str(save_path), args.format_str, args.skip_mp3)
 
 
 if __name__ == '__main__':
