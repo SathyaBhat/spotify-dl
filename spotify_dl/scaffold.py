@@ -13,7 +13,7 @@ sentry_sdk.init("https://7d74a39472c9449dac51eb24bb33bdc3@sentry.io/2383261")
 
 def check_for_tokens():
     """
-    Checks if the required API keys for Spotify has been set
+    Checks if the required API keys for Spotify has been set.
     :param name: Name to be cleaned up
     :return string containing the cleaned name
     """

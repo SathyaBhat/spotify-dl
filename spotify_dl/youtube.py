@@ -1,4 +1,3 @@
-from sentry_sdk import capture_exception
 from spotify_dl.scaffold import log
 import youtube_dl
 
