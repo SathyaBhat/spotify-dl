@@ -2,10 +2,9 @@ from sentry_sdk import capture_exception
 from spotify_dl.scaffold import log
 import youtube_dl
 
-from click import secho
 
 def download_songs(songs, download_directory, format_string, skip_mp3):
-    """ 
+    """
     Downloads songs from the YouTube URL passed to either current directory or download_directory, is it is passed.
     :param songs: Dictionary of songs and associated artist
     :param download_directory: Location where to save
@@ -14,9 +13,8 @@ def download_songs(songs, download_directory, format_string, skip_mp3):
     """
     download_directory = f"{download_directory}\\"
     log.debug(f"Downloading to {download_directory}")
-    dl_count = len(songs)
     for song, artist in songs.items():
-        query = f"{artist} - {song}".replace(":","").replace("\"","")
+        query = f"{artist} - {song}".replace(":", "").replace("\"", "")
         download_archive = download_directory + 'downloaded_songs.txt'
         outtmpl = download_directory + '%(title)s.%(ext)s'
         ydl_opts = {
