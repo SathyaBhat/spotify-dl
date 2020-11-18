@@ -14,29 +14,32 @@ def fetch_tracks(sp, item_type, url):
     offset = 0
 
     if item_type == 'playlist':
-        items = sp.playlist_items(playlist_id=url, fields='items.track.name,items.track.artists(name),items.track.album(name),total,next,offset', additional_types=['track'])
         while True:
+            items = sp.playlist_items(playlist_id=url, fields='items.track.name,items.track.artists(name),items.track.album(name),total,next,offset', additional_types=['track'], offset=offset)
+            total_songs = items.get('total')
             for item in items['items']:
                 track_name = item['track']['name']
-                log.debug("Artist: {}".format(item['track']['artists']))
                 track_artist = ", ".join([artist['name'] for artist in item['track']['artists']])
                 songs_dict.update({track_name: track_artist})
                 offset += 1
-
-            if items.get('next') is None:
+            
+            log.info(f"Fetched {offset}/{total_songs} songs in the playlist")                
+            if total_songs == offset:
                 log.info('All pages fetched, time to leave. Added %s songs in total', offset)
                 break
 
     elif item_type == 'album':
-        items = sp.album_tracks(album_id=url)
         while True:
+            items = sp.album_tracks(album_id=url)
+            total_songs = items.get('total')
             for item in items['items']:
                 track_name = item['name']
                 track_artist = " ".join([artist['name'] for artist in item['artists']])
                 songs_dict.update({track_name: track_artist})
                 offset += 1
 
-            if items.get('next') is None:
+            log.info(f"Fetched {offset}/{total_songs} songs in the album")                
+            if total_songs == offset:
                 log.info('All pages fetched, time to leave. Added %s songs in total', offset)
                 break
 
