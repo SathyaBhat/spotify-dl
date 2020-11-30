@@ -2,6 +2,7 @@ from spotify_dl.scaffold import log
 import youtube_dl
 from os import path
 
+
 def download_songs(songs, download_directory, format_string, skip_mp3):
     """
     Downloads songs from the YouTube URL passed to either current directory or download_directory, is it is passed.
@@ -14,7 +15,7 @@ def download_songs(songs, download_directory, format_string, skip_mp3):
     for song, artist in songs.items():
         query = f"{artist} - {song}".replace(":", "").replace("\"", "")
         download_archive = path.join(download_directory, 'downloaded_songs.txt')
-        outtmpl = path.join(download_directory,'%(title)s.%(ext)s')
+        outtmpl = path.join(download_directory, '%(title)s.%(ext)s')
         ydl_opts = {
             'format': format_string,
             'download_archive': download_archive,
