@@ -80,7 +80,7 @@ def spotify_dl():
 
     songs = fetch_tracks(sp, item_type, args.url)
     if args.download is True:
-        download_songs(songs, str(save_path), args.format_str, args.skip_mp3)
+        download_songs(songs, save_path, args.format_str, args.skip_mp3)
 
 
 if __name__ == '__main__':
