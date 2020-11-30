@@ -1,5 +1,6 @@
 from spotify_dl.scaffold import log
 import youtube_dl
+from os import path
 
 
 def download_songs(songs, download_directory, format_string, skip_mp3):
@@ -10,12 +11,11 @@ def download_songs(songs, download_directory, format_string, skip_mp3):
     :param format_string: format string for the file conversion
     :param skip_mp3: Whether to skip conversion to MP3
     """
-    download_directory = f"{download_directory}\\"
     log.debug(f"Downloading to {download_directory}")
     for song, artist in songs.items():
         query = f"{artist} - {song}".replace(":", "").replace("\"", "")
-        download_archive = download_directory + 'downloaded_songs.txt'
-        outtmpl = download_directory + '%(title)s.%(ext)s'
+        download_archive = path.join(download_directory, 'downloaded_songs.txt')
+        outtmpl = path.join(download_directory, '%(title)s.%(ext)s')
         ydl_opts = {
             'format': format_string,
             'download_archive': download_archive,
