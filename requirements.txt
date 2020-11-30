@@ -1,9 +1,5 @@
 spotipy==2.16
-google-api-python-client==1.6.2
-youtube-dl>=2020.11.17
-sentry-sdk==0.14.3
-colorama==0.4.3
-click==7.0
-lxml>=4.2
+youtube-dl>=2020.11.29
+sentry-sdk==0.19.4
 wheel==0.34.2
 peewee==3.13.3
