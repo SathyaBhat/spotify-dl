@@ -34,7 +34,7 @@ For more details and other arguments, issue `-h`
 
     spotify_dl -h
 
-See [the getting started guide](/GETTING_STARTED.md) for more details.
+See [the getting started guide](https://github.com/SathyaBhat/spotify-dl/blob/master/GETTING_STARTED.md) for more details.
 
 
 ### Contributing and Local development 
