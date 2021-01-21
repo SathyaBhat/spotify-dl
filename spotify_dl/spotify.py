@@ -1,3 +1,4 @@
+import sys
 from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
 
@@ -59,6 +60,9 @@ def parse_spotify_url(url):
     :param format_string: format string for the file conversion
     :return tuple indicating the type and id of the item
     """
+    if url.startswith("spotify:"):
+        log.error("Spotify URI was provided instead of a playlist/album/track URL.")
+        sys.exit(1)
     parsed_url = url.replace("https://open.spotify.com/", "")
     item_type = parsed_url.split("/")[0]
     item_id = parsed_url.split("/")[1]
