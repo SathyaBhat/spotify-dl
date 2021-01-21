@@ -1,4 +1,4 @@
-spotipy==2.16
+spotipy== 2.16.1
 youtube-dl>=2020.11.29
 sentry-sdk==0.19.4
 wheel==0.34.2
