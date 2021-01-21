@@ -55,4 +55,4 @@ Take a look at [CONTRIBUTORS](/CONTRIBUTORS.md) for a list of all people who hav
 
 ### Issues, Feedback, Contact details
 
-Feel free to raise any bugs/issues under Github issues. Pull requests are also more than welcome. 
+Feel free to raise any bugs/issues under Github issues. Pull requests are also more than welcome.
