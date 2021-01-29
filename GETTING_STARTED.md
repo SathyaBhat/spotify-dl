@@ -37,6 +37,22 @@ Pre-requisite: You need Python 3.6+
   - Linux users can get them by installing libav-tools by using apt-get (`sudo apt-get install -y libav-tools`) or a package manager which comes with your distro
   - Windows users can download FFMPEG pre-built binaries from [here](http://ffmpeg.zeranoe.com/builds/). Extract the file using [7-zip](http://7-zip.org/) to a foldrer and [add the folder to your PATH environment variable](http://www.wikihow.com/Install-FFmpeg-on-Windows) 
   
+### Use Docker
+
+Build the Docker image from the Dockerfile, run the following command in the spotify_dl root directory: `docker build -t spotify_dl .`
+
+Run the Docker image with your client ID and secret:
+``` bash
+docker run -d --rm \
+		   -e SPOTIPY_CLIENT_ID=client_id \
+		   -e SPOTIPY_CLIENT_SECRET=client_secret \
+		   -v "`pwd`":/download \
+		   spotify_dl \
+		   spotify_dl -l "spotify_playlist_link" -o download_directory
+```
+
+You can also run the bulk downloading script, make sure to configure it first: `bash bulk_docker_download.sh`
+
 ### How do I set defaults?
 
 You can set defaults per user by creating a file at `~/.spotify_dl_settings`. Create a key with value for every argument you want a default for. Example:
