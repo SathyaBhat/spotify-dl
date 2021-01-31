@@ -12,8 +12,8 @@ Pre-requisite: You need Python 3.6+
 
     You can set environment variables in Linux like so:
 
-            export SPOTIPY_CLIENT_ID=your-spotify-client-id
-            export SPOTIPY_CLIENT_SECRET=your-spotify-client-secret
+            export SPOTIFY_CLIENT_ID=your-spotify-client-id
+            export SPOTIFY_CLIENT_SECRET=your-spotify-client-secret
 
     Windows users, check for [this question](http://superuser.com/a/284351/4377) for details on how you can set environment variables. If you don't wish to use my URL for the redirect, you are free to use any valid URL. Just ensurethe redirect URL set as the environment variable matches with what you have entered in the developer console & in the environment variable above.
 
