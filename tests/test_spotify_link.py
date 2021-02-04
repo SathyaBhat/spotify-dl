@@ -1,5 +1,5 @@
 from spotify_dl.spotify import parse_spotify_url, get_item_name
-from tests.test_spotify_fetch_tracks import spotify_auth
+from test_spotify_fetch_tracks import spotify_auth
 
 def test_parse_spotify_url():
     album_url = "https://open.spotify.com/album/aabbccddee"
