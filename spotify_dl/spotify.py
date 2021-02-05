@@ -1,4 +1,3 @@
-import pprint
 import sys
 from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
