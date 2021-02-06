@@ -4,8 +4,7 @@ import spotipy
 
 
 def spotify_auth():
-    client = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id='d08d90ebd019402592980a064f1139a0',
-                                                                   client_secret='945476e41e3946288eb845486cf3c03e'))
+    client = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
     return client
 
 
