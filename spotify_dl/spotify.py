@@ -1,5 +1,5 @@
-import pprint
 import sys
+
 from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
 
@@ -19,7 +19,7 @@ def fetch_tracks(sp, item_type, url):
         while True:
             items = sp.playlist_items(playlist_id=url,
                                       fields='items.track.name,items.track.artists(name),'
-                                             'items.track.album(name, release_date, total_tracks),'
+                                             'items.track.album(name, release_date, total_tracks, images),'
                                              'items.track.track_number,total, next,offset',
                                       additional_types=['track'], offset=offset)
             total_songs = items.get('total')
@@ -30,8 +30,10 @@ def fetch_tracks(sp, item_type, url):
                 track_year = item['track']['album']['release_date'][:4]
                 album_total = item['track']['album']['total_tracks']
                 track_num = item['track']['track_number']
+                cover = item['track']['album']['images'][0]['url']
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                                   "num_tracks": album_total, "num": track_num})
+                                   "num_tracks": album_total, "num": track_num,
+                                   "cover": cover})
                 offset += 1
 
             log.info(f"Fetched {offset}/{total_songs} songs in the playlist")
@@ -47,12 +49,13 @@ def fetch_tracks(sp, item_type, url):
             track_album = album_info['name']
             track_year = album_info['release_date'][:4]
             album_total = album_info['total_tracks']
+            cover = album_info['images'][0]['url']
             for item in items['items']:
                 track_name = item['name']
-                track_artist = " ".join([artist['name'] for artist in item['artists']])
+                track_artist = ", ".join([artist['name'] for artist in item['artists']])
                 track_num = item['track_number']
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                                   "num_tracks": album_total, "num": track_num})
+                                   "num_tracks": album_total, "num": track_num, "cover": cover})
                 offset += 1
 
             log.info(f"Fetched {offset}/{total_songs} songs in the album")
@@ -63,14 +66,14 @@ def fetch_tracks(sp, item_type, url):
     elif item_type == 'track':
         items = sp.track(track_id=url)
         track_name = items['name']
-        track_artist = " ".join([artist['name'] for artist in items['artists']])
+        track_artist = ", ".join([artist['name'] for artist in items['artists']])
         track_album = items['album']['name']
         track_year = items['album']['release_date'][:4]
         album_total = items['album']['total_tracks']
         track_num = items['track_number']
+        cover = items['album']['images'][0]['url']
         songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                           "num_tracks": album_total, "num": track_num})
-
+                           "num_tracks": album_total, "num": track_num, "cover": cover})
     return songs_list
 
 
