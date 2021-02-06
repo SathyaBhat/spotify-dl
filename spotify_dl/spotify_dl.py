@@ -1,18 +1,19 @@
 #!/usr/bin/env python
-import os
-from logging import DEBUG
 import argparse
 import json
-import spotipy
+import os
 import sys
+from logging import DEBUG
+from pathlib import Path, PurePath
 
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
+from spotify_dl.constants import VERSION
+from spotify_dl.models import db, Song
 from spotify_dl.scaffold import log, check_for_tokens
 from spotify_dl.spotify import fetch_tracks, parse_spotify_url, validate_spotify_url, get_item_name
 from spotify_dl.youtube import download_songs
-from spotify_dl.constants import VERSION
-from spotify_dl.models import db, Song
-from spotipy.oauth2 import SpotifyClientCredentials
-from pathlib import Path, PurePath
 
 
 def spotify_dl():
