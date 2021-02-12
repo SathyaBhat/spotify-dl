@@ -18,7 +18,7 @@ def fetch_tracks(sp, item_type, url):
     if item_type == 'playlist':
         while True:
             items = sp.playlist_items(playlist_id=url,
-                                      fields='items.track.name,items.track.artists(name),'
+                                      fields='items.track.name,items.track.artists(name, uri),'
                                              'items.track.album(name, release_date, total_tracks, images),'
                                              'items.track.track_number,total, next,offset',
                                       additional_types=['track'], offset=offset)
@@ -31,9 +31,13 @@ def fetch_tracks(sp, item_type, url):
                 album_total = item['track']['album']['total_tracks']
                 track_num = item['track']['track_number']
                 cover = item['track']['album']['images'][0]['url']
+                if (len(sp.artist(artist_id=item['track']['artists'][0]['uri'])['genres']) > 0):
+                    genre = sp.artist(artist_id=item['track']['artists'][0]['uri'])['genres'][0]
+                else:
+                    genre = ""
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
                                    "num_tracks": album_total, "num": track_num,
-                                   "cover": cover})
+                                   "cover": cover, "genre": genre})
                 offset += 1
 
             log.info(f"Fetched {offset}/{total_songs} songs in the playlist")
@@ -50,12 +54,17 @@ def fetch_tracks(sp, item_type, url):
             track_year = album_info['release_date'][:4]
             album_total = album_info['total_tracks']
             cover = album_info['images'][0]['url']
+            if (len(sp.artist(artist_id=album_info['artists'][0]['uri'])['genres']) > 0):
+                genre = sp.artist(artist_id=album_info['artists'][0]['uri'])['genres'][0]
+            else:
+                genre = ""
             for item in items['items']:
                 track_name = item['name']
                 track_artist = ", ".join([artist['name'] for artist in item['artists']])
                 track_num = item['track_number']
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                                   "num_tracks": album_total, "num": track_num, "cover": cover})
+                                   "num_tracks": album_total, "num": track_num,
+                                   "cover": cover, "genre": genre})
                 offset += 1
 
             log.info(f"Fetched {offset}/{total_songs} songs in the album")
@@ -72,8 +81,13 @@ def fetch_tracks(sp, item_type, url):
         album_total = items['album']['total_tracks']
         track_num = items['track_number']
         cover = items['album']['images'][0]['url']
+        if (len(sp.artist(artist_id=items['artists'][0]['uri'])['genres']) > 0):
+            genre = sp.artist(artist_id=items['artists'][0]['uri'])['genres'][0]
+        else:
+            genre = ""
         songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                           "num_tracks": album_total, "num": track_num, "cover": cover})
+                           "num_tracks": album_total, "num": track_num,
+                           "cover": cover, "genre": genre})
     return songs_list
 
 
