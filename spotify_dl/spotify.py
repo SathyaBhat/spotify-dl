@@ -11,35 +11,50 @@ def fetch_tracks(sp, item_type, url):
     :param url: URL of the item
     :return Dictionary of song and artist
     """
-    songs_dict = {}
+    songs_list = []
     offset = 0
 
     if item_type == 'playlist':
         while True:
-            items = sp.playlist_items(playlist_id=url, fields='items.track.name,items.track.artists(name),items.track.album(name),total,next,offset', additional_types=['track'], offset=offset)
+            items = sp.playlist_items(playlist_id=url,
+                                      fields='items.track.name,items.track.artists(name),'
+                                             'items.track.album(name, release_date, total_tracks),'
+                                             'items.track.track_number,total, next,offset',
+                                      additional_types=['track'], offset=offset)
             total_songs = items.get('total')
             for item in items['items']:
                 track_name = item['track']['name']
                 track_artist = ", ".join([artist['name'] for artist in item['track']['artists']])
-                songs_dict.update({track_name: track_artist})
+                track_album = item['track']['album']['name']
+                track_year = item['track']['album']['release_date'][:4]
+                album_total = item['track']['album']['total_tracks']
+                track_num = item['track']['track_number']
+                songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
+                                   "num_tracks": album_total, "num": track_num})
                 offset += 1
-            
-            log.info(f"Fetched {offset}/{total_songs} songs in the playlist")                
+
+            log.info(f"Fetched {offset}/{total_songs} songs in the playlist")
             if total_songs == offset:
                 log.info('All pages fetched, time to leave. Added %s songs in total', offset)
                 break
 
     elif item_type == 'album':
         while True:
+            album_info = sp.album(album_id=url)
             items = sp.album_tracks(album_id=url)
             total_songs = items.get('total')
+            track_album = album_info['name']
+            track_year = album_info['release_date'][:4]
+            album_total = album_info['total_tracks']
             for item in items['items']:
                 track_name = item['name']
                 track_artist = " ".join([artist['name'] for artist in item['artists']])
-                songs_dict.update({track_name: track_artist})
+                track_num = item['track_number']
+                songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
+                                   "num_tracks": album_total, "num": track_num})
                 offset += 1
 
-            log.info(f"Fetched {offset}/{total_songs} songs in the album")                
+            log.info(f"Fetched {offset}/{total_songs} songs in the album")
             if total_songs == offset:
                 log.info('All pages fetched, time to leave. Added %s songs in total', offset)
                 break
@@ -48,8 +63,14 @@ def fetch_tracks(sp, item_type, url):
         items = sp.track(track_id=url)
         track_name = items['name']
         track_artist = " ".join([artist['name'] for artist in items['artists']])
-        songs_dict.update({track_name: track_artist})
-    return songs_dict
+        track_album = items['album']['name']
+        track_year = items['album']['release_date'][:4]
+        album_total = items['album']['total_tracks']
+        track_num = items['track_number']
+        songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
+                           "num_tracks": album_total, "num": track_num})
+
+    return songs_list
 
 
 def parse_spotify_url(url):

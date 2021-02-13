@@ -1,6 +1,8 @@
 from spotify_dl.scaffold import log
 import youtube_dl
 from os import path
+from mutagen.easyid3 import EasyID3
+from mutagen.mp3 import MP3
 
 
 def download_songs(songs, download_directory, format_string, skip_mp3):
@@ -12,18 +14,19 @@ def download_songs(songs, download_directory, format_string, skip_mp3):
     :param skip_mp3: Whether to skip conversion to MP3
     """
     log.debug(f"Downloading to {download_directory}")
-    for song, artist in songs.items():
-        query = f"{artist} - {song}".replace(":", "").replace("\"", "")
+    for song in songs:
+        query = f"{song.get('artist')} - {song.get('name')} Lyrics".replace(":", "").replace("\"", "")
         download_archive = path.join(download_directory, 'downloaded_songs.txt')
-        outtmpl = path.join(download_directory, '%(title)s.%(ext)s')
+        outtmpl = path.join(download_directory, f"{song.get('artist')} - {song.get('name')}.%(ext)s")
         ydl_opts = {
             'format': format_string,
             'download_archive': download_archive,
             'outtmpl': outtmpl,
             'default_search': 'ytsearch',
             'noplaylist': True,
-            'postprocessor_args': ['-metadata', 'title=' + song,
-                                   '-metadata', 'artist=' + artist]
+            'postprocessor_args': ['-metadata', 'title=' + song.get('name'),
+                                   '-metadata', 'artist=' + song.get('artist'),
+                                   '-metadata', 'album=' + song.get('album')]
         }
         if not skip_mp3:
             mp3_postprocess_opts = {
@@ -40,3 +43,10 @@ def download_songs(songs, download_directory, format_string, skip_mp3):
                 log.debug(e)
                 print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
                 continue
+
+        if not skip_mp3:
+            song_file = MP3(path.join(download_directory, f"{song.get('artist')} - {song.get('name')}.mp3"),
+                            ID3=EasyID3)
+            song_file['date'] = song.get('year')
+            song_file['tracknumber'] = str(song.get('num')) + '/' + str(song.get('num_tracks'))
+            song_file.save()
