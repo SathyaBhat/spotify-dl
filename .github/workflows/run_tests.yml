@@ -4,11 +4,11 @@ on: [push, pull_request]
 
 jobs:
   build:
-
+    environment: CI
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -29,7 +29,6 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       env:
-        YOUTUBE_DEV_KEY:  ${{ secrets.YOUTUBE_DEV_KEY }}
         SPOTIPY_CLIENT_ID:  ${{ secrets.SPOTIPY_CLIENT_ID }}
         SPOTIPY_CLIENT_SECRET:  ${{ secrets.SPOTIPY_CLIENT_SECRET }}
       run: |

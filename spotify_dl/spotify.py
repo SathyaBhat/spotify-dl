@@ -18,10 +18,12 @@ def fetch_tracks(sp, item_type, url):
     if item_type == 'playlist':
         while True:
             items = sp.playlist_items(playlist_id=url,
-                                      fields='items.track.name,items.track.artists(name, uri),'
-                                             'items.track.album(name, release_date, total_tracks, images),'
-                                             'items.track.track_number,total, next,offset',
-                                      additional_types=['track'], offset=offset)
+
+            fields='items.track.name,items.track.artists(name, uri),'
+                   'items.track.album(name, release_date, total_tracks, images),'
+
+                   'items.track.track_number,total, next,offset',
+            additional_types=['track'], offset=offset)
             total_songs = items.get('total')
             for item in items['items']:
                 track_name = item['track']['name']
@@ -38,6 +40,8 @@ def fetch_tracks(sp, item_type, url):
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
                                    "num_tracks": album_total, "num": track_num,
                                    "cover": cover, "genre": genre})
+
+
                 offset += 1
 
             log.info(f"Fetched {offset}/{total_songs} songs in the playlist")
@@ -88,6 +92,7 @@ def fetch_tracks(sp, item_type, url):
         songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
                            "num_tracks": album_total, "num": track_num,
                            "cover": cover, "genre": genre})
+
     return songs_list
 
 

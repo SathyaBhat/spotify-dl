@@ -1,5 +1,7 @@
 import urllib.request
 from os import path
+from mutagen.easyid3 import EasyID3
+from mutagen.mp3 import MP3
 
 import youtube_dl
 from mutagen.easyid3 import EasyID3

@@ -22,7 +22,7 @@ def test_spotify_playlist_fetch_one():
              'num_tracks': 15,
              'year': '1994'} == songs[0]
 
-
+    
 def test_spotify_playlist_fetch_more():
     sp = spotify_auth()
     url = "https://open.spotify.com/playlist/3cEYpjA9oz9GiPac4AsH4n"
