@@ -40,8 +40,6 @@ def fetch_tracks(sp, item_type, url):
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
                                    "num_tracks": album_total, "num": track_num,
                                    "cover": cover, "genre": genre})
-
-
                 offset += 1
 
             log.info(f"Fetched {offset}/{total_songs} songs in the playlist")
