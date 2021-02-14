@@ -8,7 +8,7 @@ def fetch_tracks(sp, item_type, url):
     """
     Fetches tracks from the provided URL.
     :param sp: Spotify client
-    :param type: Type of item being requested for: album/playlist/track
+    :param item_type: Type of item being requested for: album/playlist/track
     :param url: URL of the item
     :return Dictionary of song and artist
     """
@@ -19,11 +19,11 @@ def fetch_tracks(sp, item_type, url):
         while True:
             items = sp.playlist_items(playlist_id=url,
 
-            fields='items.track.name,items.track.artists(name, uri),'
-                   'items.track.album(name, release_date, total_tracks, images),'
+                                      fields='items.track.name,items.track.artists(name, uri),'
+                                             'items.track.album(name, release_date, total_tracks, images),'
 
-                   'items.track.track_number,total, next,offset',
-            additional_types=['track'], offset=offset)
+                                             'items.track.track_number,total, next,offset',
+                                      additional_types=['track'], offset=offset)
             total_songs = items.get('total')
             for item in items['items']:
                 track_name = item['track']['name']
@@ -33,7 +33,7 @@ def fetch_tracks(sp, item_type, url):
                 album_total = item['track']['album']['total_tracks']
                 track_num = item['track']['track_number']
                 cover = item['track']['album']['images'][0]['url']
-                if (len(sp.artist(artist_id=item['track']['artists'][0]['uri'])['genres']) > 0):
+                if len(sp.artist(artist_id=item['track']['artists'][0]['uri'])['genres']) > 0:
                     genre = sp.artist(artist_id=item['track']['artists'][0]['uri'])['genres'][0]
                 else:
                     genre = ""
@@ -56,7 +56,7 @@ def fetch_tracks(sp, item_type, url):
             track_year = album_info['release_date'][:4]
             album_total = album_info['total_tracks']
             cover = album_info['images'][0]['url']
-            if (len(sp.artist(artist_id=album_info['artists'][0]['uri'])['genres']) > 0):
+            if len(sp.artist(artist_id=album_info['artists'][0]['uri'])['genres']) > 0:
                 genre = sp.artist(artist_id=album_info['artists'][0]['uri'])['genres'][0]
             else:
                 genre = ""
@@ -83,7 +83,7 @@ def fetch_tracks(sp, item_type, url):
         album_total = items['album']['total_tracks']
         track_num = items['track_number']
         cover = items['album']['images'][0]['url']
-        if (len(sp.artist(artist_id=items['artists'][0]['uri'])['genres']) > 0):
+        if len(sp.artist(artist_id=items['artists'][0]['uri'])['genres']) > 0:
             genre = sp.artist(artist_id=items['artists'][0]['uri'])['genres'][0]
         else:
             genre = ""
@@ -98,8 +98,7 @@ def parse_spotify_url(url):
     """
     Parse the provided Spotify playlist URL and determine if it is a playlist, track or album.
     :param url: URL to be parsed
-    :param download_directory: Location where to save
-    :param format_string: format string for the file conversion
+
     :return tuple indicating the type and id of the item
     """
     if url.startswith("spotify:"):
