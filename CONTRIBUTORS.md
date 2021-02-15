@@ -14,3 +14,5 @@ spotify_dl wouldn't be what it is without the help and contributions of followin
  - [Nikhil Nagaraju](https://github.com/nikhilnagaraju) for fixing support for [playlist url with or without userid](https://github.com/SathyaBhat/spotify-dl/pull/58)
  - [Luca](https://github.com/lucanello) for adding [YouTube scraping support](https://github.com/SathyaBhat/spotify-dl/pull/75)
  - [Paul Bissex](https://github.com/pbx) for [better error description](https://github.com/SathyaBhat/spotify-dl/pull/138)
+ - [gonzk](https://github.com/gonzk) for adding [Album Art Cover](https://github.com/SathyaBhat/spotify-dl/pull/145) and [album, year released and track number song metadata](https://github.com/SathyaBhat/spotify-dl/pull/144)
+ 
