@@ -32,7 +32,6 @@ def test_download_one_false_skip():
                                                 data=urllib.request.urlopen(songs[0].get('cover')).read()
                                                 ))
 
-
 def test_download_one_true_skip():
     songs = [
         {'album': 'Hell Freezes Over (Remaster 2018)',
@@ -45,7 +44,6 @@ def test_download_one_true_skip():
          'year': '1994'}]
     yt.download_songs(songs, download_directory='~/Downloads', format_string='best',
                       skip_mp3=False)
-
 
 def test_download_cover_none():
     songs = [
