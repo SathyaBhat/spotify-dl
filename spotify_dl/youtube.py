@@ -57,11 +57,11 @@ def download_songs(songs, download_directory, format_string, skip_mp3):
             song_file.save()
             song_file = MP3(path.join(download_directory, f"{song.get('artist')} - {song.get('name')}.mp3"),
                             ID3=ID3)
-            song_file.tags['APIC'] = APIC(
-                encoding=3,
-                mime='image/jpeg',
-                type=3, desc=u'Cover',
-                data=urllib.request.urlopen(song.get('cover')).read()
-            )
+            if song.get('cover') is not None:
+                song_file.tags['APIC'] = APIC(
+                    encoding=3,
+                    mime='image/jpeg',
+                    type=3, desc=u'Cover',
+                    data=urllib.request.urlopen(song.get('cover')).read()
+                )
             song_file.save()
-            
