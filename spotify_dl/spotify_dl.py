@@ -28,6 +28,9 @@ def spotify_dl():
     parser.add_argument('-f', '--format_str', type=str, action='store',
                         help='Specify youtube-dl format string.',
                         default='bestaudio/best')
+    parser.add_argument('-k', '--keep_playlist_order', type=bool, default=False,
+                        action=argparse.BooleanOptionalAction,
+                        help='Whether to keep original playlist ordering or not.')
     parser.add_argument('-m', '--skip_mp3', action='store_true',
                         help='Don\'t convert downloaded songs to mp3')
     parser.add_argument('-s', '--scrape', action="store",
@@ -81,7 +84,7 @@ def spotify_dl():
 
     songs = fetch_tracks(sp, item_type, args.url)
     if args.download is True:
-        download_songs(songs, save_path, args.format_str, args.skip_mp3)
+        download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order)
 
 
 if __name__ == '__main__':

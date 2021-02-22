@@ -9,19 +9,25 @@ from mutagen.mp3 import MP3
 from spotify_dl.scaffold import log
 
 
-def download_songs(songs, download_directory, format_string, skip_mp3):
+def download_songs(songs, download_directory, format_string, skip_mp3, keep_playlist_order=False):
     """
     Downloads songs from the YouTube URL passed to either current directory or download_directory, is it is passed.
     :param songs: Dictionary of songs and associated artist
     :param download_directory: Location where to save
     :param format_string: format string for the file conversion
     :param skip_mp3: Whether to skip conversion to MP3
+    :param keep_playlist_order: Whether to keep original playlist ordering. Also, prefixes songs files with playlist num
     """
     log.debug(f"Downloading to {download_directory}")
     for song in songs:
         query = f"{song.get('artist')} - {song.get('name')} Lyrics".replace(":", "").replace("\"", "")
         download_archive = path.join(download_directory, 'downloaded_songs.txt')
-        outtmpl = path.join(download_directory, f"{song.get('artist')} - {song.get('name')}.%(ext)s")
+        if keep_playlist_order:
+            file_path = path.join(download_directory,
+                                  f"{song.get('playlist_num')} - {song.get('artist')} - {song.get('name')}")
+        else:
+            file_path = path.join(download_directory, f"{song.get('artist')} - {song.get('name')}")
+        outtmpl = f"{file_path}.%(ext)s"
         ydl_opts = {
             'format': format_string,
             'download_archive': download_archive,
@@ -49,13 +55,16 @@ def download_songs(songs, download_directory, format_string, skip_mp3):
                 continue
 
         if not skip_mp3:
-            song_file = MP3(path.join(download_directory, f"{song.get('artist')} - {song.get('name')}.mp3"),
+            song_file = MP3(path.join(f"{file_path}.mp3"),
                             ID3=EasyID3)
             song_file['date'] = song.get('year')
-            song_file['tracknumber'] = str(song.get('num')) + '/' + str(song.get('num_tracks'))
+            if keep_playlist_order:
+                song_file['tracknumber'] = str(song.get('playlist_num'))
+            else:
+                song_file['tracknumber'] = str(song.get('num')) + '/' + str(song.get('num_tracks'))
             song_file['genre'] = song.get('genre')
             song_file.save()
-            song_file = MP3(path.join(download_directory, f"{song.get('artist')} - {song.get('name')}.mp3"),
+            song_file = MP3(path.join(f"{file_path}.mp3"),
                             ID3=ID3)
             song_file.tags['APIC'] = APIC(
                 encoding=3,
@@ -64,4 +73,3 @@ def download_songs(songs, download_directory, format_string, skip_mp3):
                 data=urllib.request.urlopen(song.get('cover')).read()
             )
             song_file.save()
-            
