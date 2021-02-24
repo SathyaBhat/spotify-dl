@@ -7,6 +7,7 @@ from mutagen.id3 import APIC, ID3
 from mutagen.mp3 import MP3
 
 from spotify_dl.scaffold import log
+from spotify_dl.utils import sanitize
 
 
 def download_songs(songs, download_directory, format_string, skip_mp3, keep_playlist_order=False):
@@ -22,11 +23,13 @@ def download_songs(songs, download_directory, format_string, skip_mp3, keep_play
     for song in songs:
         query = f"{song.get('artist')} - {song.get('name')} Lyrics".replace(":", "").replace("\"", "")
         download_archive = path.join(download_directory, 'downloaded_songs.txt')
+
+        file_name = sanitize(f"{song.get('artist')} - {song.get('name')}", '#')  # youtube-dl automatically replaces with #
         if keep_playlist_order:
-            file_path = path.join(download_directory,
-                                  f"{song.get('playlist_num')} - {song.get('artist')} - {song.get('name')}")
-        else:
-            file_path = path.join(download_directory, f"{song.get('artist')} - {song.get('name')}")
+            # add song number prefix
+            file_name = f"{song.get('playlist_num')} - {file_name}"
+        file_path = path.join(download_directory, file_name)
+
         outtmpl = f"{file_path}.%(ext)s"
         ydl_opts = {
             'format': format_string,
@@ -55,8 +58,7 @@ def download_songs(songs, download_directory, format_string, skip_mp3, keep_play
                 continue
 
         if not skip_mp3:
-            song_file = MP3(path.join(f"{file_path}.mp3"),
-                            ID3=EasyID3)
+            song_file = MP3(path.join(f"{file_path}.mp3"), ID3=EasyID3)
             song_file['date'] = song.get('year')
             if keep_playlist_order:
                 song_file['tracknumber'] = str(song.get('playlist_num'))
@@ -64,8 +66,7 @@ def download_songs(songs, download_directory, format_string, skip_mp3, keep_play
                 song_file['tracknumber'] = str(song.get('num')) + '/' + str(song.get('num_tracks'))
             song_file['genre'] = song.get('genre')
             song_file.save()
-            song_file = MP3(path.join(f"{file_path}.mp3"),
-                            ID3=ID3)
+            song_file = MP3(path.join(f"{file_path}.mp3"), ID3=ID3)
             song_file.tags['APIC'] = APIC(
                 encoding=3,
                 mime='image/jpeg',
