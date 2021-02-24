@@ -7,6 +7,7 @@ from mutagen.id3 import APIC, ID3
 from mutagen.mp3 import MP3
 
 from spotify_dl.scaffold import log
+from spotify_dl.utils import sanitize
 
 
 def download_songs(songs, download_directory, format_string, skip_mp3):
@@ -49,13 +50,13 @@ def download_songs(songs, download_directory, format_string, skip_mp3):
                 continue
 
         if not skip_mp3:
-            song_file = MP3(path.join(download_directory, f"{song.get('artist')} - {song.get('name')}.mp3"),
+            song_file = MP3(path.join(download_directory, sanitize(f"{song.get('artist')} - {song.get('name')}.mp3", '#')),  # youtube-dl automatically replaces with #
                             ID3=EasyID3)
             song_file['date'] = song.get('year')
             song_file['tracknumber'] = str(song.get('num')) + '/' + str(song.get('num_tracks'))
             song_file['genre'] = song.get('genre')
             song_file.save()
-            song_file = MP3(path.join(download_directory, f"{song.get('artist')} - {song.get('name')}.mp3"),
+            song_file = MP3(path.join(download_directory, sanitize(f"{song.get('artist')} - {song.get('name')}.mp3", '#')),
                             ID3=ID3)
             song_file.tags['APIC'] = APIC(
                 encoding=3,
