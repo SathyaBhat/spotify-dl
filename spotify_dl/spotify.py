@@ -42,7 +42,7 @@ def fetch_tracks(sp, item_type, url):
                 else:
                     genre = ""
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                                   "num_tracks": album_total, "num": track_num,
+                                   "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
                                    "cover": cover, "genre": genre})
                 offset += 1
 
@@ -72,7 +72,7 @@ def fetch_tracks(sp, item_type, url):
                 track_artist = ", ".join([artist['name'] for artist in item['artists']])
                 track_num = item['track_number']
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                                   "num_tracks": album_total, "num": track_num,
+                                   "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
                                    "cover": cover, "genre": genre})
                 offset += 1
 
@@ -98,7 +98,7 @@ def fetch_tracks(sp, item_type, url):
         else:
             genre = ""
         songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                           "num_tracks": album_total, "num": track_num,
+                           "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
                            "cover": cover, "genre": genre})
 
     return songs_list
