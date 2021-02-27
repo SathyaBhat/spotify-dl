@@ -32,7 +32,11 @@ def fetch_tracks(sp, item_type, url):
                 track_year = item['track']['album']['release_date'][:4]
                 album_total = item['track']['album']['total_tracks']
                 track_num = item['track']['track_number']
-                cover = item['track']['album']['images'][0]['url']
+                if len(item['track']['album']['images']) > 0:
+                    cover = item['track']['album']['images'][0]['url']
+                else:
+                    cover = None
+            
                 if len(sp.artist(artist_id=item['track']['artists'][0]['uri'])['genres']) > 0:
                     genre = sp.artist(artist_id=item['track']['artists'][0]['uri'])['genres'][0]
                 else:
@@ -55,7 +59,10 @@ def fetch_tracks(sp, item_type, url):
             track_album = album_info['name']
             track_year = album_info['release_date'][:4]
             album_total = album_info['total_tracks']
-            cover = album_info['images'][0]['url']
+            if len(album_info['images']) > 0:
+                cover = album_info['images'][0]['url']
+            else:
+                cover = None
             if len(sp.artist(artist_id=album_info['artists'][0]['uri'])['genres']) > 0:
                 genre = sp.artist(artist_id=album_info['artists'][0]['uri'])['genres'][0]
             else:
@@ -82,7 +89,10 @@ def fetch_tracks(sp, item_type, url):
         track_year = items['album']['release_date'][:4]
         album_total = items['album']['total_tracks']
         track_num = items['track_number']
-        cover = items['album']['images'][0]['url']
+        if len(items['album']['images']) > 0:
+            cover = items['album']['images'][0]['url']
+        else:
+            cover = None
         if len(sp.artist(artist_id=items['artists'][0]['uri'])['genres']) > 0:
             genre = sp.artist(artist_id=items['artists'][0]['uri'])['genres'][0]
         else:
