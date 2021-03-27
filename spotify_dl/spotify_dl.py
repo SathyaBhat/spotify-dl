@@ -24,7 +24,9 @@ def spotify_dl():
     parser.add_argument('-o', '--output', type=str, action='store',
                         help='Specify download directory.', required=True)
     parser.add_argument('-d', '--download', action='store_true',
-                        help='Download using youtube-dl', default=True)
+                        help='Deprecated. No effect.', default=True)
+    parser.add_argument('-n', '--dry', action='store_true',
+                        help='Do not download the music.')
     parser.add_argument('-f', '--format_str', type=str, action='store',
                         help='Specify youtube-dl format string.',
                         default='bestaudio/best')
@@ -83,7 +85,7 @@ def spotify_dl():
         log.info("Saving songs to: {}".format(directory_name))
 
     songs = fetch_tracks(sp, item_type, args.url)
-    if args.download is True:
+    if args.dry is False:
         download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order)
 
 
