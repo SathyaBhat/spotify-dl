@@ -20,7 +20,8 @@ def test_spotify_playlist_fetch_one():
              'name': 'Hotel California - Live On MTV, 1994',
              'num': 6,
              'num_tracks': 15,
-             'year': '1994'} == songs[0]
+             'year': '1994',
+             'playlist_num': 1} == songs[0]
 
     
 def test_spotify_playlist_fetch_more():
@@ -28,6 +29,7 @@ def test_spotify_playlist_fetch_more():
     url = "https://open.spotify.com/playlist/3cEYpjA9oz9GiPac4AsH4n"
     item_type = "playlist"
     songs = fetch_tracks(sp, item_type, url)
+    print(songs)
     assert [{'album': 'Progressive Psy Trance Picks Vol.8',
               'artist': 'Odiseo',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273ce6d0eef0c1ce77e5f95bbbc',
@@ -35,7 +37,8 @@ def test_spotify_playlist_fetch_more():
               'name': 'Api',
               'num': 10,
               'num_tracks': 20,
-              'year': '2012'},
+              'year': '2012',
+              'playlist_num': 1},
              {'album': 'Wellness & Dreaming Source',
               'artist': 'Vlasta Marek',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273aa2ff29970d9a63a49dfaeb2',
@@ -43,7 +46,8 @@ def test_spotify_playlist_fetch_more():
               'name': 'Is',
               'num': 21,
               'num_tracks': 25,
-              'year': '2015'},
+              'year': '2015',
+              'playlist_num': 2},
              {'album': 'This Is Happening',
               'artist': 'LCD Soundsystem',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273ee0d0dce888c6c8a70db6e8b',
@@ -51,7 +55,8 @@ def test_spotify_playlist_fetch_more():
               'name': 'All I Want',
               'num': 4,
               'num_tracks': 9,
-              'year': '2010'},
+              'year': '2010',
+              'playlist_num': 3},
              {'album': 'Glenn Horiuchi Trio / Gelenn Horiuchi Quartet: Mercy / Jump Start '
                        '/ Endpoints / Curl Out / Earthworks / Mind Probe / Null Set / '
                        'Another Space (A)',
@@ -61,7 +66,8 @@ def test_spotify_playlist_fetch_more():
               'name': 'Endpoints',
               'num': 2,
               'num_tracks': 8,
-              'year': '2011'},
+              'year': '2011',
+              'playlist_num': 4},
              {'album': 'All The Best (Spanish Version)',
               'artist': 'Zucchero',
               'cover': 'https://i.scdn.co/image/ab67616d0000b27304e57d181ff062f8339d6c71',
@@ -69,7 +75,8 @@ def test_spotify_playlist_fetch_more():
               'name': 'You Are So Beautiful',
               'num': 18,
               'num_tracks': 18,
-              'year': '2007'}] == songs
+              'year': '2007',
+              'playlist_num': 5}] == songs
 
 
 def test_spotify_track_fetch_one():
@@ -84,7 +91,8 @@ def test_spotify_track_fetch_one():
              'name': 'Hotel California - Live On MTV, 1994',
              'num': 6,
              'num_tracks': 15,
-             'year': '1994'} == songs[0]
+             'year': '1994',
+             'playlist_num': 1} == songs[0]
 
 
 def test_spotify_album_fetch_one():
@@ -99,7 +107,8 @@ def test_spotify_album_fetch_one():
              'name': 'Simple Song',
              'num': 1,
              'num_tracks': 1,
-             'year': '2012'} == songs[0]
+             'year': '2012',
+             'playlist_num': 1} == songs[0]
 
 
 def test_spotify_album_fetch_more():
@@ -114,7 +123,8 @@ def test_spotify_album_fetch_more():
               'name': 'Procession - Remastered 2011',
               'num': 1,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 1},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -122,7 +132,8 @@ def test_spotify_album_fetch_more():
               'name': 'Father To Son - Remastered 2011',
               'num': 2,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 2},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -130,7 +141,8 @@ def test_spotify_album_fetch_more():
               'name': 'White Queen (As It Began) - Remastered 2011',
               'num': 3,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 3},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -138,7 +150,8 @@ def test_spotify_album_fetch_more():
               'name': 'Some Day One Day - Remastered 2011',
               'num': 4,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 4},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -146,7 +159,8 @@ def test_spotify_album_fetch_more():
               'name': 'The Loser In The End - Remastered 2011',
               'num': 5,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 5},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -154,7 +168,8 @@ def test_spotify_album_fetch_more():
               'name': 'Ogre Battle - Remastered 2011',
               'num': 6,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 6},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -162,7 +177,8 @@ def test_spotify_album_fetch_more():
               'name': "The Fairy Feller's Master-Stroke - Remastered 2011",
               'num': 7,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 7},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -170,7 +186,8 @@ def test_spotify_album_fetch_more():
               'name': 'Nevermore - Remastered 2011',
               'num': 8,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 8},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -178,7 +195,8 @@ def test_spotify_album_fetch_more():
               'name': 'The March Of The Black Queen - Remastered 2011',
               'num': 9,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 9},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -186,7 +204,8 @@ def test_spotify_album_fetch_more():
               'name': 'Funny How Love Is - Remastered 2011',
               'num': 10,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 10},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -194,7 +213,8 @@ def test_spotify_album_fetch_more():
               'name': 'Seven Seas Of Rhye - Remastered 2011',
               'num': 11,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 11},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -203,7 +223,8 @@ def test_spotify_album_fetch_more():
                       '2011 Remix',
               'num': 1,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 12},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -212,7 +233,8 @@ def test_spotify_album_fetch_more():
                       'December 1975',
               'num': 2,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 13},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -220,7 +242,8 @@ def test_spotify_album_fetch_more():
               'name': 'Seven Seas Of Rhye - Instrumental Mix 2011',
               'num': 3,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 14},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -228,7 +251,8 @@ def test_spotify_album_fetch_more():
               'name': 'Nevermore - Live BBC Session, London / April 1974',
               'num': 4,
               'num_tracks': 16,
-              'year': '1974'},
+              'year': '1974',
+              'playlist_num': 15},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -236,5 +260,6 @@ def test_spotify_album_fetch_more():
               'name': 'See What A Fool I’ve Been - B-Side Version / Remastered 2011',
               'num': 5,
               'num_tracks': 16,
-              'year': '1974'}] == songs
+              'year': '1974',
+              'playlist_num': 16}] == songs
     assert (len(songs)) == 16
