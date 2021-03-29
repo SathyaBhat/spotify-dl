@@ -28,8 +28,8 @@ def spotify_dl():
     parser.add_argument('-f', '--format_str', type=str, action='store',
                         help='Specify youtube-dl format string.',
                         default='bestaudio/best')
-    parser.add_argument('-k', '--keep_playlist_order', type=bool, default=False,
-                        action=argparse.BooleanOptionalAction,
+    parser.add_argument('-k', '--keep_playlist_order', default=False,
+                        action='store_true',
                         help='Whether to keep original playlist ordering or not.')
     parser.add_argument('-m', '--skip_mp3', action='store_true',
                         help='Don\'t convert downloaded songs to mp3')
