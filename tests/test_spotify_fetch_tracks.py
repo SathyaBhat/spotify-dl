@@ -30,7 +30,6 @@ def test_spotify_playlist_fetch_more():
     url = "https://open.spotify.com/playlist/3cEYpjA9oz9GiPac4AsH4n"
     item_type = "playlist"
     songs = fetch_tracks(sp, item_type, url)
-    print(songs)
     assert [{'album': 'Progressive Psy Trance Picks Vol.8',
               'artist': 'Odiseo',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273ce6d0eef0c1ce77e5f95bbbc',
