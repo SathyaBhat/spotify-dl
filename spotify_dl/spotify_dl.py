@@ -13,7 +13,7 @@ from spotify_dl.constants import VERSION
 from spotify_dl.models import db, Song
 from spotify_dl.scaffold import log, check_for_tokens
 from spotify_dl.spotify import fetch_tracks, parse_spotify_url, validate_spotify_url, get_item_name
-from spotify_dl.youtube import download_songs
+from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
 
 
 def spotify_dl():
@@ -84,7 +84,11 @@ def spotify_dl():
 
     songs = fetch_tracks(sp, item_type, args.url)
     if args.download is True:
-        download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order)
+        file_name_f = default_filename
+        if args.keep_playlist_order:
+            file_name_f = playlist_num_filename
+
+        download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, file_name_f)
 
 
 if __name__ == '__main__':
