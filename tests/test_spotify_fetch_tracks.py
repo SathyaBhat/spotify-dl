@@ -21,7 +21,8 @@ def test_spotify_playlist_fetch_one():
              'num': 6,
              'num_tracks': 15,
              'year': '1994',
-             'playlist_num': 1} == songs[0]
+             'playlist_num': 1,
+             'spotify_id': '2GpBrAoCwt48fxjgjlzMd4'} == songs[0]
 
     
 def test_spotify_playlist_fetch_more():
@@ -38,7 +39,8 @@ def test_spotify_playlist_fetch_more():
               'num': 10,
               'num_tracks': 20,
               'year': '2012',
-              'playlist_num': 1},
+              'playlist_num': 1,
+              'spotify_id': '4rzfv0JLZfVhOhbSQ8o5jZ'},
              {'album': 'Wellness & Dreaming Source',
               'artist': 'Vlasta Marek',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273aa2ff29970d9a63a49dfaeb2',
@@ -47,7 +49,8 @@ def test_spotify_playlist_fetch_more():
               'num': 21,
               'num_tracks': 25,
               'year': '2015',
-              'playlist_num': 2},
+              'playlist_num': 2,
+              'spotify_id': '5o3jMYOSbaVz3tkgwhELSV'},
              {'album': 'This Is Happening',
               'artist': 'LCD Soundsystem',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273ee0d0dce888c6c8a70db6e8b',
@@ -56,7 +59,8 @@ def test_spotify_playlist_fetch_more():
               'num': 4,
               'num_tracks': 9,
               'year': '2010',
-              'playlist_num': 3},
+              'playlist_num': 3,
+              'spotify_id': '4Cy0NHJ8Gh0xMdwyM9RkQm'},
              {'album': 'Glenn Horiuchi Trio / Gelenn Horiuchi Quartet: Mercy / Jump Start '
                        '/ Endpoints / Curl Out / Earthworks / Mind Probe / Null Set / '
                        'Another Space (A)',
@@ -67,7 +71,8 @@ def test_spotify_playlist_fetch_more():
               'num': 2,
               'num_tracks': 8,
               'year': '2011',
-              'playlist_num': 4},
+              'playlist_num': 4,
+              'spotify_id': '6hvFrZNocdt2FcKGCSY5NI'},
              {'album': 'All The Best (Spanish Version)',
               'artist': 'Zucchero',
               'cover': 'https://i.scdn.co/image/ab67616d0000b27304e57d181ff062f8339d6c71',
@@ -76,7 +81,8 @@ def test_spotify_playlist_fetch_more():
               'num': 18,
               'num_tracks': 18,
               'year': '2007',
-              'playlist_num': 5}] == songs
+              'playlist_num': 5,
+              'spotify_id': '2E2znCPaS8anQe21GLxcvJ'}] == songs
 
 
 def test_spotify_track_fetch_one():
@@ -92,7 +98,8 @@ def test_spotify_track_fetch_one():
              'num': 6,
              'num_tracks': 15,
              'year': '1994',
-             'playlist_num': 1} == songs[0]
+             'playlist_num': 1,
+             'spotify_id': '2GpBrAoCwt48fxjgjlzMd4'} == songs[0]
 
 
 def test_spotify_album_fetch_one():
@@ -108,7 +115,8 @@ def test_spotify_album_fetch_one():
              'num': 1,
              'num_tracks': 1,
              'year': '2012',
-             'playlist_num': 1} == songs[0]
+             'playlist_num': 1,
+             'spotify_id': '5EoKQDGE2zxrTfRFZF52u5'} == songs[0]
 
 
 def test_spotify_album_fetch_more():
@@ -124,7 +132,8 @@ def test_spotify_album_fetch_more():
               'num': 1,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 1},
+              'playlist_num': 1,
+              'spotify_id': '69Yw7H4bRIwfIxL0ZCZy8y'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -133,7 +142,8 @@ def test_spotify_album_fetch_more():
               'num': 2,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 2},
+              'playlist_num': 2,
+              'spotify_id': '5GGSjXZeTgX9sKYBtl8K6U'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -142,7 +152,8 @@ def test_spotify_album_fetch_more():
               'num': 3,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 3},
+              'playlist_num': 3,
+              'spotify_id': '0Ssh20fuVhmasLRJ97MLnp'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -151,7 +162,8 @@ def test_spotify_album_fetch_more():
               'num': 4,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 4},
+              'playlist_num': 4,
+              'spotify_id': '2LasW39KJDE4VH9hTVNpE2'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -160,7 +172,8 @@ def test_spotify_album_fetch_more():
               'num': 5,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 5},
+              'playlist_num': 5,
+              'spotify_id': '6jXrIu3hWbmJziw34IHIwM'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -169,7 +182,8 @@ def test_spotify_album_fetch_more():
               'num': 6,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 6},
+              'playlist_num': 6,
+              'spotify_id': '5dHmGuUeRgp5f93G69tox5'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -178,7 +192,8 @@ def test_spotify_album_fetch_more():
               'num': 7,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 7},
+              'playlist_num': 7,
+              'spotify_id': '2KPj0oB7cUuHQ3FuardOII'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -187,7 +202,8 @@ def test_spotify_album_fetch_more():
               'num': 8,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 8},
+              'playlist_num': 8,
+              'spotify_id': '34CcBjL9WqEAtnl2i6Hbxa'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -196,7 +212,8 @@ def test_spotify_album_fetch_more():
               'num': 9,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 9},
+              'playlist_num': 9,
+              'spotify_id': '1x9ak6LGIazLhfuaSIEkhG'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -205,7 +222,8 @@ def test_spotify_album_fetch_more():
               'num': 10,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 10},
+              'playlist_num': 10,
+              'spotify_id': '4CITL18Tos0PscW1amCK4j'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -214,7 +232,8 @@ def test_spotify_album_fetch_more():
               'num': 11,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 11},
+              'playlist_num': 11,
+              'spotify_id': '1e9Tt3nKBwRbuaU79kN3dn'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -224,7 +243,8 @@ def test_spotify_album_fetch_more():
               'num': 1,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 12},
+              'playlist_num': 12,
+              'spotify_id': '0uHqoDT7J2TYBsJx6m4Tvi'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -234,7 +254,8 @@ def test_spotify_album_fetch_more():
               'num': 2,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 13},
+              'playlist_num': 13,
+              'spotify_id': '3MIueGYoNiyBNfi5ukDgAK'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -243,7 +264,8 @@ def test_spotify_album_fetch_more():
               'num': 3,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 14},
+              'playlist_num': 14,
+              'spotify_id': '34WAOFWdJ83a3YYrDAZTjm'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -252,7 +274,8 @@ def test_spotify_album_fetch_more():
               'num': 4,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 15},
+              'playlist_num': 15,
+              'spotify_id': '2AFIPUlApcUwGEgOSDwoBz'},
              {'album': 'Queen II (Deluxe Remastered Version)',
               'artist': 'Queen',
               'cover': 'https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5',
@@ -261,5 +284,6 @@ def test_spotify_album_fetch_more():
               'num': 5,
               'num_tracks': 16,
               'year': '1974',
-              'playlist_num': 16}] == songs
+              'playlist_num': 16,
+              'spotify_id': '4G4Sf18XkFvNTV5vAxiQyd'}] == songs
     assert (len(songs)) == 16
