@@ -10,7 +10,16 @@ from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
 
 
-def download_songs(songs, download_directory, format_string, skip_mp3, keep_playlist_order=False):
+def default_filename(song):
+    return sanitize(f"{song.get('artist')} - {song.get('name')}", '#')  # youtube-dl automatically replaces with #
+
+
+def playlist_num_filename(song):
+    return f"{song.get('playlist_num')} - {default_filename(song)}"
+
+
+def download_songs(songs, download_directory, format_string, skip_mp3,
+                   keep_playlist_order=False, file_name_f=default_filename):
     """
     Downloads songs from the YouTube URL passed to either current directory or download_directory, is it is passed.
     :param songs: Dictionary of songs and associated artist
@@ -18,16 +27,14 @@ def download_songs(songs, download_directory, format_string, skip_mp3, keep_play
     :param format_string: format string for the file conversion
     :param skip_mp3: Whether to skip conversion to MP3
     :param keep_playlist_order: Whether to keep original playlist ordering. Also, prefixes songs files with playlist num
+    :param file_name_f: optional func(song) -> str that returns a filename for the download (without extension)
     """
     log.debug(f"Downloading to {download_directory}")
     for song in songs:
         query = f"{song.get('artist')} - {song.get('name')} Lyrics".replace(":", "").replace("\"", "")
         download_archive = path.join(download_directory, 'downloaded_songs.txt')
 
-        file_name = sanitize(f"{song.get('artist')} - {song.get('name')}", '#')  # youtube-dl automatically replaces with #
-        if keep_playlist_order:
-            # add song number prefix
-            file_name = f"{song.get('playlist_num')} - {file_name}"
+        file_name = file_name_f(song)
         file_path = path.join(download_directory, file_name)
 
         outtmpl = f"{file_path}.%(ext)s"
