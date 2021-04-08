@@ -1,6 +1,7 @@
 import urllib.request
 from os import path
 
+import mutagen
 import youtube_dl
 from mutagen.easyid3 import EasyID3
 from mutagen.id3 import APIC, ID3
@@ -67,7 +68,7 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
         if not skip_mp3:
             try:
                 song_file = MP3(path.join(f"{file_path}.mp3"), ID3=EasyID3)
-            except Exception as e:
+            except mutagen.MutagenError as e:
                 log.debug(e)
                 print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
                 continue
