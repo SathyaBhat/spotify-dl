@@ -149,9 +149,9 @@ def validate_spotify_url(url):
     item_type, item_id = parse_spotify_url(url)
     log.debug(f"Got item type {item_type} and item_id {item_id}")
     if item_type not in ['album', 'track', 'playlist']:
-        log.error("Only albums/tracks/playlists are supported")
+        log.info("Only albums/tracks/playlists are supported")
         return False
     if item_id is None:
-        log.error("Couldn't get a valid id")
+        log.info("Couldn't get a valid id")
         return False
     return True
