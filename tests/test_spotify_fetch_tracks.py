@@ -1,10 +1,12 @@
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotify_dl.spotify import fetch_tracks
 import spotipy
-
+import base64
 
 def spotify_auth():
-    client = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+    # test client ids, b64 for just to deter. 
+    client = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=base64.b64decode('NjliZDE4ZjNiNDY3NGMyNTkwNTllMzE5YTQ1ZGQwMzY=').decode('ascii'),
+                                                                    client_secret=base64.b64decode('NTczY2UwYmM2OWUzNDdkNzg3NjgwZDBlMzJmOTQ3MGM=').decode('ascii')))
     return client
 
 
