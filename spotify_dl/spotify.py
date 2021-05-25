@@ -27,13 +27,19 @@ def fetch_tracks(sp, item_type, url):
                                       additional_types=['track'], offset=offset)
             total_songs = items.get('total')
             for item in items['items']:
-                track_name = item['track']['name']
-                track_artist = ", ".join([artist['name'] for artist in item['track']['artists']])
-                track_album = item['track']['album']['name']
-                track_year = item['track']['album']['release_date'][:4]
-                album_total = item['track']['album']['total_tracks']
-                track_num = item['track']['track_number']
-                spotify_id = item['track']['id']
+                track_info = item.get('track')
+                track_album_info = track_info.get('album')
+                
+                track_num = track_info.get('track_number')
+                spotify_id = track_info.get('id')
+                track_name = track_info.get('name')
+                track_artist = ", ".join([artist['name'] for artist in track_info.get('artists')])
+                
+                if track_album_info:
+                    track_album = track_album_info.get('name')
+                    track_year = track_album_info.get('release_date')[:4] if track_album_info.get('release_date') else ''
+                    album_total = track_album_info.get('total_tracks')
+                
                 if len(item['track']['album']['images']) > 0:
                     cover = item['track']['album']['images'][0]['url']
                 else:
@@ -58,9 +64,9 @@ def fetch_tracks(sp, item_type, url):
             album_info = sp.album(album_id=url)
             items = sp.album_tracks(album_id=url)
             total_songs = items.get('total')
-            track_album = album_info['name']
-            track_year = album_info['release_date'][:4]
-            album_total = album_info['total_tracks']
+            track_album = album_info.get('name')
+            track_year = album_info.get('release_date')[:4] if album_info.get('release_date') else ''
+            album_total = album_info.get('total_tracks')
             if len(album_info['images']) > 0:
                 cover = album_info['images'][0]['url']
             else:
@@ -70,10 +76,10 @@ def fetch_tracks(sp, item_type, url):
             else:
                 genre = ""
             for item in items['items']:
-                track_name = item['name']
+                track_name = item.get('name')
                 track_artist = ", ".join([artist['name'] for artist in item['artists']])
                 track_num = item['track_number']
-                spotify_id = item['id']
+                spotify_id = item.get('id')
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
                                    "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
                                    "cover": cover, "genre": genre, "spotify_id": spotify_id})
@@ -86,11 +92,13 @@ def fetch_tracks(sp, item_type, url):
 
     elif item_type == 'track':
         items = sp.track(track_id=url)
-        track_name = items['name']
+        track_name = items.get('name')
+        album_info = items.get('album')
         track_artist = ", ".join([artist['name'] for artist in items['artists']])
-        track_album = items['album']['name']
-        track_year = items['album']['release_date'][:4]
-        album_total = items['album']['total_tracks']
+        if album_info:
+            track_album = album_info.get('name')
+            track_year = album_info.get('release_date')[:4] if album_info.get('release_date') else ''
+            album_total = album_info.get('total_tracks')
         track_num = items['track_number']
         spotify_id = items['id']
         if len(items['album']['images']) > 0:
