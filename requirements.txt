@@ -1,6 +1,5 @@
-peewee==3.13.3
 sentry_sdk==0.19.4
-youtube-dl>=2021.04.01
+youtube-dl>=2021.06.06
 spotipy==2.16.1
 mutagen==1.45.1
 spotipy== 2.16.1
