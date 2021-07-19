@@ -46,10 +46,12 @@ Run the Docker image with your client ID and secret:
 docker run -d --rm \
 		   -e SPOTIPY_CLIENT_ID=client_id \
 		   -e SPOTIPY_CLIENT_SECRET=client_secret \
-		   -v "`pwd`":/download \
+		   -v "download_directory":/download \
 		   spotify_dl \
-		   spotify_dl -l "spotify_playlist_link" -o download_directory
+		   spotify_dl -l "spotify_playlist_link" -o /download
 ```
+
+Replace `download_directory` with the path to the directory you want songs in. Set `"download_directory"` to `"$(pwd)"` to download to the current directory on Linux.
 
 You can also run the bulk downloading script, make sure to configure it first: `bash bulk_docker_download.sh`
 
