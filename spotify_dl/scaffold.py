@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO,
                     format='%(message)s')
 
 log = logging.getLogger('sdl')
-sentry_sdk.init("https://7d74a39472c9449dac51eb24bb33bdc3@sentry.io/2383261")
+sentry_sdk.init("https://fc66a23d79634b9bba1690ea13e289f0@o321064.ingest.sentry.io/2383261")
 
 
 def check_for_tokens():
