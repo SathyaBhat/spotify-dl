@@ -154,7 +154,12 @@ def validate_spotify_url(url):
     Validate the URL and determine if the item type is supported.
     :return Boolean indicating whether or not item is supported
     """
-    item_type, item_id = parse_spotify_url(url)
+    try:
+        item_type, item_id = parse_spotify_url(url)
+    except IndexError:
+        log.info("Not a spotify url")
+        return False
+
     log.debug(f"Got item type {item_type} and item_id {item_id}")
     if item_type not in ['album', 'track', 'playlist']:
         log.info("Only albums/tracks/playlists are supported")
