@@ -42,7 +42,6 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
         file_path = path.join(download_directory, file_name)
 
         mp3_already_exists = no_overwrite and path.isfile(path.join(f"{file_path}.mp3"))
-        # TODO: don't do anything if filename already exists
 
         outtmpl = f"{file_path}.%(ext)s"
         ydl_opts = {
