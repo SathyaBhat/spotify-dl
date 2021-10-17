@@ -1,4 +1,4 @@
 sentry_sdk==0.19.4
-youtube-dl>=2021.06.06
+yt-dlp>=2021.10.10
 spotipy==2.16.1
 mutagen==1.45.1
