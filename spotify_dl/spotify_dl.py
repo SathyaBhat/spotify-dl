@@ -52,7 +52,7 @@ def spotify_dl():
             config = json.loads(file.read())
 
         for key, value in config.items():
-            if value and (value.lower() == 'true' or value.lower() == 't'):
+            if value and (value.lower() in ['true', 't']):
                 setattr(args, key, True)
             else:
                 setattr(args, key, value)
