@@ -26,9 +26,16 @@ def check_for_tokens():
         print('''
             You need to set your Spotify API credentials. You can do this by
             setting environment variables like so:
-
+            Linux:
             export SPOTIPY_CLIENT_ID='your-spotify-client-id'
             export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+            Windows Powershell:
+            $env:SPOTIPY_CLIENT_ID='your-spotify-client-id'
+            $env:SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+            Windows CMD:
+            set SPOTIPY_CLIENT_ID='your-spotify-client-id'
+            set SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+
             Get your credentials at
                 https://developer.spotify.com/my-applications
         ''')

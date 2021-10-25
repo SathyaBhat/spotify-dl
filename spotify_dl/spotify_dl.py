@@ -43,7 +43,7 @@ def spotify_dl():
 
     if args.version:
         print("spotify_dl v{}".format(VERSION))
-        exit(0)
+        sys.exit(0)
 
     db.connect()
     db.create_tables([Song])
@@ -52,7 +52,7 @@ def spotify_dl():
             config = json.loads(file.read())
 
         for key, value in config.items():
-            if value and (value.lower() == 'true' or value.lower() == 't'):
+            if value and (value.lower() in ['true', 't']):
                 setattr(args, key, True)
             else:
                 setattr(args, key, value)
@@ -64,7 +64,7 @@ def spotify_dl():
     log.debug('Setting debug mode on spotify_dl')
 
     if not check_for_tokens():
-        exit(1)
+        sys.exit(1)
 
     sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
     log.debug('Arguments: {}'.format(args))
