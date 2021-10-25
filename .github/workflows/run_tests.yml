@@ -31,5 +31,6 @@ jobs:
         SPOTIPY_CLIENT_ID:  ${{ secrets.SPOTIPY_CLIENT_ID }}
         SPOTIPY_CLIENT_SECRET:  ${{ secrets.SPOTIPY_CLIENT_SECRET }}
       run: |
-        sudo apt-get install ffmpeg
+        sudo apt update
+        sudo apt install ffmpeg
         make tests
