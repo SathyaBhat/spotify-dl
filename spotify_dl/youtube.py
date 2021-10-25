@@ -2,7 +2,7 @@ import urllib.request
 from os import path
 
 import mutagen
-import youtube_dl
+import yt_dlp as youtube_dl
 from mutagen.easyid3 import EasyID3
 from mutagen.id3 import APIC, ID3
 from mutagen.mp3 import MP3

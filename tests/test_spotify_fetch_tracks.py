@@ -288,3 +288,19 @@ def test_spotify_album_fetch_more():
               'playlist_num': 16,
               'spotify_id': '4G4Sf18XkFvNTV5vAxiQyd'}] == songs
     assert (len(songs)) == 16
+
+def test_spotify_playlist_fetch_local_file():
+    sp = spotify_auth()
+    url = "https://open.spotify.com/playlist/1TWZ36xJ8qkvSeAQQUvU5b?si=ad56b6bb085b4ab9"
+    item_type = "playlist"
+    songs = fetch_tracks(sp, item_type, url)
+    assert [{'album': "Yoshi's Island",
+             'artist': 'Koji Kondo',
+             'cover': None,
+             'genre': '',
+             'name': 'Flower Garden',
+             'num': 0,
+             'num_tracks': None,
+             'year': '',
+             'playlist_num': 1,
+             'spotify_id': None}] == songs
