@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO,
                     format='%(message)s')
 
 log = logging.getLogger('sdl')
-sentry_sdk.init("https://7d74a39472c9449dac51eb24bb33bdc3@sentry.io/2383261")
+sentry_sdk.init("https://fc66a23d79634b9bba1690ea13e289f0@o321064.ingest.sentry.io/2383261")
 
 
 def check_for_tokens():
@@ -26,9 +26,16 @@ def check_for_tokens():
         print('''
             You need to set your Spotify API credentials. You can do this by
             setting environment variables like so:
-
+            Linux:
             export SPOTIPY_CLIENT_ID='your-spotify-client-id'
             export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+            Windows Powershell:
+            $env:SPOTIPY_CLIENT_ID='your-spotify-client-id'
+            $env:SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+            Windows CMD:
+            set SPOTIPY_CLIENT_ID='your-spotify-client-id'
+            set SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+
             Get your credentials at
                 https://developer.spotify.com/my-applications
         ''')
