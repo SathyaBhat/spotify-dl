@@ -28,6 +28,11 @@ def fetch_tracks(sp, item_type, url):
             total_songs = items.get('total')
             for item in items['items']:
                 track_info = item.get('track')
+                # If the user has a podcast in their playlist, there will be no track
+                # Without this conditional, the program will fail later on when the metadata is fetched
+                if track_info is None:
+                    offset += 1
+                    continue
                 track_album_info = track_info.get('album')
                 
                 track_num = track_info.get('track_number')
