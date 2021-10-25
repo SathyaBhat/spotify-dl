@@ -44,9 +44,12 @@ def fetch_tracks(sp, item_type, url):
                     cover = item['track']['album']['images'][0]['url']
                 else:
                     cover = None
-            
-                if len(sp.artist(artist_id=item['track']['artists'][0]['uri'])['genres']) > 0:
-                    genre = sp.artist(artist_id=item['track']['artists'][0]['uri'])['genres'][0]
+
+                artists = track_info.get('artists')
+                main_artist_id = artists[0].get('uri', None) if len(artists) > 0 else None
+                genres = sp.artist(artist_id=main_artist_id).get('genres', []) if main_artist_id else []
+                if len(genres) > 0:
+                    genre = genres[0]
                 else:
                     genre = ""
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
