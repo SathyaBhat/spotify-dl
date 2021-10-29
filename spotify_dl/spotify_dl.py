@@ -35,8 +35,9 @@ def spotify_dl():
                         help='Don\'t convert downloaded songs to mp3')
     parser.add_argument('-s', '--scrape', action="store",
                         help="Use HTML Scraper for YouTube Search", default=True)
-    parser.add_argument('-n', '--no_overwrites', action='store_true',
-                        help="Do not download if the target file already exists", default=False)
+    parser.add_argument('-w', '--no-overwrites', action='store_true',
+                        help="Whether we should avoid overwriting the target audio file if it already exists",
+                        default=False)
     parser.add_argument('-V', '--verbose', action='store_true',
                         help='Show more information on what''s happening.')
     parser.add_argument('-v', '--version', action='store_true',
