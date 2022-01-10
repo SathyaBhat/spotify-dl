@@ -91,7 +91,7 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
                         req = urllib.request.Request(cover)
                     else:
                         raise ValueError from None
-                    with urllib.request.urlopen(req) as resp:
+                    with urllib.request.urlopen(req) as resp:  # nosec
                         song_file.tags['APIC'] = APIC(
                             encoding=3,
                             mime='image/jpeg',
