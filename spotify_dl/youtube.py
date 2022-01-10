@@ -85,13 +85,19 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
                 song_file['genre'] = song.get('genre')
                 song_file.save()
                 song_file = MP3(mp3filename, ID3=ID3)
-                if song.get('cover') is not None:
-                    song_file.tags['APIC'] = APIC(
-                        encoding=3,
-                        mime='image/jpeg',
-                        type=3, desc=u'Cover',
-                        data=urllib.request.urlopen(song.get('cover')).read()
-                    )
+                cover = song.get('cover')
+                if cover is not None:
+                    if cover.lower().startswith('http'):
+                        req = urllib.request.Request(cover)
+                    else:
+                        raise ValueError from None
+                    with urllib.request.urlopen(req) as resp:
+                        song_file.tags['APIC'] = APIC(
+                            encoding=3,
+                            mime='image/jpeg',
+                            type=3, desc=u'Cover',
+                            data=resp.read()
+                        )
                 song_file.save()
             else:
                 print('File {} already exists, we do not overwrite it '.format(mp3filename))
