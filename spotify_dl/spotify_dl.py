@@ -10,7 +10,6 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from spotify_dl.constants import VERSION
-from spotify_dl.models import db, Song
 from spotify_dl.scaffold import log, check_for_tokens
 from spotify_dl.spotify import fetch_tracks, parse_spotify_url, validate_spotify_url, get_item_name
 from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
@@ -33,8 +32,6 @@ def spotify_dl():
                         help='Whether to keep original playlist ordering or not.')
     parser.add_argument('-m', '--skip_mp3', action='store_true',
                         help='Don\'t convert downloaded songs to mp3')
-    parser.add_argument('-s', '--scrape', action="store",
-                        help="Use HTML Scraper for YouTube Search", default=True)
     parser.add_argument('-w', '--no-overwrites', action='store_true',
                         help="Whether we should avoid overwriting the target audio file if it already exists",
                         default=False)
@@ -48,8 +45,6 @@ def spotify_dl():
         print("spotify_dl v{}".format(VERSION))
         sys.exit(0)
 
-    db.connect()
-    db.create_tables([Song])
     if os.path.isfile(os.path.expanduser('~/.spotify_dl_settings')):
         with open(os.path.expanduser('~/.spotify_dl_settings')) as file:
             config = json.loads(file.read())
