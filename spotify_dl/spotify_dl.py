@@ -35,6 +35,9 @@ def spotify_dl():
                         help='Don\'t convert downloaded songs to mp3')
     parser.add_argument('-s', '--scrape', action="store",
                         help="Use HTML Scraper for YouTube Search", default=True)
+    parser.add_argument('-w', '--no-overwrites', action='store_true',
+                        help="Whether we should avoid overwriting the target audio file if it already exists",
+                        default=False)
     parser.add_argument('-V', '--verbose', action='store_true',
                         help='Show more information on what''s happening.')
     parser.add_argument('-v', '--version', action='store_true',
@@ -88,7 +91,8 @@ def spotify_dl():
         if args.keep_playlist_order:
             file_name_f = playlist_num_filename
 
-        download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, file_name_f)
+        download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites,
+                       file_name_f)
 
 
 if __name__ == '__main__':
