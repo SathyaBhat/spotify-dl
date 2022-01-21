@@ -19,9 +19,9 @@ def spotify_dl():
     """Main entry point of the script."""
     parser = argparse.ArgumentParser(prog='spotify_dl')
     parser.add_argument('-l', '--url', action="store",
-                        help="Spotify Playlist link URL", type=str, required=True)
+                        help="Spotify Playlist link URL", type=str, required=False)
     parser.add_argument('-o', '--output', type=str, action='store',
-                        help='Specify download directory.', required=True)
+                        help='Specify download directory.', required=False)
     parser.add_argument('-d', '--download', action='store_true',
                         help='Download using youtube-dl', default=True)
     parser.add_argument('-f', '--format_str', type=str, action='store',
@@ -50,13 +50,18 @@ def spotify_dl():
             config = json.loads(file.read())
 
         for key, value in config.items():
-            if value and (value.lower() in ['true', 't']):
+            if (isinstance(value, bool) and value) or (isinstance(value, str) and value and value.lower() in ['true', 't']):
                 setattr(args, key, True)
             else:
                 setattr(args, key, value)
 
     if args.verbose:
         log.setLevel(DEBUG)
+
+    if not hasattr(args, 'url'):
+        raise(Exception("No playlist url provided"))
+    if not hasattr(args, 'o'):
+        raise(Exception("No output folder configured"))
 
     log.info('Starting spotify_dl')
     log.debug('Setting debug mode on spotify_dl')
