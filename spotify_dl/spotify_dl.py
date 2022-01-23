@@ -5,12 +5,11 @@ import os
 import sys
 from logging import DEBUG
 from pathlib import Path, PurePath
-
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from spotify_dl.constants import VERSION
-from spotify_dl.scaffold import log, check_for_tokens
+from spotify_dl.scaffold import log, check_for_tokens, console
 from spotify_dl.spotify import fetch_tracks, parse_spotify_url, validate_spotify_url, get_item_name
 from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
 
@@ -42,7 +41,7 @@ def spotify_dl():
     args = parser.parse_args()
 
     if args.version:
-        print("spotify_dl v{}".format(VERSION))
+        console.print(f"spotify_dl [bold green]v{VERSION}[/bold green]")
         sys.exit(0)
 
     if os.path.isfile(os.path.expanduser('~/.spotify_dl_settings')):
@@ -60,10 +59,10 @@ def spotify_dl():
 
     if not hasattr(args, 'url'):
         raise(Exception("No playlist url provided"))
-    if not hasattr(args, 'o'):
+    if not hasattr(args, 'output'):
         raise(Exception("No output folder configured"))
 
-    log.info('Starting spotify_dl')
+    console.log(f"Starting spotify_dl [bold green]v{VERSION}[/bold green]")
     log.debug('Setting debug mode on spotify_dl')
 
     if not check_for_tokens():
@@ -83,7 +82,7 @@ def spotify_dl():
         directory_name = get_item_name(sp, item_type, item_id)
         save_path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
         save_path.mkdir(parents=True, exist_ok=True)
-        log.info("Saving songs to: {}".format(directory_name))
+        console.print(f"Saving songs to [bold green]{directory_name}[/bold green] directory")
 
     songs = fetch_tracks(sp, item_type, args.url)
     if args.download is True:
