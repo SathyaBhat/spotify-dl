@@ -3,7 +3,6 @@ import sys
 from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
 from rich.progress import Progress
-from rich.progress import track
 def fetch_tracks(sp, item_type, url):
     """
     Fetches tracks from the provided URL.
@@ -20,14 +19,13 @@ def fetch_tracks(sp, item_type, url):
             songs_task = progress.add_task(description="Fetching songs from playlist..")
             while True:
                 items = sp.playlist_items(playlist_id=url,
-                                        fields='items.track.name,items.track.artists(name, uri),'
-                                                'items.track.album(name, release_date, total_tracks, images),'
-
-                                                'items.track.track_number,total, next,offset,'
-                                                'items.track.id',
-                                        additional_types=['track'], offset=offset)
+                                            fields='items.track.name,items.track.artists(name, uri),'
+                                                    'items.track.album(name, release_date, total_tracks, images),'
+                                                    'items.track.track_number,total, next,offset,'
+                                                    'items.track.id',
+                                            additional_types=['track'], offset=offset)
                 total_songs = items.get('total')
-                track_info_task = progress.add_task(description="Fetching track info",total=len(items['items']))
+                track_info_task = progress.add_task(description="Fetching track info", total=len(items['items']))
                 for item in items['items']:
                     track_info = item.get('track')
                     # If the user has a podcast in their playlist, there will be no track
@@ -36,17 +34,14 @@ def fetch_tracks(sp, item_type, url):
                         offset += 1
                         continue
                     track_album_info = track_info.get('album')
-                    
                     track_num = track_info.get('track_number')
                     spotify_id = track_info.get('id')
                     track_name = track_info.get('name')
                     track_artist = ", ".join([artist['name'] for artist in track_info.get('artists')])
-                    
                     if track_album_info:
                         track_album = track_album_info.get('name')
                         track_year = track_album_info.get('release_date')[:4] if track_album_info.get('release_date') else ''
                         album_total = track_album_info.get('total_tracks')
-                    
                     if len(item['track']['album']['images']) > 0:
                         cover = item['track']['album']['images'][0]['url']
                     else:
@@ -60,8 +55,8 @@ def fetch_tracks(sp, item_type, url):
                     else:
                         genre = ""
                     songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                                    "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
-                                    "cover": cover, "genre": genre, "spotify_id": spotify_id})
+                                        "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
+                                        "cover": cover, "genre": genre, "spotify_id": spotify_id})
                     offset += 1
                     progress.update(task_id=track_info_task, advance=1)
                 progress.update(task_id=songs_task, description=f"Fetched {offset} of {total_songs} songs from the playlist", advance=100, total=total_songs)

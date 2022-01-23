@@ -37,7 +37,7 @@ def check_for_tokens():
             Windows Powershell:
             $env:SPOTIPY_CLIENT_ID='your-spotify-client-id'
             $env:SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
-            
+
             Windows CMD:
             set SPOTIPY_CLIENT_ID='your-spotify-client-id'
             set SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
