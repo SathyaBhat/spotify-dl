@@ -58,41 +58,42 @@ def fetch_tracks(sp, item_type, url):
                                         "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
                                         "cover": cover, "genre": genre, "spotify_id": spotify_id})
                     offset += 1
-                    progress.update(task_id=track_info_task, advance=1)
+                    progress.update(task_id=track_info_task, description=f"Fetching track info for \n{track_name}",advance=1)
                 progress.update(task_id=songs_task, description=f"Fetched {offset} of {total_songs} songs from the playlist", advance=100, total=total_songs)
                 if total_songs == offset:
                     break
 
     elif item_type == 'album':
-        while True:
-            album_info = sp.album(album_id=url)
-            items = sp.album_tracks(album_id=url)
-            total_songs = items.get('total')
-            track_album = album_info.get('name')
-            track_year = album_info.get('release_date')[:4] if album_info.get('release_date') else ''
-            album_total = album_info.get('total_tracks')
-            if len(album_info['images']) > 0:
-                cover = album_info['images'][0]['url']
-            else:
-                cover = None
-            if len(sp.artist(artist_id=album_info['artists'][0]['uri'])['genres']) > 0:
-                genre = sp.artist(artist_id=album_info['artists'][0]['uri'])['genres'][0]
-            else:
-                genre = ""
-            for item in items['items']:
-                track_name = item.get('name')
-                track_artist = ", ".join([artist['name'] for artist in item['artists']])
-                track_num = item['track_number']
-                spotify_id = item.get('id')
-                songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                                   "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
-                                   "cover": cover, "genre": genre, "spotify_id": spotify_id})
-                offset += 1
+        with Progress() as progress:
+            album_songs_task = progress.add_task(description="Fetching songs from the album..")
+            while True:
+                album_info = sp.album(album_id=url)
+                items = sp.album_tracks(album_id=url)
+                total_songs = items.get('total')
+                track_album = album_info.get('name')
+                track_year = album_info.get('release_date')[:4] if album_info.get('release_date') else ''
+                album_total = album_info.get('total_tracks')
+                if len(album_info['images']) > 0:
+                    cover = album_info['images'][0]['url']
+                else:
+                    cover = None
+                if len(sp.artist(artist_id=album_info['artists'][0]['uri'])['genres']) > 0:
+                    genre = sp.artist(artist_id=album_info['artists'][0]['uri'])['genres'][0]
+                else:
+                    genre = ""
+                for item in items['items']:
+                    track_name = item.get('name')
+                    track_artist = ", ".join([artist['name'] for artist in item['artists']])
+                    track_num = item['track_number']
+                    spotify_id = item.get('id')
+                    songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
+                                    "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
+                                    "cover": cover, "genre": genre, "spotify_id": spotify_id})
+                    offset += 1
 
-            log.info(f"Fetched {offset}/{total_songs} songs in the album")
-            if total_songs == offset:
-                log.info('All pages fetched, time to leave. Added %s songs in total', offset)
-                break
+                progress.update(task_id=album_songs_task, description=f"Fetched {offset} of {album_total} songs from the album {track_album}", advance=offset, total=album_total)
+                if total_songs == offset:
+                    break
 
     elif item_type == 'track':
         items = sp.track(track_id=url)
