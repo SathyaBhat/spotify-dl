@@ -5,13 +5,11 @@ import os
 import sys
 from logging import DEBUG
 from pathlib import Path, PurePath
-
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from spotify_dl.constants import VERSION
-from spotify_dl.models import db, Song
-from spotify_dl.scaffold import log, check_for_tokens
+from spotify_dl.scaffold import log, check_for_tokens, console
 from spotify_dl.spotify import fetch_tracks, parse_spotify_url, validate_spotify_url, get_item_name
 from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
 
@@ -22,7 +20,7 @@ def spotify_dl():
     parser.add_argument('-l', '--url', action="store",
                         help="Spotify Playlist link URL", type=str, nargs='+', required=True)
     parser.add_argument('-o', '--output', type=str, action='store',
-                        help='Specify download directory.', required=True)
+                        help='Specify download directory.', required=False)
     parser.add_argument('-d', '--download', action='store_true',
                         help='Download using youtube-dl', default=True)
     parser.add_argument('-f', '--format_str', type=str, action='store',
@@ -33,8 +31,9 @@ def spotify_dl():
                         help='Whether to keep original playlist ordering or not.')
     parser.add_argument('-m', '--skip_mp3', action='store_true',
                         help='Don\'t convert downloaded songs to mp3')
-    parser.add_argument('-s', '--scrape', action="store",
-                        help="Use HTML Scraper for YouTube Search", default=True)
+    parser.add_argument('-w', '--no-overwrites', action='store_true',
+                        help="Whether we should avoid overwriting the target audio file if it already exists",
+                        default=False)
     parser.add_argument('-V', '--verbose', action='store_true',
                         help='Show more information on what''s happening.')
     parser.add_argument('-v', '--version', action='store_true',
@@ -42,17 +41,15 @@ def spotify_dl():
     args = parser.parse_args()
 
     if args.version:
-        print("spotify_dl v{}".format(VERSION))
+        console.print(f"spotify_dl [bold green]v{VERSION}[/bold green]")
         sys.exit(0)
 
-    db.connect()
-    db.create_tables([Song])
     if os.path.isfile(os.path.expanduser('~/.spotify_dl_settings')):
         with open(os.path.expanduser('~/.spotify_dl_settings')) as file:
             config = json.loads(file.read())
 
         for key, value in config.items():
-            if value and (value.lower() in ['true', 't']):
+            if (isinstance(value, bool) and value) or (isinstance(value, str) and value and value.lower() in ['true', 't']):
                 setattr(args, key, True)
             else:
                 setattr(args, key, value)
@@ -60,7 +57,12 @@ def spotify_dl():
     if args.verbose:
         log.setLevel(DEBUG)
 
-    log.info('Starting spotify_dl')
+    if not hasattr(args, 'url'):
+        raise(Exception("No playlist url provided"))
+    if not hasattr(args, 'output'):
+        raise(Exception("No output folder configured"))
+
+    console.log(f"Starting spotify_dl [bold green]v{VERSION}[/bold green]")
     log.debug('Setting debug mode on spotify_dl')
 
     if not check_for_tokens():
@@ -81,7 +83,7 @@ def spotify_dl():
             directory_name = get_item_name(sp, item_type, item_id)
             save_path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
             save_path.mkdir(parents=True, exist_ok=True)
-            log.info("Saving songs to: {}".format(directory_name))
+            console.print(f"Saving songs to [bold green]{directory_name}[/bold green] directory")
 
         songs = fetch_tracks(sp, item_type, url)
         if args.download is True:
@@ -89,7 +91,7 @@ def spotify_dl():
             if args.keep_playlist_order:
                 file_name_f = playlist_num_filename
 
-            download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, file_name_f)
+            download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, file_name_f)
 
 
 if __name__ == '__main__':
