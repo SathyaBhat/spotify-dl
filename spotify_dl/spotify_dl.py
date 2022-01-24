@@ -60,7 +60,7 @@ def spotify_dl():
 
     if not hasattr(args, 'url'):
         raise(Exception("No playlist url provided"))
-    if not hasattr(args, 'o'):
+    if not hasattr(args, 'output'):
         raise(Exception("No output folder configured"))
 
     log.info('Starting spotify_dl')
