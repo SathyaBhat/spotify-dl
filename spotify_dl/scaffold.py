@@ -1,12 +1,16 @@
 import logging
 from os import getenv
 import sentry_sdk
+from rich.logging import RichHandler
+from rich.console import Console
 
-__all__ = ['log', 'check_for_tokens']
+__all__ = ['log', 'check_for_tokens', 'console']
 
 logging.basicConfig(level=logging.INFO,
-                    format='%(message)s')
-
+                    format="%(message)s",
+                    datefmt="[%X]",
+                    handlers=[RichHandler(show_level=False, show_time=False)])
+console = Console()
 log = logging.getLogger('sdl')
 sentry_sdk.init("https://fc66a23d79634b9bba1690ea13e289f0@o321064.ingest.sentry.io/2383261")
 
@@ -29,9 +33,11 @@ def check_for_tokens():
             Linux:
             export SPOTIPY_CLIENT_ID='your-spotify-client-id'
             export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+
             Windows Powershell:
             $env:SPOTIPY_CLIENT_ID='your-spotify-client-id'
             $env:SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+
             Windows CMD:
             set SPOTIPY_CLIENT_ID='your-spotify-client-id'
             set SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'

@@ -47,6 +47,7 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
             'outtmpl': outtmpl,
             'default_search': 'ytsearch',
             'noplaylist': True,
+            'no_color': False,
             'postprocessor_args': ['-metadata', 'title=' + song.get('name'),
                                    '-metadata', 'artist=' + song.get('artist'),
                                    '-metadata', 'album=' + song.get('album')]
