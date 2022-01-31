@@ -1,5 +1,5 @@
-sentry_sdk==1.5.3
+sentry_sdk>=1.5,<2
 yt-dlp>=2022.01.21
-spotipy==2.16.1
-mutagen==1.45.1
-rich==11.0.0
+spotipy>=2.16,<3
+mutagen>=1.45,<2
+rich>=11.0,<12
