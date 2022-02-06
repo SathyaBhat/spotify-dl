@@ -20,7 +20,7 @@ def spotify_dl():
     parser.add_argument('-l', '--url', action="store",
                         help="Spotify Playlist link URL", type=str, nargs='+', required=True)
     parser.add_argument('-o', '--output', type=str, action='store',
-                        help='Specify download directory.', required=False)
+                        help='Specify download directory.', required=False, default = ".")
     parser.add_argument('-d', '--download', action='store_true',
                         help='Download using youtube-dl', default=True)
     parser.add_argument('-f', '--format_str', type=str, action='store',
@@ -79,21 +79,24 @@ def spotify_dl():
 
         if not valid_item:
             sys.exit(1)
-
+        
+        
+        
         if args.output:
             item_type, item_id = parse_spotify_url(url)
             directory_name = get_item_name(sp, item_type, item_id)
             save_path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
             save_path.mkdir(parents=True, exist_ok=True)
             console.print(f"Saving songs to [bold green]{directory_name}[/bold green] directory")
-
-        songs = fetch_tracks(sp, item_type, url)
+            songs = fetch_tracks(sp, item_type, url)
+        else:
+            songs = {}
         if args.download is True:
             file_name_f = default_filename
             if args.keep_playlist_order:
                 file_name_f = playlist_num_filename
-
-            download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, file_name_f)
+            if save_path is not None:
+                download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, file_name_f)
 
 
 if __name__ == '__main__':
