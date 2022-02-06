@@ -28,3 +28,9 @@ template: |
   ## Changes
 
   $CHANGES
+
+  Update using
+
+    pip install spotify_dl --upgrade
+
+  Thanks to everyone for their contributions!
