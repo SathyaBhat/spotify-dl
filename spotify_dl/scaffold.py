@@ -4,7 +4,7 @@ import sentry_sdk
 from rich.logging import RichHandler
 from rich.console import Console
 
-__all__ = ['log', 'check_for_tokens', 'console']
+__all__ = ['log', 'get_tokens', 'console']
 
 logging.basicConfig(level=logging.INFO,
                     format="%(message)s",
@@ -15,7 +15,7 @@ log = logging.getLogger('sdl')
 sentry_sdk.init("https://fc66a23d79634b9bba1690ea13e289f0@o321064.ingest.sentry.io/2383261")
 
 
-def check_for_tokens():
+def get_tokens():
     """
     Checks if the required API keys for Spotify has been set.
     :param name: Name to be cleaned up
@@ -45,5 +45,5 @@ def check_for_tokens():
             Get your credentials at
                 https://developer.spotify.com/my-applications
         ''')
-        return False
-    return True
+        return None
+    return CLIENT_ID, CLIENT_SECRET
