@@ -11,11 +11,10 @@ Downloads songs from any Spotify playlist, album or track.
 [![GitHub contributors](https://img.shields.io/github/contributors/SathyaBhat/spotify-dl.svg)](https://GitHub.com/SathyaBhat/spotify-dl/graphs/contributors/)
 
 [![Awesome Badges](https://img.shields.io/badge/badges-awesome-green.svg)](https://github.com/Naereen/badges)
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E55G3EI)
 
 ### Tell me more!
 
-I wanted an easy way to grab the songs present in my library so I can download it & use it offline. [spotify_to_mp3](https://github.com/frosas/spotify-to-mp3) worked well but it relied on grooveshark, which unfortunately is no more. So I wrote this script which mimics that library, but instead of downloading from grooveshark, it searches YouTube and downloads the song using [youtube-dl](https://rg3.github.io/youtube-dl/).
+I wanted an easy way to grab the songs present in my library so I can download it & use it offline. [spotify_to_mp3](https://github.com/frosas/spotify-to-mp3) worked well but it relied on grooveshark, which unfortunately is no more. So I wrote this script which mimics that library, but instead of downloading from grooveshark, it searches YouTube and downloads the song using [yt-dlp](https://github.com/yt-dlp/yt-dlp).
 
 ### How do I get this thing running?
 
@@ -51,7 +50,7 @@ to run the tests with [Make](https://www.gnu.org/software/make/)
 
 ### Thanks and Credits
 
-Take a look at [CONTRIBUTORS](/CONTRIBUTORS.md) for a list of all people who have helped and contributed to the project.
+Take a look at [CONTRIBUTORS](https://github.com/SathyaBhat/spotify-dl/graphs/contributors) for a list of all people who have helped and contributed to the project.
 
 ### Issues, Feedback, Contact details
 
