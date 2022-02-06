@@ -68,7 +68,7 @@ def fetch_tracks(sp, item_type, url):
             album_songs_task = progress.add_task(description="Fetching songs from the album..")
             while True:
                 album_info = sp.album(album_id=url)
-                items = sp.album_tracks(album_id=url)
+                items = sp.album_tracks(album_id=url, offset=offset)
                 total_songs = items.get('total')
                 track_album = album_info.get('name')
                 track_year = album_info.get('release_date')[:4] if album_info.get('release_date') else ''
@@ -80,7 +80,7 @@ def fetch_tracks(sp, item_type, url):
                 if len(sp.artist(artist_id=album_info['artists'][0]['uri'])['genres']) > 0:
                     genre = sp.artist(artist_id=album_info['artists'][0]['uri'])['genres'][0]
                 else:
-                    genre = ""
+                    genre = ""          
                 for item in items['items']:
                     track_name = item.get('name')
                     track_artist = ", ".join([artist['name'] for artist in item['artists']])
@@ -92,7 +92,7 @@ def fetch_tracks(sp, item_type, url):
                     offset += 1
 
                 progress.update(task_id=album_songs_task, description=f"Fetched {offset} of {album_total} songs from the album {track_album}", advance=offset, total=album_total)
-                if total_songs == offset:
+                if album_total == offset:
                     break
 
     elif item_type == 'track':
