@@ -9,7 +9,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from spotify_dl.constants import VERSION
-from spotify_dl.scaffold import log, check_for_tokens, console
+from spotify_dl.scaffold import log, get_tokens, console
 from spotify_dl.spotify import fetch_tracks, parse_spotify_url, validate_spotify_url, get_item_name
 from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
 
@@ -65,10 +65,12 @@ def spotify_dl():
     console.log(f"Starting spotify_dl [bold green]v{VERSION}[/bold green]")
     log.debug('Setting debug mode on spotify_dl')
 
-    if not check_for_tokens():
+    tokens = get_tokens()
+    if tokens is None:
         sys.exit(1)
 
-    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+    C_ID, C_SECRET = tokens
+    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=C_ID,client_secret=C_SECRET))
     log.debug('Arguments: {}'.format(args))
 
     for url in args.url:
