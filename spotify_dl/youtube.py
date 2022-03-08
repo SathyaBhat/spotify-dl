@@ -20,7 +20,8 @@ def playlist_num_filename(song):
 
 
 def download_songs(songs, download_directory, format_string, skip_mp3,
-                   keep_playlist_order=False, no_overwrites=False, file_name_f=default_filename):
+                   keep_playlist_order=False, no_overwrites=False, skip_non_music_sections=False,
+                   file_name_f=default_filename):
     """
     Downloads songs from the YouTube URL passed to either current directory or download_directory, is it is passed.
     :param songs: Dictionary of songs and associated artist
@@ -29,6 +30,7 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
     :param skip_mp3: Whether to skip conversion to MP3
     :param keep_playlist_order: Whether to keep original playlist ordering. Also, prefixes songs files with playlist num
     :param no_overwrites: Whether we should avoid overwriting the song if it already exists
+    :param skip_non_music_sections: Whether we should skip Non-Music sections using SponsorBlock API
     :param file_name_f: optional func(song) -> str that returns a filename for the download (without extension)
     """
     overwrites = not no_overwrites
@@ -40,6 +42,8 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
         file_name = file_name_f(song)
         file_path = path.join(download_directory, file_name)
 
+        sponsorblock_remove_list = ['music_offtopic'] if skip_non_music_sections else []
+
         outtmpl = f"{file_path}.%(ext)s"
         ydl_opts = {
             'format': format_string,
@@ -48,6 +52,16 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
             'default_search': 'ytsearch',
             'noplaylist': True,
             'no_color': False,
+            'postprocessors': [
+                {
+                    'key': 'SponsorBlock',
+                    'categories': sponsorblock_remove_list,
+                },
+                {
+                    'key': 'ModifyChapters',
+                    'remove_sponsor_segments': ['music_offtopic'],
+                    'force_keyframes': True,
+                }],
             'postprocessor_args': ['-metadata', 'title=' + song.get('name'),
                                    '-metadata', 'artist=' + song.get('artist'),
                                    '-metadata', 'album=' + song.get('album')]
@@ -58,7 +72,7 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
                 'preferredcodec': 'mp3',
                 'preferredquality': '192',
             }
-            ydl_opts['postprocessors'] = [mp3_postprocess_opts.copy()]
+            ydl_opts['postprocessors'].append(mp3_postprocess_opts.copy())
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             try:
