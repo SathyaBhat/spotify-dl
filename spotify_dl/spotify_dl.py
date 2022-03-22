@@ -31,6 +31,9 @@ def spotify_dl():
                         help='Whether to keep original playlist ordering or not.')
     parser.add_argument('-m', '--skip_mp3', action='store_true',
                         help='Don\'t convert downloaded songs to mp3')
+    parser.add_argument('-s', '--skip_non_music_sections', default=False,
+                        action='store_true',
+                        help='Whether to skip non-music sections using SponsorBlock API.')
     parser.add_argument('-w', '--no-overwrites', action='store_true',
                         help="Whether we should avoid overwriting the target audio file if it already exists",
                         default=False)
@@ -96,7 +99,7 @@ def spotify_dl():
             if args.keep_playlist_order:
                 file_name_f = playlist_num_filename
             if save_path is not None:
-                download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, file_name_f)
+                download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, args.skip_non_music_sections, file_name_f)
 
 
 if __name__ == '__main__':
