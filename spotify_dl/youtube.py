@@ -3,6 +3,7 @@ from os import path
 import os
 import multiprocessing
 
+import json
 import mutagen
 import csv
 import yt_dlp
@@ -35,8 +36,8 @@ def dump_json(songs):
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             try:
-                json = ydl.extract_info('ytsearch:' + query, False)
-                print(json.get('entries'))
+                ytJson = ydl.extract_info('ytsearch:' + query, False)
+                print(json.dumps(ytJson.get('entries')))
             except Exception as e:
                 log.debug(e)
                 print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
