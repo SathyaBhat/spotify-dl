@@ -18,7 +18,7 @@ from spotify_dl.spotify import (
     get_item_name,
 )
 
-from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
+from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename, dump_json
 
 
 def spotify_dl():
@@ -48,6 +48,13 @@ def spotify_dl():
         action="store_true",
         help="Download using youtube-dl",
         default=True,
+    )
+    parser.add_argument(
+        "-j",
+        "--dump-json",
+        action="store_true",
+        help="Dump info-json using youtube-dl",
+        default=False
     )
     parser.add_argument(
         "-f",
@@ -185,7 +192,9 @@ def spotify_dl():
         )
         url_dict["songs"] = fetch_tracks(sp, item_type, url)
         url_data["urls"].append(url_dict.copy())
-    if args.download is True:
+    if args.dump_json is True:
+        dump_json(url_dict["songs"])
+    elif args.download is True:
         file_name_f = default_filename
         if args.keep_playlist_order:
             file_name_f = playlist_num_filename

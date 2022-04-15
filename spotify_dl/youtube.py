@@ -25,6 +25,22 @@ def playlist_num_filename(**kwargs):
     """name with track number"""
     return f"{kwargs['track_num']} - {default_filename(**kwargs)}"
 
+def dump_json(songs):
+    for song in songs:
+        query = f"{song.get('artist')} - {song.get('name')} Lyrics".replace(":", "").replace("\"", "")
+
+        ydl_opts = {
+            'quiet': True
+        }
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            try:
+                json = ydl.extract_info('ytsearch:' + query, False)
+                print(json.get('entries'))
+            except Exception as e:
+                log.debug(e)
+                print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
+                continue
 
 def write_tracks(tracks_file, song_dict):
     """
