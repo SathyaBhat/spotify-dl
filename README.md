@@ -14,7 +14,7 @@ Downloads songs from any Spotify playlist, album or track.
 
 ### Tell me more!
 
-I wanted an easy way to grab the songs present in my library so I can download it & use it offline. [spotify_to_mp3](https://github.com/frosas/spotify-to-mp3) worked well but it relied on grooveshark, which unfortunately is no more. So I wrote this script which mimics that library, but instead of downloading from grooveshark, it searches YouTube and downloads the song using [yt-dlp](https://github.com/yt-dlp/yt-dlp).
+I wanted an easy way to grab the songs present in my library so I can download it & use it offline. I no longer use this, but continue to maintain this. spotify-dl doesn't download anything from Spotify. It picks up the metadata from Spotify API and then uses [yt-dlp](https://github.com/yt-dlp/yt-dlp) to download the song. 
 
 ### How do I get this thing running?
 
@@ -35,6 +35,10 @@ For more details and other arguments, issue `-h`
     spotify_dl -h
 
 See [the getting started guide](https://github.com/SathyaBhat/spotify-dl/blob/master/GETTING_STARTED.md) for more details.
+
+### Demo 
+
+[![asciicast](https://asciinema.org/a/488558.svg)](https://asciinema.org/a/488558)
 
 ### Contributing and Local development
 

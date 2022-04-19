@@ -31,6 +31,6 @@ template: |
 
   Update using
 
-    pip install spotify_dl --upgrade
+      pip install spotify_dl --upgrade
 
   Thanks to everyone for their contributions!
