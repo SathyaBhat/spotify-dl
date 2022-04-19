@@ -1,5 +1,5 @@
 sentry_sdk~=1.5.0
 yt-dlp>=2022.01.21
-spotipy~=2.16.0
+spotipy~=2.19.0
 mutagen~=1.45.0
 rich~=12.0.0
