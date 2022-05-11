@@ -62,7 +62,7 @@ def fetch_tracks(sp, item_type, url, offset=0):
                     offset += 1
                     progress.update(task_id=track_info_task, description=f"Fetching track info for \n{track_name}",advance=1)
                 progress.update(task_id=songs_task, description=f"Fetched {offset} of {total_songs} songs from the playlist", advance=100, total=total_songs)
-                if total_songs >= offset:
+                if total_songs == offset:
                     break
 
     elif item_type == 'album':
