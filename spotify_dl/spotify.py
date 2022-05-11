@@ -3,7 +3,7 @@ import sys
 from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
 from rich.progress import Progress
-def fetch_tracks(sp, item_type, url):
+def fetch_tracks(sp, item_type, url, offset):
     """
     Fetches tracks from the provided URL.
     :param sp: Spotify client
@@ -12,7 +12,6 @@ def fetch_tracks(sp, item_type, url):
     :return Dictionary of song and artist
     """
     songs_list = []
-    offset = 0
 
     if item_type == 'playlist':
         with Progress() as progress:
@@ -60,7 +59,7 @@ def fetch_tracks(sp, item_type, url):
                     offset += 1
                     progress.update(task_id=track_info_task, description=f"Fetching track info for \n{track_name}",advance=1)
                 progress.update(task_id=songs_task, description=f"Fetched {offset} of {total_songs} songs from the playlist", advance=100, total=total_songs)
-                if total_songs == offset:
+                if total_songs >= offset:
                     break
 
     elif item_type == 'album':
