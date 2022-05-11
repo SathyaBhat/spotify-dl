@@ -29,6 +29,8 @@ def spotify_dl():
     parser.add_argument('-k', '--keep_playlist_order', default=False,
                         action='store_true',
                         help='Whether to keep original playlist ordering or not.')
+    parser.add_argument('-O', '--offset', type=int, action='store', default=0,
+                        help='Specify offset to start downloading from.')
     parser.add_argument('-m', '--skip_mp3', action='store_true',
                         help='Don\'t convert downloaded songs to mp3')
     parser.add_argument('-s', '--skip_non_music_sections', default=False,
@@ -91,7 +93,7 @@ def spotify_dl():
             save_path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
             save_path.mkdir(parents=True, exist_ok=True)
             console.print(f"Saving songs to [bold green]{directory_name}[/bold green] directory")
-            songs = fetch_tracks(sp, item_type, url)
+            songs = fetch_tracks(sp, item_type, url, args.offset)
         else:
             songs = {}
         if args.download is True:
