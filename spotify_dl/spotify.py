@@ -3,7 +3,7 @@ import sys
 from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
 from rich.progress import Progress
-def fetch_tracks(sp, item_type, url, offset):
+def fetch_tracks(sp, item_type, url, offset=0):
     """
     Fetches tracks from the provided URL.
     :param sp: Spotify client
@@ -24,6 +24,9 @@ def fetch_tracks(sp, item_type, url, offset):
                                                     'items.track.id',
                                             additional_types=['track'], offset=offset)
                 total_songs = items.get('total')
+                if offset > total_songs:
+                    log.error("Offset is bigger than the total number of songs")
+                    sys.exit(1)
                 track_info_task = progress.add_task(description="Fetching track info", total=len(items['items']))
                 for item in items['items']:
                     track_info = item.get('track')
