@@ -33,7 +33,6 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
     :param skip_non_music_sections: Whether we should skip Non-Music sections using SponsorBlock API
     :param file_name_f: optional func(song) -> str that returns a filename for the download (without extension)
     """
-    overwrites = not no_overwrites
     log.debug(f"Downloading to {download_directory}")
     for song in songs:
         query = f"{song.get('artist')} - {song.get('name')} Lyrics".replace(":", "").replace("\"", "")
