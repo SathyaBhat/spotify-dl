@@ -42,6 +42,13 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
         file_name = file_name_f(song)
         file_path = path.join(download_directory, file_name)
 
+        mp3filename = f"{file_path}.mp3"
+        mp3file_path = path.join(mp3filename)
+
+        if no_overwrites and path.exists(mp3file_path):
+            print('File {} already exists, we do not overwrite it '.format(mp3filename))
+            continue
+
         sponsorblock_remove_list = ['music_offtopic'] if skip_non_music_sections else []
 
         outtmpl = f"{file_path}.%(ext)s"
@@ -83,36 +90,31 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
                 continue
 
         if not skip_mp3:
-            mp3filename = f"{file_path}.mp3"
-            mp3file_path = path.join(mp3filename)
-            if overwrites or not path.exists(mp3file_path):
-                try:
-                    song_file = MP3(mp3file_path, ID3=EasyID3)
-                except mutagen.MutagenError as e:
-                    log.debug(e)
-                    print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
-                    continue
-                song_file['date'] = song.get('year')
-                if keep_playlist_order:
-                    song_file['tracknumber'] = str(song.get('playlist_num'))
-                else:
-                    song_file['tracknumber'] = str(song.get('num')) + '/' + str(song.get('num_tracks'))
-                song_file['genre'] = song.get('genre')
-                song_file.save()
-                song_file = MP3(mp3filename, ID3=ID3)
-                cover = song.get('cover')
-                if cover is not None:
-                    if cover.lower().startswith('http'):
-                        req = urllib.request.Request(cover)
-                    else:
-                        raise ValueError from None
-                    with urllib.request.urlopen(req) as resp:  # nosec
-                        song_file.tags['APIC'] = APIC(
-                            encoding=3,
-                            mime='image/jpeg',
-                            type=3, desc=u'Cover',
-                            data=resp.read()
-                        )
-                song_file.save()
+            try:
+                song_file = MP3(mp3file_path, ID3=EasyID3)
+            except mutagen.MutagenError as e:
+                log.debug(e)
+                print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
+                continue
+            song_file['date'] = song.get('year')
+            if keep_playlist_order:
+                song_file['tracknumber'] = str(song.get('playlist_num'))
             else:
-                print('File {} already exists, we do not overwrite it '.format(mp3filename))
+                song_file['tracknumber'] = str(song.get('num')) + '/' + str(song.get('num_tracks'))
+            song_file['genre'] = song.get('genre')
+            song_file.save()
+            song_file = MP3(mp3filename, ID3=ID3)
+            cover = song.get('cover')
+            if cover is not None:
+                if cover.lower().startswith('http'):
+                    req = urllib.request.Request(cover)
+                else:
+                    raise ValueError from None
+                with urllib.request.urlopen(req) as resp:  # nosec
+                    song_file.tags['APIC'] = APIC(
+                        encoding=3,
+                        mime='image/jpeg',
+                        type=3, desc=u'Cover',
+                        data=resp.read()
+                    )
+            song_file.save()
