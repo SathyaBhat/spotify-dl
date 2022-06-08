@@ -44,7 +44,7 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
         mp3filename = f"{file_path}.mp3"
         mp3file_path = path.join(mp3filename)
 
-        if no_overwrites and path.exists(mp3file_path):
+        if no_overwrites and not skip_mp3 and path.exists(mp3file_path):
             print('File {} already exists, we do not overwrite it '.format(mp3filename))
             continue
 
