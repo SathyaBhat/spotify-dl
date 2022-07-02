@@ -76,11 +76,20 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             try:
-                ydl.download([query])
-            except Exception as e:
-                log.debug(e)
-                print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
-                continue
+                #ydl.download([query])
+                # From this line, modified code by kinglobster
+
+                if alternative_yt_url is None:
+                    ydl.download([query])
+                else:
+                    print('###### Downloading from alternative url!!!: ' + alternative_yt_url)
+                    ydl.download(alternative_yt_url)
+
+                # End of modified code            
+                except Exception as e:
+                    log.debug(e)
+                    print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
+                    continue
 
         if not skip_mp3:
             mp3filename = f"{file_path}.mp3"
