@@ -21,7 +21,7 @@ def playlist_num_filename(song):
 
 def download_songs(songs, download_directory, format_string, skip_mp3,
                    keep_playlist_order=False, no_overwrites=False, skip_non_music_sections=False,
-                   file_name_f=default_filename):
+                   file_name_f=default_filename, alternative_yt_url=None):
     """
     Downloads songs from the YouTube URL passed to either current directory or download_directory, is it is passed.
     :param songs: Dictionary of songs and associated artist
@@ -32,6 +32,7 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
     :param no_overwrites: Whether we should avoid overwriting the song if it already exists
     :param skip_non_music_sections: Whether we should skip Non-Music sections using SponsorBlock API
     :param file_name_f: optional func(song) -> str that returns a filename for the download (without extension)
+    :param alternative_yt_url: added by kinglobster, contains alternative youtube video to download the song from
     """
     overwrites = not no_overwrites
     log.debug(f"Downloading to {download_directory}")
@@ -70,13 +71,23 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
             mp3_postprocess_opts = {
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
-                'preferredquality': '192',
+                'preferredquality': '320',  # 320kbps is spotify's 'very high' quality. Was '192'
             }
             ydl_opts['postprocessors'].append(mp3_postprocess_opts.copy())
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             try:
-                ydl.download([query])
+                # ydl.download([query])
+                # From this line, modified code by kinglobster
+
+                if alternative_yt_url is None:
+                    ydl.download([query])
+                else:
+                    print('###### Downloading from alternative url!!!: ' + alternative_yt_url)
+                    ydl.download(alternative_yt_url)
+
+                # End of modified code
+
             except Exception as e:
                 log.debug(e)
                 print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
