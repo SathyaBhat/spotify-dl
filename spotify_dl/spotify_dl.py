@@ -24,8 +24,8 @@ def spotify_dl():
     parser.add_argument('-d', '--download', action='store_true',
                         help='Download using youtube-dl', default=True)
 
-    '''Newly added argument (by kinglobster). Specifies an alternative youtube url in case that the one
-    determined by the program is mistaken or does not fulfill the requirements of quality or any other.'''
+    # Newly added argument (by kinglobster). Specifies an alternative youtube url in case that the one
+    # determined by the program is mistaken or does not fulfill the requirements of quality or any other.
     parser.add_argument('-y', '--alternative_yt_url', action='store', type=str, required=False,
                         help='Specify youtube url to download the song from. The metadata form spotify'
                              'and the audio from youtube will still merge in a single file.')
@@ -106,7 +106,7 @@ def spotify_dl():
             if args.keep_playlist_order:
                 file_name_f = playlist_num_filename
             if save_path is not None:
-                #download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, args.skip_non_music_sections, file_name_f)
+                # download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, args.skip_non_music_sections, file_name_f)
                 # From this line downwards, modified code by kinglobster
 
                 if args.alternative_yt_url is not None:
@@ -121,3 +121,5 @@ def spotify_dl():
 
 if __name__ == '__main__':
     spotify_dl()
+    
+
