@@ -77,7 +77,7 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             try:
-                #ydl.download([query])
+                # ydl.download([query])
                 # From this line, modified code by kinglobster
 
                 if alternative_yt_url is None:
