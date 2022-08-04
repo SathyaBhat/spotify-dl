@@ -80,7 +80,6 @@ def spotify_dl():
     log.debug('Arguments: {}'.format(args))
 
     processes = []
-    # results = ThreadPool(n_cpus - 1).imap_unordered()
     for url in args.url:
         print(url)
         processes.append(Process(target=download_for_one_link, args=(url, args, sp)))
@@ -98,9 +97,7 @@ def download_for_one_link(url, args, sp) :
 
     if args.output:
         item_type, item_id = parse_spotify_url(url)
-        console.print(f"Here [bold green]{item_type}[/bold green]")
         directory_name = get_item_name(sp, item_type, item_id)
-        console.print(f"Here2 [bold green")
         save_path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
         save_path.mkdir(parents=True, exist_ok=True)
         console.print(f"Saving songs to [bold green]{directory_name}[/bold green] directory")
