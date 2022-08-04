@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import json
+from multiprocessing.dummy import Process 
 import os
 import sys
 from logging import DEBUG
@@ -13,6 +14,8 @@ from spotify_dl.scaffold import log, get_tokens, console
 from spotify_dl.spotify import fetch_tracks, parse_spotify_url, validate_spotify_url, get_item_name
 from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
 
+from multiprocessing import cpu_count
+from multiprocessing.pool import ThreadPool
 
 def spotify_dl():
     """Main entry point of the script."""
@@ -76,31 +79,39 @@ def spotify_dl():
     sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=C_ID,client_secret=C_SECRET))
     log.debug('Arguments: {}'.format(args))
 
+    processes = []
+    # results = ThreadPool(n_cpus - 1).imap_unordered()
     for url in args.url:
-        if url:
-            valid_item = validate_spotify_url(url)
+        print(url)
+        processes.append(Process(target=download_for_one_link, args=(url, args, sp)))
+        processes[-1].start()
+    
+    for process in processes:
+        process.join()
 
-        if not valid_item:
-            sys.exit(1)
-        
-        
-        
-        if args.output:
-            item_type, item_id = parse_spotify_url(url)
-            directory_name = get_item_name(sp, item_type, item_id)
-            save_path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
-            save_path.mkdir(parents=True, exist_ok=True)
-            console.print(f"Saving songs to [bold green]{directory_name}[/bold green] directory")
-            songs = fetch_tracks(sp, item_type, url)
-        else:
-            songs = {}
-        if args.download is True:
-            file_name_f = default_filename
-            if args.keep_playlist_order:
-                file_name_f = playlist_num_filename
-            if save_path is not None:
-                download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, args.skip_non_music_sections, file_name_f)
+def download_for_one_link(url, args, sp) :
+    if url:
+        valid_item = validate_spotify_url(url)
 
+    if not valid_item:
+        sys.exit(1)
+
+    if args.output:
+        item_type, item_id = parse_spotify_url(url)
+        console.print(f"Here [bold green]{item_type}[/bold green]")
+        directory_name = get_item_name(sp, item_type, item_id)
+        console.print(f"Here2 [bold green")
+        save_path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
+        save_path.mkdir(parents=True, exist_ok=True)
+        console.print(f"Saving songs to [bold green]{directory_name}[/bold green] directory")
+
+    songs = fetch_tracks(sp, item_type, url)
+    if args.download is True:
+        file_name_f = default_filename
+        if args.keep_playlist_order:
+            file_name_f = playlist_num_filename
+
+        download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, args.skip_non_music_sections, file_name_f)
 
 if __name__ == '__main__':
     spotify_dl()
