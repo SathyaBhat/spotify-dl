@@ -81,7 +81,6 @@ def spotify_dl():
 
     processes = []
     for url in args.url:
-        print(url)
         processes.append(Process(target=download_for_one_link, args=(url, args, sp)))
         processes[-1].start()
     
