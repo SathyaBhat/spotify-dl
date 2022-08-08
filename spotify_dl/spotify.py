@@ -2,7 +2,6 @@ import sys
 
 from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
-# from rich.progress import Progress
 
 def fetch_tracks(sp, item_type, url):
     """
@@ -16,8 +15,6 @@ def fetch_tracks(sp, item_type, url):
     offset = 0
 
     if item_type == 'playlist':
-        # with Progress() as progress:
-            # songs_task = progress.add_task(description="Fetching songs from playlist..")
         while True:
             items = sp.playlist_items(playlist_id=url,
                                         fields='items.track.name,items.track.artists(name, uri),'
@@ -26,7 +23,6 @@ def fetch_tracks(sp, item_type, url):
                                                 'items.track.id',
                                         additional_types=['track'], offset=offset)
             total_songs = items.get('total')
-            # track_info_task = progress.add_task(description="Fetching track info", total=len(items['items']))
             for item in items['items']:
                 track_info = item.get('track')
                 # If the user has a podcast in their playlist, there will be no track
@@ -59,14 +55,10 @@ def fetch_tracks(sp, item_type, url):
                                     "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
                                     "cover": cover, "genre": genre, "spotify_id": spotify_id})
                 offset += 1
-                # progress.update(task_id=track_info_task, description=f"Fetching track info for \n{track_name}",advance=1)
-            # progress.update(task_id=songs_task, description=f"Fetched {offset} of {total_songs} songs from the playlist", advance=100, total=total_songs)
             if total_songs == offset:
                 break
 
     elif item_type == 'album':
-        # with Progress() as progress:
-            # album_songs_task = progress.add_task(description="Fetching songs from the album..")
         while True:
             album_info = sp.album(album_id=url)
             items = sp.album_tracks(album_id=url, offset=offset)
@@ -92,7 +84,6 @@ def fetch_tracks(sp, item_type, url):
                                 "cover": cover, "genre": genre, "spotify_id": spotify_id})
                 offset += 1
 
-            # progress.update(task_id=album_songs_task, description=f"Fetched {offset} of {album_total} songs from the album {track_album}", advance=offset, total=album_total)
             if album_total == offset:
                 break
 
