@@ -13,6 +13,8 @@ from spotify_dl.scaffold import log, get_tokens, console
 from spotify_dl.spotify import fetch_tracks, parse_spotify_url, validate_spotify_url, get_item_name
 from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
 
+import multiprocessing
+
 
 def spotify_dl():
     """Main entry point of the script."""
@@ -94,12 +96,35 @@ def spotify_dl():
             songs = fetch_tracks(sp, item_type, url)
         else:
             songs = {}
+        
+        # list of parameter dictionaries to be sent to download_songs function
+        # Every song from every playlist/ablum/track url will be append to this list
+        params_list = []
+
         if args.download is True:
             file_name_f = default_filename
             if args.keep_playlist_order:
                 file_name_f = playlist_num_filename
             if save_path is not None:
-                download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, args.skip_non_music_sections, file_name_f)
+                for song in songs:
+                    params = {}
+                    params["song"] = song
+                    params["download_directory"] = save_path
+                    params["format_string"] = args.format_str
+                    params["skip_mp3"] = args.skip_mp3
+                    params["keep_playlist_order"] = args.keep_playlist_order
+                    params["no_overwrites"] = args.no_overwrites
+                    params["skip_non_music_sections"] = args.skip_non_music_sections
+                    params["file_name_f"] = file_name_f
+                    params_list.append(params)
+    
+    n_cores = multiprocessing.cpu_count()
+    # using 1 less that the available cores to avoid overloading the system
+    cores_to_use = n_cores - 1 if n_cores > 1 else 1
+    pool = multiprocessing.Pool(processes = cores_to_use)
+    # map will run the function on each parameter dictionary in parallel, 
+    pool.map(download_songs, params_list)
+    pool.close()
 
 
 if __name__ == '__main__':
