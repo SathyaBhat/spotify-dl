@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import json
-from multiprocessing.dummy import Process 
+from multiprocessing.dummy import Process
 import os
 import sys
 from logging import DEBUG
@@ -74,17 +74,20 @@ def spotify_dl():
 
     C_ID, C_SECRET = tokens
     sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=C_ID,client_secret=C_SECRET))
-    log.debug('Arguments: {}'.format(args))
+    log.debug(f'Arguments: {args}')
 
     processes = []
     for url in args.url:
         processes.append(Process(target=download_for_one_link, args=(url, args, sp)))
         processes[-1].start()
-    
+
     for process in processes:
         process.join()
 
+
 def download_for_one_link(url, args, sp) :
+    """Downloads songs for one playlist/album/track url.
+       This function with the required arg can be passed to Process constructor to initiate parallel download."""
     if url:
         valid_item = validate_spotify_url(url)
 
@@ -105,6 +108,7 @@ def download_for_one_link(url, args, sp) :
             file_name_f = playlist_num_filename
 
         download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, args.skip_non_music_sections, file_name_f)
+
 
 if __name__ == '__main__':
     spotify_dl()

@@ -73,7 +73,7 @@ def fetch_tracks(sp, item_type, url):
             if len(sp.artist(artist_id=album_info['artists'][0]['uri'])['genres']) > 0:
                 genre = sp.artist(artist_id=album_info['artists'][0]['uri'])['genres'][0]
             else:
-                genre = ""          
+                genre = ""
             for item in items['items']:
                 track_name = item.get('name')
                 track_artist = ", ".join([artist['name'] for artist in item['artists']])
