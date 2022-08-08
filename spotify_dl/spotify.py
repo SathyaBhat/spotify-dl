@@ -3,6 +3,7 @@ import sys
 from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
 
+
 def fetch_tracks(sp, item_type, url):
     """
     Fetches tracks from the provided URL.
@@ -52,8 +53,8 @@ def fetch_tracks(sp, item_type, url):
                 else:
                     genre = ""
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                                    "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
-                                    "cover": cover, "genre": genre, "spotify_id": spotify_id})
+                                   "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
+                                   "cover": cover, "genre": genre, "spotify_id": spotify_id})
                 offset += 1
             if total_songs == offset:
                 break
@@ -80,8 +81,8 @@ def fetch_tracks(sp, item_type, url):
                 track_num = item['track_number']
                 spotify_id = item.get('id')
                 songs_list.append({"name": track_name, "artist": track_artist, "album": track_album, "year": track_year,
-                                "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
-                                "cover": cover, "genre": genre, "spotify_id": spotify_id})
+                                   "num_tracks": album_total, "num": track_num, "playlist_num": offset + 1,
+                                   "cover": cover, "genre": genre, "spotify_id": spotify_id})
                 offset += 1
 
             if album_total == offset:

@@ -14,6 +14,7 @@ from spotify_dl.scaffold import log, get_tokens, console
 from spotify_dl.spotify import fetch_tracks, parse_spotify_url, validate_spotify_url, get_item_name
 from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
 
+
 def spotify_dl():
     """Main entry point of the script."""
     parser = argparse.ArgumentParser(prog='spotify_dl')
@@ -86,8 +87,11 @@ def spotify_dl():
 
 
 def download_for_one_link(url, args, sp) :
-    """Downloads songs for one playlist/album/track url.
-       This function with the required arg can be passed to Process constructor to initiate parallel download."""
+    """
+    Downloads songs for one playlist/album/track url. 
+    This function with the required arg can be passed to 
+    Process constructor to initiate parallel download.
+    """
     if url:
         valid_item = validate_spotify_url(url)
 
