@@ -18,7 +18,12 @@ def test_download_one_false_skip():
               'num': 6,
               'num_tracks': 15,
               'year': '1994'}]
-    yt.download_songs(songs[0])
+    params = {}
+    params["song"] = songs[0]
+    params["download_directory"] = os.path.dirname(os.path.realpath(__file__))
+    params["format_string"] = 'best'
+    params["skip_mp3"] = False
+    yt.download_songs(params)
     music = MP3("tests/Eagles - Hotel California - Live On MTV, 1994.mp3", ID3=EasyID3)
     tags = ID3("tests/Eagles - Hotel California - Live On MTV, 1994.mp3")
     assert (music['artist'][0] == 'Eagles')
@@ -40,7 +45,12 @@ def test_download_one_true_skip():
          'num': 6,
          'num_tracks': 15,
          'year': '1994'}]
-    yt.download_songs(songs[0])
+    params = {}
+    params["song"] = songs[0]
+    params["download_directory"] = '~/Downloads'
+    params["format_string"] = 'best'
+    params["skip_mp3"] = False
+    yt.download_songs(params)
 
 def test_download_cover_none():
     songs = [
@@ -52,7 +62,12 @@ def test_download_cover_none():
          'num': 7,
          'num_tracks': 16,
          'year': '1974'}]
-    yt.download_songs(songs[0])
+    params = {}
+    params["song"] = songs[0]
+    params["download_directory"] = 'os.path.dirname(os.path.realpath(__file__))'
+    params["format_string"] = 'best'
+    params["skip_mp3"] = False
+    yt.download_songs(params)
     music = MP3("tests/Queen - The Fairy Feller's Master-Stroke - Remastered 2011.mp3", ID3=EasyID3)
     tags = ID3("tests/Queen - The Fairy Feller's Master-Stroke - Remastered 2011.mp3")
     assert (music['artist'][0] == 'Queen')
