@@ -1,29 +1,253 @@
 import urllib.request
 from os import path
-
+import os
+import multiprocessing
 import mutagen
-import yt_dlp as youtube_dl
+import yt_dlp
 from mutagen.easyid3 import EasyID3
 from mutagen.id3 import APIC, ID3
 from mutagen.mp3 import MP3
-
-from spotify_dl.scaffold import log
-from spotify_dl.utils import sanitize
-
-
-def default_filename(song):
-    return sanitize(f"{song.get('artist')} - {song.get('name')}", '#')  # youtube-dl automatically replaces with #
+from youtube_search import YoutubeSearch
+from scaffold import log
+from utils import sanitize
 
 
-def playlist_num_filename(song):
-    return f"{song.get('playlist_num')} - {default_filename(song)}"
+def default_filename(**kwargs):
+    return sanitize(
+        f"{kwargs['artist']} - {kwargs['name']}", "#"
+    )  # youtube-dl automatically replaces with #
 
 
-def download_songs(songs, download_directory, format_string, skip_mp3,
-                   keep_playlist_order=False, no_overwrites=False, skip_non_music_sections=False,
-                   file_name_f=default_filename):
+def playlist_num_filename(**kwargs):
+    return f"{kwargs['track_num']} - {default_filename(**kwargs)}"
+
+
+def write_tracks(tracks_file, song_dict):
+    # print(song_dict)
+    track_db = []
+    # Writes the information of all tracks in the playlist to a text file.
+    # This includins the name, artist, and spotify URL. Each is delimited by a comma.
+    with open(tracks_file, "w+", encoding="utf-8") as file_out:
+        for url_dict in song_dict["urls"]:
+            # for track in url_dict['songs']:
+            for i in range(len(url_dict["songs"])):
+                track = url_dict["songs"][i]
+                track_url = track["track_url"]
+                track_name = track["name"]
+                track_artist = track["artist"]
+                track_num = track["num"]
+                track_album = track["album"]
+                track["save_path"] = url_dict["save_path"]
+                track_db.append(track)
+                track_index = len(track_db) - 1
+                csv_line = (
+                    track_name
+                    + ","
+                    + track_artist
+                    + ","
+                    + track_url
+                    + ","
+                    + str(track_num)
+                    + ","
+                    + track_album
+                    + ","
+                    + str(track_index)
+                    + "\n"
+                )
+                try:
+                    file_out.write(csv_line)
+                except UnicodeEncodeError:
+                    print(
+                        "Track named {} failed due to an encoding error. This is \
+                        most likely due to this song having a non-English name.".format(
+                            track_name
+                        )
+                    )
+    return track_db
+
+
+def set_tags(temp, file_path, kwargs):
+    mp3filename = f"{file_path}.mp3"
+    mp3file_path = path.join(mp3filename)
+    song = kwargs["track_db"][int(temp[-1])]
+    if not kwargs["no_overwrites"] or not path.exists(mp3file_path):
+        try:
+            song_file = MP3(mp3filename, ID3=EasyID3)
+        except mutagen.MutagenError as e:
+            log.debug(e)
+            print(
+                "Failed to download: {}, please ensure YouTubeDL is up-to-date. ".format(
+                    query
+                )
+            )
+            return
+        song_file["date"] = song.get("year")
+        if kwargs["keep_playlist_order"]:
+            song_file["tracknumber"] = str(song.get("playlist_num"))
+        else:
+            song_file["tracknumber"] = (
+                str(song.get("num")) + "/" + str(song.get("num_tracks"))
+            )
+        song_file["genre"] = song.get("genre")
+        song_file = MP3(mp3filename, ID3=ID3)
+        cover = song.get("cover")
+        if cover is not None:
+            if cover.lower().startswith("http"):
+                req = urllib.request.Request(cover)
+            else:
+                raise ValueError from None
+            with urllib.request.urlopen(req) as resp:  # nosec
+                song_file.tags["APIC"] = APIC(
+                    encoding=3,
+                    mime="image/jpeg",
+                    type=3,
+                    desc="Cover",
+                    data=resp.read(),
+                )
+        song_file.save()
+    else:
+        print("File {} already exists, we do not overwrite it ".format(mp3filename))
+
+
+def find_and_download_songs(kwargs):
+    reference_file = kwargs["reference_file"]
+    TOTAL_ATTEMPTS = 10
+    with open(reference_file, "r", encoding="utf-8") as file:
+        for line in file:
+            temp = line.split(",")
+            name, artist, num, album, i = (
+                temp[0],
+                temp[1],
+                temp[3],
+                temp[4],
+                int(temp[-1].replace("\n", "")),
+            )
+            text_to_search = artist + " - " + name
+            best_url = None
+            attempts_left = TOTAL_ATTEMPTS
+            while attempts_left > 0:
+                try:
+                    results_list = YoutubeSearch(
+                        text_to_search, max_results=1
+                    ).to_dict()
+                    best_url = "https://www.youtube.com{}".format(
+                        results_list[0]["url_suffix"]
+                    )
+                    break
+                except IndexError:
+                    attempts_left -= 1
+                    print(
+                        "No valid URLs found for {}, trying again ({} attempts left).".format(
+                            text_to_search, attempts_left
+                        )
+                    )
+            if best_url is None:
+                print(
+                    "No valid URLs found for {}, skipping track.".format(text_to_search)
+                )
+                continue
+            # Run you-get to fetch and download the link's audio
+            print("Initiating download for {}.".format(best_url))
+            # add args from old script here
+            file_name = kwargs["file_name_f"](
+                name=name, artist=artist, track_num=kwargs["track_db"][i].get("num")
+            )
+            sponsorblock_remove_list = (
+                ["music_offtopic"] if kwargs["skip_non_music_sections"] else []
+            )
+            # need a way to figure out which playlist_dir song shd be saved to
+            file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
+            outtmpl = f"{file_path}.%(ext)s"
+            ydl_opts = {
+                "format": "bestaudio/best",
+                "outtmpl": outtmpl,
+                "postprocessors": [
+                    {
+                        "key": "ModifyChapters",
+                        "remove_sponsor_segments": ["music_offtopic"],
+                        "force_keyframes": True,
+                    },
+                ],
+                "noplaylist": True,
+                "no_color": False,
+                "postprocessor_args": [
+                    "-metadata",
+                    "title=" + name,
+                    "-metadata",
+                    "artist=" + artist,
+                    "-metadata",
+                    "album=" + album,
+                ],
+            }
+            if not kwargs["skip_mp3"]:
+                mp3_postprocess_opts = {
+                    "key": "FFmpegExtractAudio",
+                    "preferredcodec": "mp3",
+                    "preferredquality": "192",
+                }
+            ydl_opts["postprocessors"].append(mp3_postprocess_opts.copy())
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([best_url])
+            if not kwargs["skip_mp3"]:
+                set_tags(temp, file_path, kwargs)
+
+
+def multicore_find_and_download_songs(kwargs):
+
+    lines = []
+    with open(kwargs["reference_file"], "r", encoding="utf-8") as file:
+        for line in file:
+            lines.append(line)
+
+    cpu_count = kwargs["multi_core"]
+    number_of_songs = len(lines)
+    songs_per_cpu = number_of_songs // cpu_count
+    extra_songs = number_of_songs % cpu_count
+
+    cpu_count_list = []
+    for cpu in range(cpu_count):
+        songs = songs_per_cpu
+        if cpu < extra_songs:
+            songs = songs + 1
+        cpu_count_list.append(songs)
+
+    index = 0
+    file_segments = []
+    for cpu in cpu_count_list:
+        right = cpu + index
+        segment = lines[index:right]
+        index = index + cpu
+        file_segments.append(segment)
+
+    processes = []
+    segment_index = 0
+    for segment in file_segments:
+        p = multiprocessing.Process(
+            target=multicore_handler, args=(segment_index, segment, kwargs.copy())
+        )
+        processes.append(p)
+        segment_index += 1
+
+    [p.start() for p in processes]
+    [p.join() for p in processes]
+
+
+def multicore_handler(segment_index, segment, kwargs):
+    reference_filename = "{}.txt".format(segment_index)
+    with open(reference_filename, "w+", encoding="utf-8") as file_out:
+        for line in segment:
+            file_out.write(line)
+
+    kwargs["reference_file"] = reference_filename
+    find_and_download_songs(kwargs)
+
+    if os.path.exists(reference_filename):
+        os.remove(reference_filename)
+
+
+def download_songs(**kwargs):
     """
-    Downloads songs from the YouTube URL passed to either current directory or download_directory, is it is passed.
+    Downloads songs from the YouTube URL passed to either current directory or download_directory, as it is passed.  [made small typo change]
     :param songs: Dictionary of songs and associated artist
     :param download_directory: Location where to save
     :param format_string: format string for the file conversion
@@ -33,86 +257,24 @@ def download_songs(songs, download_directory, format_string, skip_mp3,
     :param skip_non_music_sections: Whether we should skip Non-Music sections using SponsorBlock API
     :param file_name_f: optional func(song) -> str that returns a filename for the download (without extension)
     """
-    overwrites = not no_overwrites
-    log.debug(f"Downloading to {download_directory}")
-    for song in songs:
-        query = f"{song.get('artist')} - {song.get('name')} Lyrics".replace(":", "").replace("\"", "")
-        download_archive = path.join(download_directory, 'downloaded_songs.txt')
-
-        file_name = file_name_f(song)
-        file_path = path.join(download_directory, file_name)
-
-        sponsorblock_remove_list = ['music_offtopic'] if skip_non_music_sections else []
-
-        outtmpl = f"{file_path}.%(ext)s"
-        ydl_opts = {
-            'format': format_string,
-            'download_archive': download_archive,
-            'outtmpl': outtmpl,
-            'default_search': 'ytsearch',
-            'noplaylist': True,
-            'no_color': False,
-            'postprocessors': [
-                {
-                    'key': 'SponsorBlock',
-                    'categories': sponsorblock_remove_list,
-                },
-                {
-                    'key': 'ModifyChapters',
-                    'remove_sponsor_segments': ['music_offtopic'],
-                    'force_keyframes': True,
-                }],
-            'postprocessor_args': ['-metadata', 'title=' + song.get('name'),
-                                   '-metadata', 'artist=' + song.get('artist'),
-                                   '-metadata', 'album=' + song.get('album')]
-        }
-        if not skip_mp3:
-            mp3_postprocess_opts = {
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
-            }
-            ydl_opts['postprocessors'].append(mp3_postprocess_opts.copy())
-
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            try:
-                ydl.download([query])
-            except Exception as e:
-                log.debug(e)
-                print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
-                continue
-
-        if not skip_mp3:
-            mp3filename = f"{file_path}.mp3"
-            mp3file_path = path.join(mp3filename)
-            if overwrites or not path.exists(mp3file_path):
-                try:
-                    song_file = MP3(mp3file_path, ID3=EasyID3)
-                except mutagen.MutagenError as e:
-                    log.debug(e)
-                    print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
-                    continue
-                song_file['date'] = song.get('year')
-                if keep_playlist_order:
-                    song_file['tracknumber'] = str(song.get('playlist_num'))
-                else:
-                    song_file['tracknumber'] = str(song.get('num')) + '/' + str(song.get('num_tracks'))
-                song_file['genre'] = song.get('genre')
-                song_file.save()
-                song_file = MP3(mp3filename, ID3=ID3)
-                cover = song.get('cover')
-                if cover is not None:
-                    if cover.lower().startswith('http'):
-                        req = urllib.request.Request(cover)
-                    else:
-                        raise ValueError from None
-                    with urllib.request.urlopen(req) as resp:  # nosec
-                        song_file.tags['APIC'] = APIC(
-                            encoding=3,
-                            mime='image/jpeg',
-                            type=3, desc=u'Cover',
-                            data=resp.read()
-                        )
-                song_file.save()
-            else:
-                print('File {} already exists, we do not overwrite it '.format(mp3filename))
+    [
+        log.debug(f"Downloading to {kwargs['songs']['urls'][i]['save_path']}")
+        for i in range(len(kwargs["songs"]["urls"]))
+    ]
+    # helper script code comes in here
+    # helper script has multiprocessing already implemented and working fine..
+    # will declare name for refrence file for all songs to be downloaded. [ refrence file = '{}.txt'.format(playlist name)
+    # params needed by helper script: [first need to check if multprocessing option was set]
+    # from this the script will allocate song dictionaries to different processors as per number specified
+    # the playlist name is also needed , will use param download_directory str(download_directory).split('/')[-1])
+    # need a function to populate the play_listname with songs
+    reference_file = "All Songs For This Download.txt"
+    track_db = write_tracks(reference_file, kwargs["songs"])
+    os.rename(reference_file, kwargs["output_dir"] + "/" + reference_file)
+    reference_file = str(kwargs["output_dir"]) + "/" + reference_file
+    kwargs["reference_file"] = reference_file
+    kwargs["track_db"] = track_db
+    if kwargs["multi_core"] > 1:
+        multicore_find_and_download_songs(kwargs)
+    else:
+        find_and_download_songs(kwargs)

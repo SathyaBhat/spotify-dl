@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import time
 import json
 import os
 import sys
@@ -8,99 +9,184 @@ from pathlib import Path, PurePath
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-from spotify_dl.constants import VERSION
-from spotify_dl.scaffold import log, get_tokens, console
-from spotify_dl.spotify import fetch_tracks, parse_spotify_url, validate_spotify_url, get_item_name
-from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
+from constants import VERSION
+from scaffold import log, get_tokens, console
+from spotify import (
+    fetch_tracks,
+    parse_spotify_url,
+    validate_spotify_urls,
+    get_item_name,
+)
+from youtube import download_songs, default_filename, playlist_num_filename
 
 
 def spotify_dl():
     """Main entry point of the script."""
-    parser = argparse.ArgumentParser(prog='spotify_dl')
-    parser.add_argument('-l', '--url', action="store",
-                        help="Spotify Playlist link URL", type=str, nargs='+', required=True)
-    parser.add_argument('-o', '--output', type=str, action='store',
-                        help='Specify download directory.', required=False, default = ".")
-    parser.add_argument('-d', '--download', action='store_true',
-                        help='Download using youtube-dl', default=True)
-    parser.add_argument('-f', '--format_str', type=str, action='store',
-                        help='Specify youtube-dl format string.',
-                        default='bestaudio/best')
-    parser.add_argument('-k', '--keep_playlist_order', default=False,
-                        action='store_true',
-                        help='Whether to keep original playlist ordering or not.')
-    parser.add_argument('-m', '--skip_mp3', action='store_true',
-                        help='Don\'t convert downloaded songs to mp3')
-    parser.add_argument('-s', '--skip_non_music_sections', default=False,
-                        action='store_true',
-                        help='Whether to skip non-music sections using SponsorBlock API.')
-    parser.add_argument('-w', '--no-overwrites', action='store_true',
-                        help="Whether we should avoid overwriting the target audio file if it already exists",
-                        default=False)
-    parser.add_argument('-V', '--verbose', action='store_true',
-                        help='Show more information on what''s happening.')
-    parser.add_argument('-v', '--version', action='store_true',
-                        help='Shows current version of the program')
+    parser = argparse.ArgumentParser(prog="spotify_dl")
+    parser.add_argument(
+        "-l",
+        "--url",
+        action="store",
+        help="Spotify Playlist link URL",
+        type=str,
+        nargs="+",
+        required=False,  # this has to be set to false to prevent useless prompt for url when all user wants is the script version
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=str,
+        action="store",
+        help="Specify download directory.",
+        required=False,
+        default=".",
+    )
+    parser.add_argument(
+        "-d",
+        "--download",
+        action="store_true",
+        help="Download using youtube-dl",
+        default=True,
+    )
+    parser.add_argument(
+        "-f",
+        "--format_str",
+        type=str,
+        action="store",
+        help="Specify youtube-dl format string.",
+        default="bestaudio/best",
+    )
+    parser.add_argument(
+        "-k",
+        "--keep_playlist_order",
+        default=False,
+        action="store_true",
+        help="Whether to keep original playlist ordering or not.",
+    )
+    parser.add_argument(
+        "-m",
+        "--skip_mp3",
+        action="store_true",
+        help="Don't convert downloaded songs to mp3",
+    )
+    parser.add_argument(
+        "-s",
+        "--skip_non_music_sections",
+        default=False,
+        action="store_true",
+        help="Whether to skip non-music sections using SponsorBlock API.",
+    )
+    parser.add_argument(
+        "-w",
+        "--no-overwrites",
+        action="store_true",
+        help="Whether we should avoid overwriting the target audio file if it already exists",
+        default=False,
+    )
+    parser.add_argument(
+        "-V",
+        "--verbose",
+        action="store_true",
+        help="Show more information on what" "s happening.",
+    )
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="store_true",
+        help="Shows current version of the program",
+    )
+    parser.add_argument(
+        "-mc",
+        "--multi_core",
+        action="store",
+        type=str,
+        default=0,
+        help="Use multiprocessing [-m [int:numcores]",
+    )
     args = parser.parse_args()
-
+    args.multi_core = int(args.multi_core)
     if args.version:
         console.print(f"spotify_dl [bold green]v{VERSION}[/bold green]")
         sys.exit(0)
 
-    if os.path.isfile(os.path.expanduser('~/.spotify_dl_settings')):
-        with open(os.path.expanduser('~/.spotify_dl_settings')) as file:
+    if os.path.isfile(os.path.expanduser("~/.spotify_dl_settings")):
+        with open(os.path.expanduser("~/.spotify_dl_settings")) as file:
             config = json.loads(file.read())
+            print(config)
 
         for key, value in config.items():
-            if (isinstance(value, bool) and value) or (isinstance(value, str) and value and value.lower() in ['true', 't']):
+            if (isinstance(value, bool) and value) or (
+                isinstance(value, str) and value and value.lower() in ["true", "t"]
+            ):
                 setattr(args, key, True)
             else:
                 setattr(args, key, value)
+    else:
+        print("no config file")
 
     if args.verbose:
         log.setLevel(DEBUG)
-
-    if not hasattr(args, 'url'):
-        raise(Exception("No playlist url provided"))
-    if not hasattr(args, 'output'):
-        raise(Exception("No output folder configured"))
+    if not args.url:
+        raise (Exception("No playlist url provided:"))
 
     console.log(f"Starting spotify_dl [bold green]v{VERSION}[/bold green]")
-    log.debug('Setting debug mode on spotify_dl')
+    log.debug("Setting debug mode on spotify_dl")
 
     tokens = get_tokens()
     if tokens is None:
         sys.exit(1)
 
     C_ID, C_SECRET = tokens
-    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=C_ID,client_secret=C_SECRET))
-    log.debug('Arguments: {}'.format(args))
+    sp = spotipy.Spotify(
+        auth_manager=SpotifyClientCredentials(client_id=C_ID, client_secret=C_SECRET)
+    )
+    log.debug("Arguments: {}".format(args))
 
-    for url in args.url:
-        if url:
-            valid_item = validate_spotify_url(url)
+    # for url in args.url:
+    # done implementing mutiprocessing but currently only works per url.. so theres some procedural code running here
+    # need a way to work on getting songs from both urls and saving to one file then multiprocessing that file
+    # will need variables to track different folders for each url
+    # if url:
+    # will need to validate both urls and return only the valid
+    # will send the urls in args.url to validate func and it will return a list of valid urls
+    # if theres no valid url it will return an empty list and program will exit at sys.exit(1)
+    valid_urls = validate_spotify_urls(args.url)
+    if not len(valid_urls):
+        sys.exit(1)
+    url_data = {}
+    # some procedural code here
+    url_data["urls"] = []
+    for url in valid_urls:
+        url_dict = {}
+        item_type, item_id = parse_spotify_url(url)
+        directory_name = get_item_name(sp, item_type, item_id)
+        url_dict["save_path"] = Path(
+            PurePath.joinpath(Path(args.output), Path(directory_name))
+        )
+        url_dict["save_path"].mkdir(parents=True, exist_ok=True)
+        console.print(
+            f"Saving songs to [bold green]{directory_name}[/bold green] directory"
+        )
+        url_dict["songs"] = fetch_tracks(sp, item_type, url)
+        url_data["urls"].append(url_dict.copy())
+    if args.download is True:
+        file_name_f = default_filename
+        if args.keep_playlist_order:
+            file_name_f = playlist_num_filename
+        download_songs(
+            songs=url_data,
+            output_dir=args.output,
+            format_str=args.format_str,
+            skip_mp3=args.skip_mp3,
+            keep_playlist_order=args.keep_playlist_order,
+            no_overwrites=args.no_overwrites,
+            skip_non_music_sections=args.skip_non_music_sections,
+            file_name_f=file_name_f,
+            multi_core=args.multi_core,
+        )
 
-        if not valid_item:
-            sys.exit(1)
-        
-        
-        
-        if args.output:
-            item_type, item_id = parse_spotify_url(url)
-            directory_name = get_item_name(sp, item_type, item_id)
-            save_path = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
-            save_path.mkdir(parents=True, exist_ok=True)
-            console.print(f"Saving songs to [bold green]{directory_name}[/bold green] directory")
-            songs = fetch_tracks(sp, item_type, url)
-        else:
-            songs = {}
-        if args.download is True:
-            file_name_f = default_filename
-            if args.keep_playlist_order:
-                file_name_f = playlist_num_filename
-            if save_path is not None:
-                download_songs(songs, save_path, args.format_str, args.skip_mp3, args.keep_playlist_order, args.no_overwrites, args.skip_non_music_sections, file_name_f)
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
+    starttime = time.time()
     spotify_dl()
+    print(f"[*] finished in {time.time() - starttime}")
