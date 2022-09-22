@@ -150,10 +150,13 @@ def spotify_dl():
     # will need to validate both urls and return only the valid
     # will send the urls in args.url to validate func and it will return a list of valid urls
     # if theres no valid url it will return an empty list and program will exit at sys.exit(1)
-    valid_urls = validate_spotify_urls(args.url)
+    valid_urls = validate_spotify_urls(args.url) 
+    
     if not valid_urls:
         sys.exit(1)
-    url_data = {'urls':[]} 
+  
+    url_data = {'urls' : []} 
+    
     for url in valid_urls:
         url_dict = {}
         item_type, item_id = parse_spotify_url(url)
