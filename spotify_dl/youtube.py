@@ -60,7 +60,7 @@ def write_tracks(tracks_file, song_dict):
                         "Track named {track_name} failed due to an encoding error. This is \
                         most likely due to this song having a non-English name."
                         )
-                    )
+                    
     return track_db
 
 
@@ -76,7 +76,7 @@ def set_tags(temp, file_path, kwargs):
             print(
                 f"Failed to download: {mp3filename}, please ensure YouTubeDL is up-to-date. "
                 )
-            )
+            
             return
         song_file["date"] = song.get("year")
         if kwargs["keep_playlist_order"]:
@@ -127,7 +127,7 @@ def find_and_download_songs(kwargs):
                     results_list = YoutubeSearch(
                         text_to_search, max_results=1
                     ).to_dict()
-                    best_url = "https://www.youtube.com{results_list[0]['url_suffix']}"
+                    best_url = f"https://www.youtube.com{results_list[0]['url_suffix']}"
                 
                     break
                 except IndexError:
@@ -182,6 +182,7 @@ def find_and_download_songs(kwargs):
                 }
             ydl_opts["postprocessors"].append(mp3_postprocess_opts.copy())
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                print(best_url)
                 ydl.download([best_url])
             if not kwargs["skip_mp3"]:
                 set_tags(temp, file_path, kwargs)
@@ -253,7 +254,7 @@ def download_songs(**kwargs):
     :param file_name_f: optional func(song) -> str that returns a filename for the download (without extension)
     """
     [
-        log.debug("Downloading to %s" kwargs['songs']['urls'][i]['save_path'])
+        log.debug("Downloading to %s", kwargs['songs']['urls'][i]['save_path'])
         for i in range(len(kwargs["songs"]["urls"]))
     ]
     # helper script code comes in here
