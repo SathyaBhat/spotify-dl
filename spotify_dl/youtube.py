@@ -69,7 +69,7 @@ def write_tracks(tracks_file, song_dict):
                     print(
                         "Track named {track_name} failed due to an encoding error. This is \
                         most likely due to this song having a non-English name."
-                        )       
+                        )
     return track_db
 
 
