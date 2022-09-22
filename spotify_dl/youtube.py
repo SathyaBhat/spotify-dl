@@ -3,6 +3,7 @@ from os import path
 import os
 import multiprocessing
 import mutagen
+import csv
 import yt_dlp
 from mutagen.easyid3 import EasyID3
 from mutagen.id3 import APIC, ID3
@@ -32,8 +33,9 @@ def write_tracks(tracks_file, song_dict):
     :param tracks_file: name of file towhich the songs are to be written
     :param song_dict: the songs to be written to tracks_file
     """
-    track_db = []
-    with open(tracks_file, "w+", encoding="utf-8") as file_out:
+    with open(tracks_file, "w+", encoding="utf-8", newline="") as file_out:
+        i = 0
+        writer = csv.writer(file_out, delimiter=";")
         for url_dict in song_dict["urls"]:
             # for track in url_dict['songs']:
             for track in url_dict["songs"]:
@@ -44,28 +46,24 @@ def write_tracks(tracks_file, song_dict):
                 track_album = track["album"]
                 track["save_path"] = url_dict["save_path"]
                 track_db.append(track)
-                track_index = len(track_db) - 1
-                csv_line = (
-                    track_name
-                    + ","
-                    + track_artist
-                    + ","
-                    + track_url
-                    + ","
-                    + str(track_num)
-                    + ","
-                    + track_album
-                    + ","
-                    + str(track_index)
-                    + "\n"
-                )
+                track_index = i
+                i += 1
+                csv_row = [
+                    track_name,
+                    track_artist,
+                    track_url,
+                    str(track_num),
+                    track_album,
+                    str(track_index),
+                ]
                 try:
-                    file_out.write(csv_line)
+                    writer.writerow(csv_row)
                 except UnicodeEncodeError:
                     print(
                         "Track named {track_name} failed due to an encoding error. This is \
                         most likely due to this song having a non-English name."
                         )
+                    )
     return track_db
 
 
@@ -87,6 +85,7 @@ def set_tags(temp, file_path, kwargs):
             print(
                 f"Failed to download: {mp3filename}, please ensure YouTubeDL is up-to-date. "
                 )
+
             return
         song_file["date"] = song.get("year")
         if kwargs["keep_playlist_order"]:
@@ -126,13 +125,17 @@ def find_and_download_songs(kwargs):
     TOTAL_ATTEMPTS = 10
     with open(reference_file, "r", encoding="utf-8") as file:
         for line in file:
-            temp = line.split(",")
+            print(line)
+            temp = line.split(";")
             name, artist, album, i = (
                 temp[0],
                 temp[1],
                 temp[4],
                 int(temp[-1].replace("\n", "")),
             )
+
+            # print('track name: ',name,' track_artist: ',artist,' track_album: ', album, ' track_url: ',temp[2])
+            # assert('spotify' not in album)
             text_to_search = artist + " - " + name
             best_url = None
             attempts_left = TOTAL_ATTEMPTS
@@ -149,9 +152,7 @@ def find_and_download_songs(kwargs):
                         f"No valid URLs found for {text_to_search}, trying again ({attempts_left} attempts left)."
                     )
             if best_url is None:
-                print(
-                    f"No valid URLs found for {text_to_search}, skipping track."
-                )
+                print(f"No valid URLs found for {text_to_search}, skipping track.")
                 continue
 
             print(f"Initiating download for {best_url}.")
@@ -268,7 +269,6 @@ def download_songs(**kwargs):
     """
     for i,url in enumerate(kwargs['songs']['urls']):
         log.debug("Downloading to %s", url['save_path'])
-   
     reference_file = "All Songs For This Download.txt"
     track_db = write_tracks(reference_file, kwargs["songs"])
     os.rename(reference_file, kwargs["output_dir"] + "/" + reference_file)
