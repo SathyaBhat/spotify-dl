@@ -153,13 +153,13 @@ def find_and_download_songs(kwargs):
                     f"No valid URLs found for {text_to_search}, skipping track."
                 )
                 continue
-      
+
             print(f"Initiating download for {best_url}.")
-         
+   
             file_name = kwargs["file_name_f"](
                 name=name, artist=artist, track_num=kwargs["track_db"][i].get("num")
             )
-           
+
             file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
             outtmpl = f"{file_path}.%(ext)s"
             ydl_opts = {
