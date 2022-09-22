@@ -243,7 +243,7 @@ def multicore_find_and_download_songs(kwargs):
         segment_index += 1
 
      
-    for p on processes:
+    for p in processes:
         p.start()
         
     for p in processes:
