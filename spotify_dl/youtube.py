@@ -8,8 +8,8 @@ from mutagen.easyid3 import EasyID3
 from mutagen.id3 import APIC, ID3
 from mutagen.mp3 import MP3
 from youtube_search import YoutubeSearch
-from scaffold import log
-from utils import sanitize
+from spotify_dl.scaffold import log
+from spotify_dl.utils import sanitize
 
 
 def default_filename(**kwargs):
