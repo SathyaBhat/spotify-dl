@@ -13,18 +13,14 @@ from spotify_dl.utils import sanitize
 
 
 def default_filename(**kwargs):
-    """
-    name without number
-    """
+    "name without number"
     return sanitize(
         f"{kwargs['artist']} - {kwargs['name']}", "#"
     )  # youtube-dl automatically replaces with #
 
 
 def playlist_num_filename(**kwargs):
-    """
-    name with track number
-    """
+    "name with track number"
     return f"{kwargs['track_num']} - {default_filename(**kwargs)}"
 
 
