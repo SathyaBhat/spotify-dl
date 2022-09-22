@@ -59,8 +59,7 @@ def write_tracks(tracks_file, song_dict):
                     print(
                         "Track named {track_name} failed due to an encoding error. This is \
                         most likely due to this song having a non-English name."
-                        )
-                    
+                        )       
     return track_db
 
 
@@ -76,7 +75,6 @@ def set_tags(temp, file_path, kwargs):
             print(
                 f"Failed to download: {mp3filename}, please ensure YouTubeDL is up-to-date. "
                 )
-            
             return
         song_file["date"] = song.get("year")
         if kwargs["keep_playlist_order"]:
@@ -127,7 +125,6 @@ def find_and_download_songs(kwargs):
                         text_to_search, max_results=1
                     ).to_dict()
                     best_url = f"https://www.youtube.com{results_list[0]['url_suffix']}"
-                
                     break
                 except IndexError:
                     attempts_left -= 1
