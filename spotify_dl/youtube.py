@@ -212,7 +212,6 @@ def multicore_find_and_download_songs(kwargs):
     with open(reference_file, "r", encoding="utf-8") as file:
         for line in file:
             lines.append(line)
-
     cpu_count = kwargs["multi_core"]
     number_of_songs = len(lines)
     songs_per_cpu = number_of_songs // cpu_count
@@ -241,11 +240,9 @@ def multicore_find_and_download_songs(kwargs):
         )
         processes.append(p)
         segment_index += 1
-
-     
-    for p in processes:
-        p.start()
         
+    for p in processes:
+        p.start()   
     for p in processes:
         p.join()
 
@@ -273,7 +270,6 @@ def download_songs(**kwargs):
     Downloads songs from the YouTube URL passed to either current directory or download_directory, as it is passed.  [made small typo change]
     :param kwargs: keyword arguments to be passed on between functions when downloading
     """
- 
     for i,url in enumerate(kwargs['songs']['urls']):
         log.debug("Downloading to %s", url['save_path'])
    
