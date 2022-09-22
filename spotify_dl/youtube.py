@@ -249,6 +249,7 @@ def multicore_find_and_download_songs(kwargs):
     for p in processes:
         p.join()
 
+
 def multicore_handler(segment_index, segment, kwargs):
     """
     function to handle each unique processor spawned download job
