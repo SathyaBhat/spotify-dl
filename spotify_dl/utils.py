@@ -5,7 +5,6 @@ def sanitize(name, replace_with=""):
     :return string containing the cleaned name
     """
     clean_up_list = ["\\", "/", ":", "*", "?", '"', "<", ">", "|", "\0", "$"]
-    [
-        name := name.replace(x, replace_with) for x in clean_up_list
-    ]  # just making the code a little more pythonic :)
+    for x in clean_up_list:
+        name = name.replace(x, replace_with)
     return name
