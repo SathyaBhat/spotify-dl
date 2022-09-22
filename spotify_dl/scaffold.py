@@ -28,7 +28,7 @@ def get_tokens():
     log.debug("Checking for tokens")
     CLIENT_ID = getenv("SPOTIPY_CLIENT_ID")
     CLIENT_SECRET = getenv("SPOTIPY_CLIENT_SECRET")
-    log.debug("Tokens fetched: {} {}".format(CLIENT_ID, CLIENT_SECRET))
+    log.debug("Tokens fetched: %s %s",(CLIENT_ID, CLIENT_SECRET))
 
     if CLIENT_ID is None or CLIENT_SECRET is None:
         print(
