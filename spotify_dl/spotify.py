@@ -1,6 +1,6 @@
 import sys
-from scaffold import log
-from utils import sanitize
+from spotify_dl.scaffold import log
+from spotify_dl.utils import sanitize
 from rich.progress import Progress
 
 
