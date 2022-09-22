@@ -140,7 +140,7 @@ def spotify_dl():
     sp = spotipy.Spotify(
         auth_manager=SpotifyClientCredentials(client_id=C_ID, client_secret=C_SECRET)
     )
-    log.debug("Arguments: {}".format(args))
+    log.debug("Arguments: %s " args)
 
     # for url in args.url:
     # done implementing mutiprocessing but currently only works per url.. so theres some procedural code running here
@@ -151,11 +151,9 @@ def spotify_dl():
     # will send the urls in args.url to validate func and it will return a list of valid urls
     # if theres no valid url it will return an empty list and program will exit at sys.exit(1)
     valid_urls = validate_spotify_urls(args.url)
-    if not len(valid_urls):
+    if not valid_urls:
         sys.exit(1)
-    url_data = {}
-    # some procedural code here
-    url_data["urls"] = []
+    url_data = {'urls'} = []
     for url in valid_urls:
         url_dict = {}
         item_type, item_id = parse_spotify_url(url)

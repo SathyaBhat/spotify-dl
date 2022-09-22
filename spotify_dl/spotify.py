@@ -1,5 +1,4 @@
 import sys
-import time  # added
 from scaffold import log
 from utils import sanitize
 from rich.progress import Progress
@@ -254,12 +253,12 @@ def validate_spotify_urls(urls):
     valid_urls = []
     for url in urls:
         item_type, item_id = parse_spotify_url(url)
-        log.debug(f"Got item type {item_type} and item_id {item_id}")
+        log.debug("Got item_type %s and item_id %s" item_type, item_id)
         if item_type not in ["album", "track", "playlist"]:
-            log.info(f"Only albums/tracks/playlists are supported and not {item_type}")
+            log.info("Only albums/tracks/playlists are supported and not %s" item_type)
             continue
         if item_id is None:
-            log.info(f"Couln't get valid item_id for {url}")
+            log.info("Couln't get valid item_id for %s" url)
         else:
             valid_urls.append(url)
     return valid_urls

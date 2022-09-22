@@ -30,8 +30,7 @@ def write_tracks(tracks_file, song_dict):
     with open(tracks_file, "w+", encoding="utf-8") as file_out:
         for url_dict in song_dict["urls"]:
             # for track in url_dict['songs']:
-            for i in range(len(url_dict["songs"])):
-                track = url_dict["songs"][i]
+            for i, track in enumerate(url_dict["songs"]):
                 track_url = track["track_url"]
                 track_name = track["name"]
                 track_artist = track["artist"]
@@ -58,9 +57,8 @@ def write_tracks(tracks_file, song_dict):
                     file_out.write(csv_line)
                 except UnicodeEncodeError:
                     print(
-                        "Track named {} failed due to an encoding error. This is \
-                        most likely due to this song having a non-English name.".format(
-                            track_name
+                        "Track named {track_name} failed due to an encoding error. This is \
+                        most likely due to this song having a non-English name."
                         )
                     )
     return track_db
@@ -76,8 +74,7 @@ def set_tags(temp, file_path, kwargs):
         except mutagen.MutagenError as e:
             log.debug(e)
             print(
-                "Failed to download: {}, please ensure YouTubeDL is up-to-date. ".format(
-                    query
+                f"Failed to download: {mp3filename}, please ensure YouTubeDL is up-to-date. "
                 )
             )
             return
@@ -106,7 +103,7 @@ def set_tags(temp, file_path, kwargs):
                 )
         song_file.save()
     else:
-        print("File {} already exists, we do not overwrite it ".format(mp3filename))
+        print("File {mp3filename} already exists, we do not overwrite it ")
 
 
 def find_and_download_songs(kwargs):
@@ -130,24 +127,22 @@ def find_and_download_songs(kwargs):
                     results_list = YoutubeSearch(
                         text_to_search, max_results=1
                     ).to_dict()
-                    best_url = "https://www.youtube.com{}".format(
-                        results_list[0]["url_suffix"]
-                    )
+                    best_url = "https://www.youtube.com{results_list[0]['url_suffix']}"
+                
                     break
                 except IndexError:
                     attempts_left -= 1
                     print(
-                        "No valid URLs found for {}, trying again ({} attempts left).".format(
-                            text_to_search, attempts_left
+                        "No valid URLs found for {text_to_search}, trying again ({attempts_left} attempts left).".format(
                         )
                     )
             if best_url is None:
                 print(
-                    "No valid URLs found for {}, skipping track.".format(text_to_search)
+                    f"No valid URLs found for {text_to_search}, skipping track."
                 )
                 continue
             # Run you-get to fetch and download the link's audio
-            print("Initiating download for {}.".format(best_url))
+            print(f"Initiating download for {best_url}.")
             # add args from old script here
             file_name = kwargs["file_name_f"](
                 name=name, artist=artist, track_num=kwargs["track_db"][i].get("num")
@@ -233,7 +228,7 @@ def multicore_find_and_download_songs(kwargs):
 
 
 def multicore_handler(segment_index, segment, kwargs):
-    reference_filename = "{}.txt".format(segment_index)
+    reference_filename = f"{segment_index}.txt"
     with open(reference_filename, "w+", encoding="utf-8") as file_out:
         for line in segment:
             file_out.write(line)
@@ -258,7 +253,7 @@ def download_songs(**kwargs):
     :param file_name_f: optional func(song) -> str that returns a filename for the download (without extension)
     """
     [
-        log.debug(f"Downloading to {kwargs['songs']['urls'][i]['save_path']}")
+        log.debug("Downloading to %s" kwargs['songs']['urls'][i]['save_path'])
         for i in range(len(kwargs["songs"]["urls"]))
     ]
     # helper script code comes in here
