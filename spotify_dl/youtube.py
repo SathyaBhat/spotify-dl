@@ -222,9 +222,12 @@ def multicore_find_and_download_songs(kwargs):
         processes.append(p)
         segment_index += 1
 
-    [p.start() for p in processes]
-    [p.join() for p in processes]
-
+     
+    for p on processes:
+        p.start()
+        
+    for p in processes:
+        p.join()
 
 def multicore_handler(segment_index, segment, kwargs):
     reference_filename = f"{segment_index}.txt"
@@ -251,10 +254,9 @@ def download_songs(**kwargs):
     :param skip_non_music_sections: Whether we should skip Non-Music sections using SponsorBlock API
     :param file_name_f: optional func(song) -> str that returns a filename for the download (without extension)
     """
-    [
+ 
+    for i in range(len(kwargs['songs']['urls'])):
         log.debug("Downloading to %s", kwargs['songs']['urls'][i]['save_path'])
-        for i in range(len(kwargs["songs"]["urls"]))
-    ]
     # helper script code comes in here
     # helper script has multiprocessing already implemented and working fine..
     # will declare name for refrence file for all songs to be downloaded. [ refrence file = '{}.txt'.format(playlist name)
