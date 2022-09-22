@@ -181,6 +181,11 @@ def find_and_download_songs(kwargs):
 
 
 def multicore_find_and_download_songs(kwargs):
+    """
+    function handles divinding songs to be downloaded among the specified number of CPU's
+    extra songs are shared among the CPU's
+    each cpu then handles its own batch through the multihandler fn
+    """
 
     lines = []
     with open(kwargs["reference_file"], "r", encoding="utf-8") as file:
