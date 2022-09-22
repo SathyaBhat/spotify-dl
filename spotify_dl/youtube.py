@@ -13,20 +13,30 @@ from spotify_dl.utils import sanitize
 
 
 def default_filename(**kwargs):
+    """
+    name without number
+    """
     return sanitize(
         f"{kwargs['artist']} - {kwargs['name']}", "#"
     )  # youtube-dl automatically replaces with #
 
 
 def playlist_num_filename(**kwargs):
+    """
+    name with track number
+    """
     return f"{kwargs['track_num']} - {default_filename(**kwargs)}"
 
 
 def write_tracks(tracks_file, song_dict):
     # print(song_dict)
     track_db = []
-    # Writes the information of all tracks in the playlist to a text file.
-    # This includins the name, artist, and spotify URL. Each is delimited by a comma.
+    """
+    Writes the information of all tracks in the playlist[s] to a text file in csv kind of format
+    This includins the name, artist, and spotify URL. Each is delimited by a comma.
+    :param tracks_file: name of file towhich the songs are to be written
+    :param song_dict: the songs to be written to tracks_file
+    """
     with open(tracks_file, "w+", encoding="utf-8") as file_out:
         for url_dict in song_dict["urls"]:
             # for track in url_dict['songs']:
@@ -64,6 +74,12 @@ def write_tracks(tracks_file, song_dict):
 
 
 def set_tags(temp, file_path, kwargs):
+    """
+    sets song tags after they are downloaded
+   :param temp: contains index used to obtain more info about song being editted
+   :param file_path: location of song whose tags are to be editted
+   :param kwargs: a dictionary of extra arguments to be used in tag editing
+   """
     mp3filename = f"{file_path}.mp3"
     mp3file_path = path.join(mp3filename)
     song = kwargs["track_db"][int(temp[-1])]
@@ -105,6 +121,11 @@ def set_tags(temp, file_path, kwargs):
 
 
 def find_and_download_songs(kwargs):
+    """
+    function handles actual download of the songs
+    the youtube_search lib is used to search for songs and get best url
+    :param kwargs: dictionary of key value arguments to be used in download
+    """
     reference_file = kwargs["reference_file"]
     TOTAL_ATTEMPTS = 10
     with open(reference_file, "r", encoding="utf-8") as file:
