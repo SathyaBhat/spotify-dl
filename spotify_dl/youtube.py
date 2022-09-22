@@ -207,9 +207,9 @@ def multicore_find_and_download_songs(kwargs):
     extra songs are shared among the CPU's
     each cpu then handles its own batch through the multihandler fn
     """
-
+    reference_file = kwargs["reference_file"]
     lines = []
-    with open(kwargs["reference_file"], "r", encoding="utf-8") as file:
+    with open(reference_file, "r", encoding="utf-8") as file:
         for line in file:
             lines.append(line)
 
