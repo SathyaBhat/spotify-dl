@@ -273,8 +273,8 @@ def download_songs(**kwargs):
     :param kwargs: keyword arguments to be passed on between functions when downloading
     """
  
-    for i in range(len(kwargs['songs']['urls'])):
-        log.debug("Downloading to %s", kwargs['songs']['urls'][i]['save_path'])
+    for i,url in enumerate(kwargs['songs']['urls']):
+        log.debug("Downloading to %s", url['save_path'])
    
     reference_file = "All Songs For This Download.txt"
     track_db = write_tracks(reference_file, kwargs["songs"])
