@@ -139,16 +139,13 @@ def find_and_download_songs(kwargs):
                     f"No valid URLs found for {text_to_search}, skipping track."
                 )
                 continue
-            # Run you-get to fetch and download the link's audio
+      
             print(f"Initiating download for {best_url}.")
-            # add args from old script here
+         
             file_name = kwargs["file_name_f"](
                 name=name, artist=artist, track_num=kwargs["track_db"][i].get("num")
             )
-            #sponsorblock_remove_list = (
-            #    ["music_offtopic"] if kwargs["skip_non_music_sections"] else []
-            #)
-            # need a way to figure out which playlist_dir song shd be saved to
+           
             file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
             outtmpl = f"{file_path}.%(ext)s"
             ydl_opts = {
@@ -230,6 +227,11 @@ def multicore_find_and_download_songs(kwargs):
         p.join()
 
 def multicore_handler(segment_index, segment, kwargs):
+    """
+    function to handle each unique processor spawned download job
+    :param segment_index: to be used for naming the reference file to be used for processor's download batch
+    :param segment: list of songs to be downloaded using spawning processor
+    """
     reference_filename = f"{segment_index}.txt"
     with open(reference_filename, "w+", encoding="utf-8") as file_out:
         for line in segment:
@@ -245,25 +247,12 @@ def multicore_handler(segment_index, segment, kwargs):
 def download_songs(**kwargs):
     """
     Downloads songs from the YouTube URL passed to either current directory or download_directory, as it is passed.  [made small typo change]
-    :param songs: Dictionary of songs and associated artist
-    :param download_directory: Location where to save
-    :param format_string: format string for the file conversion
-    :param skip_mp3: Whether to skip conversion to MP3
-    :param keep_playlist_order: Whether to keep original playlist ordering. Also, prefixes songs files with playlist num
-    :param no_overwrites: Whether we should avoid overwriting the song if it already exists
-    :param skip_non_music_sections: Whether we should skip Non-Music sections using SponsorBlock API
-    :param file_name_f: optional func(song) -> str that returns a filename for the download (without extension)
+    :param kwargs: keyword arguments to be passed on between functions when downloading
     """
  
     for i in range(len(kwargs['songs']['urls'])):
         log.debug("Downloading to %s", kwargs['songs']['urls'][i]['save_path'])
-    # helper script code comes in here
-    # helper script has multiprocessing already implemented and working fine..
-    # will declare name for refrence file for all songs to be downloaded. [ refrence file = '{}.txt'.format(playlist name)
-    # params needed by helper script: [first need to check if multprocessing option was set]
-    # from this the script will allocate song dictionaries to different processors as per number specified
-    # the playlist name is also needed , will use param download_directory str(download_directory).split('/')[-1])
-    # need a function to populate the play_listname with songs
+   
     reference_file = "All Songs For This Download.txt"
     track_db = write_tracks(reference_file, kwargs["songs"])
     os.rename(reference_file, kwargs["output_dir"] + "/" + reference_file)
