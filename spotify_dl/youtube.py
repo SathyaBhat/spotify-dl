@@ -71,11 +71,11 @@ def write_tracks(tracks_file, song_dict):
 
 def set_tags(temp, file_path, kwargs):
     """
-    sets song tags after they are downloaded
-   :param temp: contains index used to obtain more info about song being editted
-   :param file_path: location of song whose tags are to be editted
-   :param kwargs: a dictionary of extra arguments to be used in tag editing
-   """
+     sets song tags after they are downloaded
+    :param temp: contains index used to obtain more info about song being editted
+    :param file_path: location of song whose tags are to be editted
+    :param kwargs: a dictionary of extra arguments to be used in tag editing
+    """
     mp3filename = f"{file_path}.mp3"
     mp3file_path = path.join(mp3filename)
     song = kwargs["track_db"][int(temp[-1])]
