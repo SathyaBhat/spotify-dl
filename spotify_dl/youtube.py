@@ -30,7 +30,7 @@ def write_tracks(tracks_file, song_dict):
     with open(tracks_file, "w+", encoding="utf-8") as file_out:
         for url_dict in song_dict["urls"]:
             # for track in url_dict['songs']:
-            for i, track in enumerate(url_dict["songs"]):
+            for track in url_dict["songs"]:
                 track_url = track["track_url"]
                 track_name = track["name"]
                 track_artist = track["artist"]
@@ -112,10 +112,9 @@ def find_and_download_songs(kwargs):
     with open(reference_file, "r", encoding="utf-8") as file:
         for line in file:
             temp = line.split(",")
-            name, artist, num, album, i = (
+            name, artist, album, i = (
                 temp[0],
                 temp[1],
-                temp[3],
                 temp[4],
                 int(temp[-1].replace("\n", "")),
             )
@@ -133,8 +132,7 @@ def find_and_download_songs(kwargs):
                 except IndexError:
                     attempts_left -= 1
                     print(
-                        "No valid URLs found for {text_to_search}, trying again ({attempts_left} attempts left).".format(
-                        )
+                        f"No valid URLs found for {text_to_search}, trying again ({attempts_left} attempts left)."
                     )
             if best_url is None:
                 print(
@@ -147,9 +145,9 @@ def find_and_download_songs(kwargs):
             file_name = kwargs["file_name_f"](
                 name=name, artist=artist, track_num=kwargs["track_db"][i].get("num")
             )
-            sponsorblock_remove_list = (
-                ["music_offtopic"] if kwargs["skip_non_music_sections"] else []
-            )
+            #sponsorblock_remove_list = (
+            #    ["music_offtopic"] if kwargs["skip_non_music_sections"] else []
+            #)
             # need a way to figure out which playlist_dir song shd be saved to
             file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
             outtmpl = f"{file_path}.%(ext)s"

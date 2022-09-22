@@ -111,7 +111,7 @@ def spotify_dl():
 
     if os.path.isfile(os.path.expanduser("~/.spotify_dl_settings")):
         with open(os.path.expanduser("~/.spotify_dl_settings")) as file:
-            config = json.loads(file.read())
+            config = json.load(file)
             print(config)
 
         for key, value in config.items():
