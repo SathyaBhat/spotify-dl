@@ -155,7 +155,7 @@ def spotify_dl():
     if not valid_urls:
         sys.exit(1)
   
-    url_data = {'urls' : []} 
+    url_data = {'urls' : []}
     
     for url in valid_urls:
         url_dict = {}
