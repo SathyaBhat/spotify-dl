@@ -9,15 +9,15 @@ from pathlib import Path, PurePath
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-from constants import VERSION
-from scaffold import log, get_tokens, console
-from spotify import (
+from spotify_dl.constants import VERSION
+from spotify_dl.scaffold import log, get_tokens, console
+from spotify_dl.spotify import (
     fetch_tracks,
     parse_spotify_url,
     validate_spotify_urls,
     get_item_name,
 )
-from youtube import download_songs, default_filename, playlist_num_filename
+from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
 
 
 def spotify_dl():
@@ -132,11 +132,11 @@ def spotify_dl():
     console.log(f"Starting spotify_dl [bold green]v{VERSION}[/bold green]")
     log.debug("Setting debug mode on spotify_dl")
 
-    tokens = get_tokens()
-    if tokens is None:
-        sys.exit(1)
-
-    C_ID, C_SECRET = tokens
+    #tokens = get_tokens()
+    #if tokens is None:
+    #    sys.exit(1)
+     
+    C_ID, C_SECRET = 'a7f37282a11042e78fd0014047f6faea', '050617d5d562441da4e5b82178b216fa'
     sp = spotipy.Spotify(
         auth_manager=SpotifyClientCredentials(client_id=C_ID, client_secret=C_SECRET)
     )
@@ -165,6 +165,7 @@ def spotify_dl():
         file_name_f = default_filename
         if args.keep_playlist_order:
             file_name_f = playlist_num_filename
+
         download_songs(
             songs=url_data,
             output_dir=args.output,

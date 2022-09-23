@@ -14,9 +14,7 @@ def fetch_tracks(sp, item_type, url):
     """
     songs_list = []
     offset = 0
-    songs_fetched = (
-        0  # offset cant be used since somewhere in the code it helps end the while loop
-    )
+    songs_fetched = 0
 
     if item_type == "playlist":
         with Progress() as progress:
@@ -93,14 +91,13 @@ def fetch_tracks(sp, item_type, url):
                         }
                     )
                     offset += 1
-                    songs_fetched += 1  # added
+                    songs_fetched += 1
                     progress.update(
                         task_id=track_info_task,
                         description=f"Fetching track info for \n{track_name}",
                         advance=1,
                     )
-                # false info conveyed about numer of songs fetched..is when theres a podcast in list
-                # all songs are feteched but the podcast
+
                 progress.update(
                     task_id=songs_task,
                     description=f"Fetched {songs_fetched} of {total_songs} songs from the playlist",
@@ -248,7 +245,7 @@ def get_item_name(sp, item_type, item_id):
 def validate_spotify_urls(urls):
     """
     Validate the URLs and determine if the item types they have are supported
-    : return a list of valud urls
+    : return a list of valid urls
     """
     valid_urls = []
     for url in urls:
