@@ -132,9 +132,6 @@ def spotify_dl():
     console.log(f"Starting spotify_dl [bold green]v{VERSION}[/bold green]")
     log.debug("Setting debug mode on spotify_dl")
 
-    #tokens = get_tokens()
-    #if tokens is None:
-    #    sys.exit(1)
      
     C_ID, C_SECRET = 'a7f37282a11042e78fd0014047f6faea', '050617d5d562441da4e5b82178b216fa'
     sp = spotipy.Spotify(
