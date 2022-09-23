@@ -23,7 +23,6 @@ def test_download_one_false_skip():
     assert (music['album'][0] == 'Hell Freezes Over (Remaster 2018)')
     print(music)
     print(tags)
-    #assert (music['genre'][0] == 'album rock')
     assert (tags.getall("APIC")[0].data == APIC(encoding=3,
                                                 mime='image/jpeg',
                                                 type=3, desc=u'Cover',
