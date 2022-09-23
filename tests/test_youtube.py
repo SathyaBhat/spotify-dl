@@ -1,7 +1,7 @@
 import os
 import urllib
 import urllib.request
-from pathlib import Path, PurePath
+from pathlib import Path
 from mutagen.easyid3 import EasyID3
 from mutagen.id3 import APIC, ID3
 from mutagen.mp3 import MP3
