@@ -9,8 +9,7 @@ Downloads songs from any Spotify playlist, album or track.
 [![GitHub release](https://img.shields.io/github/release/SathyaBhat/spotify-dl.svg)](https://GitHub.com/SathyaBhat/spotify-dl/releases/)
 [![GitHub stars](https://img.shields.io/github/stars/SathyaBhat/spotify-dl.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/SathyaBhat/spotify-dl/stargazers/)
 [![GitHub contributors](https://img.shields.io/github/contributors/SathyaBhat/spotify-dl.svg)](https://GitHub.com/SathyaBhat/spotify-dl/graphs/contributors/)
-PLUS ME , I CONTRIBUTED TO THIS FORK :) HEHEHE
-ORIGINAL REPO BY SATHYA BHAT HERE (https://github.com/SathyaBhat/spotify-dl)
+
 
 [![Awesome Badges](https://img.shields.io/badge/badges-awesome-green.svg)](https://github.com/Naereen/badges)
 
@@ -18,19 +17,19 @@ ORIGINAL REPO BY SATHYA BHAT HERE (https://github.com/SathyaBhat/spotify-dl)
 
 Install using pip
 
-    pip3 install spotify_dlx
+    pip3 install spotify_dl
 
 Run the program
 
-    spotify_dlx-l spotify_playlist_link/s -o download_directory
+    spotify_dl-l spotify_playlist_link/s -o download_directory
 
 For running in verbose mode, append `-V`
 
-    spotify_dlx -V  -l spotify_playlist_link -o download_directory
+    spotify_dl -V  -l spotify_playlist_link -o download_directory
 
 For more details and other arguments, issue `-h`
 
-    spotify_dlx -h
+    spotify_dl -h
 
 See [the getting started guide](https://github.com/SathyaBhat/spotify-dl/blob/master/GETTING_STARTED.md) for more details.
 
