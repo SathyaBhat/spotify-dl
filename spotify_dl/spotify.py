@@ -42,7 +42,6 @@ def fetch_tracks(sp, item_type, url):
                         continue
                     track_album_info = track_info.get("album")
                     track_num = track_info.get("track_number")
-                    print("TRACK NUMBER : ", track_num)
                     spotify_id = track_info.get("id")
                     track_name = track_info.get("name")
                     track_url = track_info["artists"][0]["uri"]
@@ -87,7 +86,7 @@ def fetch_tracks(sp, item_type, url):
                             "cover": cover,
                             "genre": genre,
                             "spotify_id": spotify_id,
-                            "track_url": track_url,
+                            "track_url": None,
                         }
                     )
                     offset += 1
@@ -151,6 +150,7 @@ def fetch_tracks(sp, item_type, url):
                             "year": track_year,
                             "num_tracks": album_total,
                             "num": track_num,
+                            "track_url": None,
                             "playlist_num": offset + 1,
                             "cover": cover,
                             "genre": genre,
@@ -202,6 +202,7 @@ def fetch_tracks(sp, item_type, url):
                 "playlist_num": offset + 1,
                 "cover": cover,
                 "genre": genre,
+                "track_url": None,
                 "spotify_id": spotify_id,
             }
         )
