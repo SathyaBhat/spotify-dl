@@ -127,7 +127,6 @@ def find_and_download_songs(kwargs):
     :param kwargs: dictionary of key value arguments to be used in download
     """
     reference_file = kwargs["reference_file"]
-    TOTAL_ATTEMPTS = 10
     with open(reference_file, "r", encoding="utf-8") as file:
         for line in file:
             temp = line.split(";")
