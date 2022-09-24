@@ -36,7 +36,7 @@ For more details and other arguments, issue `-h`
 
 For downloadind using multiprocessing
 
-    spotify_dl -mc [number of cores to use]
+    spotify_dl -l [link] -mc [number of cores to use]
 
 See [the getting started guide](https://github.com/SathyaBhat/spotify-dl/blob/master/GETTING_STARTED.md) for more details.
 
