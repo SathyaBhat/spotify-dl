@@ -93,12 +93,8 @@ def set_tags(temp, file_path, kwargs):
             song_file["tracknumber"] = (
                 str(song.get("num")) + "/" + str(song.get("num_tracks"))
             )
-            file = open("tags.txt", "w+")
-            file.write(f"{song.get('num')}| {song.get('num_tracks')} \n")
 
         song_file["genre"] = song.get("genre")
-        file.write(f"{song.get('genre')}\n")
-        file.close()
         song_file.save()
         song_file = MP3(mp3filename, ID3=ID3)
         cover = song.get("cover")
