@@ -10,7 +10,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from spotify_dl.constants import VERSION
-from spotify_dl.scaffold import log, console
+from spotify_dl.scaffold import log, console, get_tokens
 from spotify_dl.spotify import (
     fetch_tracks,
     parse_spotify_url,
