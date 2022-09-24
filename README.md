@@ -10,8 +10,11 @@ Downloads songs from any Spotify playlist, album or track.
 [![GitHub stars](https://img.shields.io/github/stars/SathyaBhat/spotify-dl.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/SathyaBhat/spotify-dl/stargazers/)
 [![GitHub contributors](https://img.shields.io/github/contributors/SathyaBhat/spotify-dl.svg)](https://GitHub.com/SathyaBhat/spotify-dl/graphs/contributors/)
 
-
 [![Awesome Badges](https://img.shields.io/badge/badges-awesome-green.svg)](https://github.com/Naereen/badges)
+
+### Tell me more!
+
+I wanted an easy way to grab the songs present in my library so I can download it & use it offline. I no longer use this, but continue to maintain this. spotify-dl doesn't download anything from Spotify. It picks up the metadata from Spotify API and then uses [yt-dlp](https://github.com/yt-dlp/yt-dlp) to download the song. 
 
 ### How do I get this thing running?
 
@@ -21,11 +24,11 @@ Install using pip
 
 Run the program
 
-    spotify_dl-l spotify_playlist_link/s -o download_directory
+    spotify_dl -l spotify_playlist_link/s -o download_directory
 
 For running in verbose mode, append `-V`
 
-    spotify_dl -V  -l spotify_playlist_link -o download_directory
+    spotify_dl -V -l spotify_playlist_link -o download_directory
 
 For more details and other arguments, issue `-h`
 
@@ -43,9 +46,15 @@ Pull requests and any contributions are always welcome. Please open an issue wit
 
 #### Running tests
 
-At the moment, there are barely any tests but PRs always welcome to improve this.
+At the moment, there are barely any tests but PRs always welcome to improve this. Tests are setup and run with pytest, run
+
+    make tests
+
+to run the tests with [Make](https://www.gnu.org/software/make/)
 
 ### Thanks and Credits
+
+Take a look at [CONTRIBUTORS](https://github.com/SathyaBhat/spotify-dl/graphs/contributors) for a list of all people who have helped and contributed to the project.
 
 ### Issues, Feedback, Contact details
 

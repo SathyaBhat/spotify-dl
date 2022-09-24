@@ -8,7 +8,6 @@ import yt_dlp
 from mutagen.easyid3 import EasyID3
 from mutagen.id3 import APIC, ID3
 from mutagen.mp3 import MP3
-from youtube_search import YoutubeSearch
 from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
 
@@ -139,28 +138,8 @@ def find_and_download_songs(kwargs):
                 int(temp[-1].replace("\n", "")),
             )
 
-            # print('track name: ',name,' track_artist: ',artist,' track_album: ', album, ' track_url: ',temp[2])
-            # assert('spotify' not in album)
-            text_to_search = artist + " - " + name
-            best_url = None
-            attempts_left = TOTAL_ATTEMPTS
-            while attempts_left > 0:
-                try:
-                    results_list = YoutubeSearch(
-                        text_to_search, max_results=1
-                    ).to_dict()
-                    best_url = f"https://www.youtube.com{results_list[0]['url_suffix']}"
-                    break
-                except IndexError:
-                    attempts_left -= 1
-                    print(
-                        f"No valid URLs found for {text_to_search}, trying again ({attempts_left} attempts left)."
-                    )
-            if best_url is None:
-                print(f"No valid URLs found for {text_to_search}, skipping track.")
-                continue
-
-            print(f"Initiating download for {best_url}.")
+            query = f"{artist} - {name} Lyrics".replace(":", "").replace('"', "")
+            print(f"Initiating download for {query}.")
 
             file_name = kwargs["file_name_f"](
                 name=name, artist=artist, track_num=kwargs["track_db"][i].get("num")
@@ -172,6 +151,7 @@ def find_and_download_songs(kwargs):
             file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
             outtmpl = f"{file_path}.%(ext)s"
             ydl_opts = {
+                "default_search": "ytsearch",
                 "format": "bestaudio/best",
                 "outtmpl": outtmpl,
                 "postprocessors": [
@@ -205,7 +185,7 @@ def find_and_download_songs(kwargs):
                 ydl_opts["postprocessors"].append(mp3_postprocess_opts.copy())
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 try:
-                    ydl.download([best_url])
+                    ydl.download([query])
                 except Exception as e:
                     log.debug(e)
                     print(f"Failed to download {name}, make sure yt_dlp is up to date")

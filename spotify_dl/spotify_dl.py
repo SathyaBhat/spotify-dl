@@ -135,7 +135,7 @@ def spotify_dl():
     tokens = get_tokens()
     if tokens is None:
         sys.exit(1)
-    C_ID, C_SECRET = tokens 
+    C_ID, C_SECRET = tokens
 
     sp = spotipy.Spotify(
         auth_manager=SpotifyClientCredentials(client_id=C_ID, client_secret=C_SECRET)
