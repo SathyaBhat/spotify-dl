@@ -44,8 +44,8 @@ def get_tokens():
             $env:SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
 
             Windows CMD:
-            set SPOTIPY_CLIENT_ID="your-spotify-client-id"
-            set SPOTIPY_CLIENT_SECRET="your-spotify-client-secret"
+            set SPOTIPY_CLIENT_ID=your-spotify-client-id
+            set SPOTIPY_CLIENT_SECRET=your-spotify-client-secret
 
             Get your credentials at
                 https://developer.spotify.com/my-applications
