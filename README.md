@@ -34,7 +34,8 @@ For more details and other arguments, issue `-h`
 
     spotify_dl -h
 
-For downloadind using multiprocessing
+For downloading using multiple cores
+
 
     spotify_dl -l [link] -mc [number of cores to use]
 
