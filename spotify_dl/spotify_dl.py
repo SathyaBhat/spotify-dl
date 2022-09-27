@@ -107,7 +107,7 @@ def spotify_dl():
     num_cores = os.cpu_count()
     args.multi_core = int(args.multi_core)
     if args.multi_core > (num_cores - 1):
-        print('[!] too many cores requested , reverting to {numcores - 1} cores')
+        print(f'[!] too many cores requested , reverting to {numcores - 1} cores')
         args.multi_core = numcores - 1
     if args.version:
         console.print(f"spotify_dl [bold green]v{VERSION}[/bold green]")
