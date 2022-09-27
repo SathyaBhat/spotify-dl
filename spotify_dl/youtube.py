@@ -258,7 +258,7 @@ def download_songs(**kwargs):
     """
     for url in kwargs["songs"]["urls"]:
         log.debug("Downloading to %s", url["save_path"])
-    reference_file = "All Songs For This Download.txt"
+    reference_file = "All_Songs_For_This_Download.txt"
     track_db = write_tracks(reference_file, kwargs["songs"])
     os.rename(reference_file, kwargs["output_dir"] + "/" + reference_file)
     reference_file = str(kwargs["output_dir"]) + "/" + reference_file
