@@ -108,7 +108,7 @@ def spotify_dl():
     num_cores = os.cpu_count()
     args.multi_core = int(args.multi_core)
     if args.multi_core > (num_cores - 1):
-        print(f'[!] too many cores requested , reverting to {num_cores - 1} cores')
+        print(f"[!] too many cores requested , reverting to {num_cores - 1} cores")
         args.multi_core = num_cores - 1
     if args.version:
         console.print(f"spotify_dl [bold green]v{VERSION}[/bold green]")
@@ -142,9 +142,7 @@ def spotify_dl():
         sys.exit(1)
     C_ID, C_SECRET = tokens
 
-    sp = spotipy.Spotify(
-        auth_manager=SpotifyClientCredentials(client_id=C_ID, client_secret=C_SECRET)
-    )
+    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=C_ID, client_secret=C_SECRET))
     log.debug("Arguments: %s ", args)
 
     valid_urls = validate_spotify_urls(args.url)
@@ -157,13 +155,9 @@ def spotify_dl():
         url_dict = {}
         item_type, item_id = parse_spotify_url(url)
         directory_name = get_item_name(sp, item_type, item_id)
-        url_dict["save_path"] = Path(
-            PurePath.joinpath(Path(args.output), Path(directory_name))
-        )
+        url_dict["save_path"] = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
         url_dict["save_path"].mkdir(parents=True, exist_ok=True)
-        console.print(
-            f"Saving songs to [bold green]{directory_name}[/bold green] directory"
-        )
+        console.print(f"Saving songs to [bold green]{directory_name}[/bold green] directory")
         url_dict["songs"] = fetch_tracks(sp, item_type, url)
         url_data["urls"].append(url_dict.copy())
     if args.download is True:

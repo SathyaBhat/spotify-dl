@@ -14,9 +14,7 @@ logging.basicConfig(
 )
 console = Console()
 log = logging.getLogger("sdl")
-sentry_sdk.init(
-    "https://fc66a23d79634b9bba1690ea13e289f0@o321064.ingest.sentry.io/2383261"
-)
+sentry_sdk.init("https://fc66a23d79634b9bba1690ea13e289f0@o321064.ingest.sentry.io/2383261")
 
 
 def get_tokens():
