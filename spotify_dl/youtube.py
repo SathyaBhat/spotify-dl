@@ -25,7 +25,6 @@ def playlist_num_filename(**kwargs):
 
 
 def write_tracks(tracks_file, song_dict):
-
     """
     Writes the information of all tracks in the playlist[s] to a text file in csv kind of format
     This includins the name, artist, and spotify URL. Each is delimited by a comma.
