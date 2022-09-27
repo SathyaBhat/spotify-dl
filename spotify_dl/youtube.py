@@ -256,7 +256,7 @@ def download_songs(**kwargs):
     Downloads songs from the YouTube URL passed to either current directory or download_directory, as it is passed.  [made small typo change]
     :param kwargs: keyword arguments to be passed on between functions when downloading
     """
-    for i, url in enumerate(kwargs["songs"]["urls"]):
+    for url in kwargs["songs"]["urls"]:
         log.debug("Downloading to %s", url["save_path"])
     reference_file = "All Songs For This Download.txt"
     track_db = write_tracks(reference_file, kwargs["songs"])
