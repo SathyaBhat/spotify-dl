@@ -164,7 +164,6 @@ def spotify_dl():
             f"Saving songs to [bold green]{directory_name}[/bold green] directory"
         )
         url_dict["songs"] = fetch_tracks(sp, item_type, url)
-        assert "track_url" in url_dict["songs"][0].keys()
         url_data["urls"].append(url_dict.copy())
     if args.download is True:
         file_name_f = default_filename
