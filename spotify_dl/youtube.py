@@ -29,7 +29,11 @@ def write_tracks(tracks_file, song_dict):
     :param tracks_file: name of file towhich the songs are to be written
     :param song_dict: the songs to be written to tracks_file
     """
+
     track_db = []
+    if tracks_file is not "All_Songs_For_This_Download.txt":
+        return "Invalid filename"
+
     with open(tracks_file, "w+", encoding="utf-8", newline="") as file_out:
         i = 0
         writer = csv.writer(file_out, delimiter=";")
@@ -170,9 +174,9 @@ def find_and_download_songs(kwargs):
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 try:
                     ydl.download([query])
-                except Exception as e:
-                    log.debug(e)
-                    print(f"Failed to download {name}, make sure yt_dlp is up to date")
+                except Exception as exc:
+                    log.debug(exc)
+                    print(f"Failed to download {name}, Error: {exc}, make sure yt_dlp is up to date")
             if not kwargs["skip_mp3"]:
                 set_tags(temp, file_path, kwargs)
 
