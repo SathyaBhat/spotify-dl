@@ -8,12 +8,8 @@ def spotify_auth():
     # test client ids, b64 for just to deter.
     client = spotipy.Spotify(
         auth_manager=SpotifyClientCredentials(
-            client_id=base64.b64decode(
-                "NjliZDE4ZjNiNDY3NGMyNTkwNTllMzE5YTQ1ZGQwMzY="
-            ).decode("ascii"),
-            client_secret=base64.b64decode(
-                "NTczY2UwYmM2OWUzNDdkNzg3NjgwZDBlMzJmOTQ3MGM="
-            ).decode("ascii"),
+            client_id=base64.b64decode("NjliZDE4ZjNiNDY3NGMyNTkwNTllMzE5YTQ1ZGQwMzY=").decode("ascii"),
+            client_secret=base64.b64decode("NTczY2UwYmM2OWUzNDdkNzg3NjgwZDBlMzJmOTQ3MGM=").decode("ascii"),
         )
     )
     return client
@@ -309,8 +305,7 @@ def test_spotify_album_fetch_more():
             "artist": "Queen",
             "cover": "https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5",
             "genre": "classic rock",
-            "name": "See What A Fool I've Been - Live BBC Session, London / July 1973 / "
-            "2011 Remix",
+            "name": "See What A Fool I've Been - Live BBC Session, London / July 1973 / " "2011 Remix",
             "num": 1,
             "track_url": None,
             "num_tracks": 16,
@@ -323,8 +318,7 @@ def test_spotify_album_fetch_more():
             "artist": "Queen",
             "cover": "https://i.scdn.co/image/ab67616d0000b273dcf482c792ef848d7a994fd5",
             "genre": "classic rock",
-            "name": "White Queen (As It Began) - Live At Hammersmith Odeon, London / "
-            "December 1975",
+            "name": "White Queen (As It Began) - Live At Hammersmith Odeon, London / " "December 1975",
             "num": 2,
             "track_url": None,
             "num_tracks": 16,

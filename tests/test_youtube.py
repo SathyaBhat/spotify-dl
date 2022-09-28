@@ -49,9 +49,7 @@ def test_download_one_false_skip():
         "Hotel California - Live On MTV, 1994/Eagles - Hotel California - Live On MTV, 1994.mp3",
         ID3=EasyID3,
     )
-    tags = ID3(
-        "Hotel California - Live On MTV, 1994/Eagles - Hotel California - Live On MTV, 1994.mp3"
-    )
+    tags = ID3("Hotel California - Live On MTV, 1994/Eagles - Hotel California - Live On MTV, 1994.mp3")
     assert music["artist"][0] == "Eagles"
     assert music["album"][0] == "Hell Freezes Over (Remaster 2018)"
     assert music["genre"][0] == "album rock"
@@ -62,7 +60,6 @@ def test_download_one_false_skip():
         desc="Cover",
         data=urllib.request.urlopen(songs["urls"][0]["songs"][0].get("cover")).read(),
     )
-
 
 
 def test_download_one_true_skip():

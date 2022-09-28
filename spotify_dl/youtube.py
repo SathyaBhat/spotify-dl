@@ -31,7 +31,7 @@ def write_tracks(tracks_file, song_dict):
     """
 
     track_db = []
-    if tracks_file is not "All_Songs_For_This_Download.txt":
+    if tracks_file != "All_Songs_For_This_Download.txt":
         return "Invalid filename"
 
     with open(tracks_file, "w+", encoding="utf-8", newline="") as file_out:
