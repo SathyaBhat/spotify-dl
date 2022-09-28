@@ -29,7 +29,6 @@ def write_tracks(tracks_file, song_dict):
     :param tracks_file: name of file towhich the songs are to be written
     :param song_dict: the songs to be written to tracks_file
     """
-
     track_db = []
     if tracks_file != "All_Songs_For_This_Download.txt":
         return "Invalid filename"
