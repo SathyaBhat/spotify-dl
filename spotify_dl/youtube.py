@@ -173,9 +173,9 @@ def find_and_download_songs(kwargs):
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 try:
                     ydl.download([query])
-                except Exception as exc:
-                    log.debug(exc)
-                    print(f"Failed to download {name}, Error: {exc}, make sure yt_dlp is up to date")
+                except Exception as e:
+                    log.debug(e)
+                    print(f"Failed to download {name}, make sure yt_dlp is up to date")
             if not kwargs["skip_mp3"]:
                 set_tags(temp, file_path, kwargs)
 
