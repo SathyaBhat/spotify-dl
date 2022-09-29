@@ -117,6 +117,73 @@ def set_tags(temp, file_path, kwargs):
                     print(f"Failed to download {name}, make sure yt_dlp is up to date")
             if not kwargs["skip_mp3"]:
                 set_tags(temp, file_path, kwargs)
+                
+def find_and_download_songs(kwargs):
+    """
+    function handles actual download of the songs
+    the youtube_search lib is used to search for songs and get best url
+    :param kwargs: dictionary of key value arguments to be used in download
+    """
+    reference_file = kwargs["reference_file"]
+    with open(reference_file, "r", encoding="utf-8") as file:
+        for line in file:
+            temp = line.split(";")
+            name, artist, album, i = (
+                temp[0],
+                temp[1],
+                temp[4],
+                int(temp[-1].replace("\n", "")),
+            )
+
+            query = f"{artist} - {name} Lyrics".replace(":", "").replace('"', "")
+            print(f"Initiating download for {query}.")
+
+            file_name = kwargs["file_name_f"](name=name, artist=artist, track_num=kwargs["track_db"][i].get("num"))
+            sponsorblock_remove_list = ["music_offtopic"] if kwargs["skip_non_music_sections"] else []
+
+            file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
+            outtmpl = f"{file_path}.%(ext)s"
+            ydl_opts = {
+                "default_search": "ytsearch",
+                "format": "bestaudio/best",
+                "outtmpl": outtmpl,
+                "postprocessors": [
+                    {
+                        "key": "SponsorBlock",
+                        "categories": sponsorblock_remove_list,
+                    },
+                    {
+                        "key": "ModifyChapters",
+                        "remove_sponsor_segments": ["music_offtopic"],
+                        "force_keyframes": True,
+                    },
+                ],
+                "noplaylist": True,
+                "no_color": False,
+                "postprocessor_args": [
+                    "-metadata",
+                    "title=" + name,
+                    "-metadata",
+                    "artist=" + artist,
+                    "-metadata",
+                    "album=" + album,
+                ],
+            }
+            if not kwargs["skip_mp3"]:
+                mp3_postprocess_opts = {
+                    "key": "FFmpegExtractAudio",
+                    "preferredcodec": "mp3",
+                    "preferredquality": "192",
+                }
+                ydl_opts["postprocessors"].append(mp3_postprocess_opts.copy())
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                try:
+                    ydl.download([query])
+                except Exception as e:
+                    log.debug(e)
+                    print(f"Failed to download {name}, make sure yt_dlp is up to date")
+            if not kwargs["skip_mp3"]:
+                set_tags(temp, file_path, kwargs)
 
 
 def multicore_find_and_download_songs(kwargs):
