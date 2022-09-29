@@ -112,12 +112,7 @@ def set_tags(temp, file_path, kwargs):
         print("File {mp3filename} already exists, we do not overwrite it ")
 
 
-                except Exception as e: # skipcq: PYL-W0703
-                    log.debug(e)
-                    print(f"Failed to download {name}, make sure yt_dlp is up to date")
-            if not kwargs["skip_mp3"]:
-                set_tags(temp, file_path, kwargs)
-                
+          
 def find_and_download_songs(kwargs):
     """
     function handles actual download of the songs
@@ -179,7 +174,7 @@ def find_and_download_songs(kwargs):
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 try:
                     ydl.download([query])
-                except Exception as e:
+                except Exception as e: # skipcq: PYL-W0703
                     log.debug(e)
                     print(f"Failed to download {name}, make sure yt_dlp is up to date")
             if not kwargs["skip_mp3"]:
