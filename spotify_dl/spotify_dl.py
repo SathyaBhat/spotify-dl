@@ -126,8 +126,6 @@ def spotify_dl():
                 setattr(args, key, True)
             else:
                 setattr(args, key, value)
-    else:
-        print("no config file")
 
     if args.verbose:
         log.setLevel(DEBUG)
