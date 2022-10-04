@@ -221,7 +221,7 @@ def validate_spotify_urls(urls):
     valid_urls = []
     for url in urls:
         item_type, item_id = parse_spotify_url(url)
-        log.debug("Got item_type %s and item_id %s",item_type,item_id)
+        log.debug("Got item_type %s and item_id %s", item_type, item_id)
         if item_type not in ["album", "track", "playlist"]:
             log.info("Only albums/tracks/playlists are supported and not %s", item_type)
             continue
