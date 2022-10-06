@@ -10,7 +10,7 @@ from mutagen.id3 import APIC, ID3
 from mutagen.mp3 import MP3
 from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
-
+from spotify_dl.constants import DOWNLOAD_LIST
 
 def default_filename(**kwargs):
     """name without number"""
@@ -30,8 +30,6 @@ def write_tracks(tracks_file, song_dict):
     :param song_dict: the songs to be written to tracks_file
     """
     track_db = []
-    if tracks_file != "All_Songs_For_This_Download.txt":
-        return "Invalid filename"
 
     with open(tracks_file, "w+", encoding="utf-8", newline="") as file_out:
         i = 0
@@ -249,7 +247,7 @@ def download_songs(**kwargs):
     """
     for url in kwargs["songs"]["urls"]:
         log.debug("Downloading to %s", url["save_path"])
-    reference_file = "All_Songs_For_This_Download.txt"
+    reference_file = DOWNLOAD_LIST
     track_db = write_tracks(reference_file, kwargs["songs"])
     os.rename(reference_file, kwargs["output_dir"] + "/" + reference_file)
     reference_file = str(kwargs["output_dir"]) + "/" + reference_file
@@ -259,3 +257,4 @@ def download_songs(**kwargs):
         multicore_find_and_download_songs(kwargs)
     else:
         find_and_download_songs(kwargs)
+    os.remove(reference_file)
