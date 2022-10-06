@@ -107,8 +107,13 @@ def spotify_dl():
     args = parser.parse_args()
     num_cores = os.cpu_count()
     args.multi_core = int(args.multi_core)
+    console.log(f"Starting spotify_dl [bold green]v{VERSION}[/bold green]")
+    if args.verbose:
+        log.setLevel(DEBUG)
+    log.debug("Setting debug mode on spotify_dl")
+    
     if args.multi_core > (num_cores - 1):
-        print(f"[!] too many cores requested , reverting to {num_cores - 1} cores")
+        console.log(f"Requested cores [bold red]{args.multi_core}[/bold red] exceeds available [bold green]{num_cores}[/bold green], using [bold green]{num_cores - 1}[/bold green] cores.")
         args.multi_core = num_cores - 1
     if args.version:
         console.print(f"spotify_dl [bold green]v{VERSION}[/bold green]")
@@ -127,20 +132,15 @@ def spotify_dl():
             else:
                 setattr(args, key, value)
 
-    if args.verbose:
-        log.setLevel(DEBUG)
     if not args.url:
         raise (Exception("No playlist url provided:"))
-
-    console.log(f"Starting spotify_dl [bold green]v{VERSION}[/bold green]")
-    log.debug("Setting debug mode on spotify_dl")
 
     tokens = get_tokens()
     if tokens is None:
         sys.exit(1)
-    C_ID, C_SECRET = tokens
+    client_id, client_secret = tokens
 
-    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=C_ID, client_secret=C_SECRET))
+    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=client_id, client_secret=client_secret))
     log.debug("Arguments: %s ", args)
 
     valid_urls = validate_spotify_urls(args.url)
@@ -177,6 +177,6 @@ def spotify_dl():
 
 
 if __name__ == "__main__":
-    starttime = time.time()
+    start_time = time.time()
     spotify_dl()
-    print(f"[*] finished in {time.time() - starttime}")
+    console.log(f"Download completed in [bold green]{time.time() - start_time} seconds.[/bold green]")
