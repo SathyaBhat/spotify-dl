@@ -27,8 +27,8 @@ You need Python 3.6+. To download songs as MP3, you will need ffmpeg.
             $env:SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
             
     Windows CMD:
-            set SPOTIPY_CLIENT_ID='your-spotify-client-id'
-            set SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+            set SPOTIPY_CLIENT_ID=your-spotify-client-id
+            set SPOTIPY_CLIENT_SECRET=your-spotify-client-secret
 
     See [this question](http://superuser.com/a/284351/4377) for more info,
 

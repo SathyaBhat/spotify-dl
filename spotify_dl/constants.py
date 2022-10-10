@@ -1,9 +1,9 @@
 import os
 from pathlib import Path
 
-__all__ = ['VERSION']
+__all__ = ["VERSION"]
 
-VERSION = '8.3.0'
+VERSION = "8.3.0"
 
 if os.getenv("XDG_CACHE_HOME") is not None:
     SAVE_PATH = os.getenv("XDG_CACHE_HOME") + "/spotifydl"
