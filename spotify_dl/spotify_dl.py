@@ -111,9 +111,11 @@ def spotify_dl():
     if args.verbose:
         log.setLevel(DEBUG)
     log.debug("Setting debug mode on spotify_dl")
-    
+
     if args.multi_core > (num_cores - 1):
-        console.log(f"Requested cores [bold red]{args.multi_core}[/bold red] exceeds available [bold green]{num_cores}[/bold green], using [bold green]{num_cores - 1}[/bold green] cores.")
+        console.log(
+            f"Requested cores [bold red]{args.multi_core}[/bold red] exceeds available [bold green]{num_cores}[/bold green], using [bold green]{num_cores - 1}[/bold green] cores."
+        )
         args.multi_core = num_cores - 1
     if args.version:
         console.print(f"spotify_dl [bold green]v{VERSION}[/bold green]")
@@ -140,7 +142,11 @@ def spotify_dl():
         sys.exit(1)
     client_id, client_secret = tokens
 
-    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=client_id, client_secret=client_secret))
+    sp = spotipy.Spotify(
+        auth_manager=SpotifyClientCredentials(
+            client_id=client_id, client_secret=client_secret
+        )
+    )
     log.debug("Arguments: %s ", args)
 
     valid_urls = validate_spotify_urls(args.url)
@@ -153,9 +159,13 @@ def spotify_dl():
         url_dict = {}
         item_type, item_id = parse_spotify_url(url)
         directory_name = get_item_name(sp, item_type, item_id)
-        url_dict["save_path"] = Path(PurePath.joinpath(Path(args.output), Path(directory_name)))
+        url_dict["save_path"] = Path(
+            PurePath.joinpath(Path(args.output), Path(directory_name))
+        )
         url_dict["save_path"].mkdir(parents=True, exist_ok=True)
-        console.print(f"Saving songs to [bold green]{directory_name}[/bold green] directory")
+        console.print(
+            f"Saving songs to [bold green]{directory_name}[/bold green] directory"
+        )
         url_dict["songs"] = fetch_tracks(sp, item_type, url)
         url_data["urls"].append(url_dict.copy())
     if args.download is True:
@@ -179,4 +189,6 @@ def spotify_dl():
 if __name__ == "__main__":
     start_time = time.time()
     spotify_dl()
-    console.log(f"Download completed in [bold green]{time.time() - start_time} seconds.[/bold green]")
+    console.log(
+        f"Download completed in [bold green]{time.time() - start_time} seconds.[/bold green]"
+    )

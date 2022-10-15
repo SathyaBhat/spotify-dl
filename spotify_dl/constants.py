@@ -10,4 +10,4 @@ if os.getenv("XDG_CACHE_HOME") is not None:
 else:
     SAVE_PATH = str(Path.home()) + "/.cache/spotifydl"
 
-DOWNLOAD_LIST="download_list.log"
+DOWNLOAD_LIST = "download_list.log"

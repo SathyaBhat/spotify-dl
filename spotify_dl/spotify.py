@@ -30,7 +30,9 @@ def fetch_tracks(sp, item_type, url):
                     offset=offset,
                 )
                 total_songs = items.get("total")
-                track_info_task = progress.add_task(description="Fetching track info", total=len(items["items"]))
+                track_info_task = progress.add_task(
+                    description="Fetching track info", total=len(items["items"])
+                )
                 for item in items["items"]:
                     track_info = item.get("track")
                     # If the user has a podcast in their playlist, there will be no track
@@ -42,11 +44,15 @@ def fetch_tracks(sp, item_type, url):
                     track_num = track_info.get("track_number")
                     spotify_id = track_info.get("id")
                     track_name = track_info.get("name")
-                    track_artist = ",".join([artist["name"] for artist in track_info.get("artists")])
+                    track_artist = ",".join(
+                        [artist["name"] for artist in track_info.get("artists")]
+                    )
                     if track_album_info:
                         track_album = track_album_info.get("name")
                         track_year = (
-                            track_album_info.get("release_date")[:4] if track_album_info.get("release_date") else ""
+                            track_album_info.get("release_date")[:4]
+                            if track_album_info.get("release_date")
+                            else ""
                         )
                         album_total = track_album_info.get("total_tracks")
                     if len(item["track"]["album"]["images"]) > 0:
@@ -55,8 +61,14 @@ def fetch_tracks(sp, item_type, url):
                         cover = None
 
                     artists = track_info.get("artists")
-                    main_artist_id = artists[0].get("uri", None) if len(artists) > 0 else None
-                    genres = sp.artist(artist_id=main_artist_id).get("genres", []) if main_artist_id else []
+                    main_artist_id = (
+                        artists[0].get("uri", None) if len(artists) > 0 else None
+                    )
+                    genres = (
+                        sp.artist(artist_id=main_artist_id).get("genres", [])
+                        if main_artist_id
+                        else []
+                    )
                     if len(genres) > 0:
                         genre = genres[0]
                     else:
@@ -95,25 +107,38 @@ def fetch_tracks(sp, item_type, url):
 
     elif item_type == "album":
         with Progress() as progress:
-            album_songs_task = progress.add_task(description="Fetching songs from the album..")
+            album_songs_task = progress.add_task(
+                description="Fetching songs from the album.."
+            )
             while True:
                 album_info = sp.album(album_id=url)
                 items = sp.album_tracks(album_id=url, offset=offset)
                 total_songs = items.get("total")
                 track_album = album_info.get("name")
-                track_year = album_info.get("release_date")[:4] if album_info.get("release_date") else ""
+                track_year = (
+                    album_info.get("release_date")[:4]
+                    if album_info.get("release_date")
+                    else ""
+                )
                 album_total = album_info.get("total_tracks")
                 if len(album_info["images"]) > 0:
                     cover = album_info["images"][0]["url"]
                 else:
                     cover = None
-                if len(sp.artist(artist_id=album_info["artists"][0]["uri"])["genres"]) > 0:
-                    genre = sp.artist(artist_id=album_info["artists"][0]["uri"])["genres"][0]
+                if (
+                    len(sp.artist(artist_id=album_info["artists"][0]["uri"])["genres"])
+                    > 0
+                ):
+                    genre = sp.artist(artist_id=album_info["artists"][0]["uri"])[
+                        "genres"
+                    ][0]
                 else:
                     genre = ""
                 for item in items["items"]:
                     track_name = item.get("name")
-                    track_artist = ", ".join([artist["name"] for artist in item["artists"]])
+                    track_artist = ", ".join(
+                        [artist["name"] for artist in item["artists"]]
+                    )
                     track_num = item["track_number"]
                     spotify_id = item.get("id")
                     songs_list.append(
@@ -149,7 +174,11 @@ def fetch_tracks(sp, item_type, url):
         track_artist = ", ".join([artist["name"] for artist in items["artists"]])
         if album_info:
             track_album = album_info.get("name")
-            track_year = album_info.get("release_date")[:4] if album_info.get("release_date") else ""
+            track_year = (
+                album_info.get("release_date")[:4]
+                if album_info.get("release_date")
+                else ""
+            )
             album_total = album_info.get("total_tracks")
         track_num = items["track_number"]
         spotify_id = items["id"]
