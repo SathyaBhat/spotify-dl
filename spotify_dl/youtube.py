@@ -10,11 +10,14 @@ from mutagen.id3 import APIC, ID3
 from mutagen.mp3 import MP3
 from spotify_dl.scaffold import log
 from spotify_dl.utils import sanitize
+from spotify_dl.constants import DOWNLOAD_LIST
 
 
 def default_filename(**kwargs):
     """name without number"""
-    return sanitize(f"{kwargs['artist']} - {kwargs['name']}", "#")  # youtube-dl automatically replaces with #
+    return sanitize(
+        f"{kwargs['artist']} - {kwargs['name']}", "#"
+    )  # youtube-dl automatically replaces with #
 
 
 def playlist_num_filename(**kwargs):
@@ -30,8 +33,6 @@ def write_tracks(tracks_file, song_dict):
     :param song_dict: the songs to be written to tracks_file
     """
     track_db = []
-    if tracks_file != "All_Songs_For_This_Download.txt":
-        return "Invalid filename"
 
     with open(tracks_file, "w+", encoding="utf-8", newline="") as file_out:
         i = 0
@@ -81,14 +82,18 @@ def set_tags(temp, file_path, kwargs):
             song_file = MP3(mp3filename, ID3=EasyID3)
         except mutagen.MutagenError as e:
             log.debug(e)
-            print(f"Failed to download: {mp3filename}, please ensure YouTubeDL is up-to-date. ")
+            print(
+                f"Failed to download: {mp3filename}, please ensure YouTubeDL is up-to-date. "
+            )
 
             return
         song_file["date"] = song.get("year")
         if kwargs["keep_playlist_order"]:
             song_file["tracknumber"] = str(song.get("playlist_num"))
         else:
-            song_file["tracknumber"] = str(song.get("num")) + "/" + str(song.get("num_tracks"))
+            song_file["tracknumber"] = (
+                str(song.get("num")) + "/" + str(song.get("num_tracks"))
+            )
 
         song_file["genre"] = song.get("genre")
         song_file.save()
@@ -132,8 +137,12 @@ def find_and_download_songs(kwargs):
             query = f"{artist} - {name} Lyrics".replace(":", "").replace('"', "")
             print(f"Initiating download for {query}.")
 
-            file_name = kwargs["file_name_f"](name=name, artist=artist, track_num=kwargs["track_db"][i].get("num"))
-            sponsorblock_remove_list = ["music_offtopic"] if kwargs["skip_non_music_sections"] else []
+            file_name = kwargs["file_name_f"](
+                name=name, artist=artist, track_num=kwargs["track_db"][i].get("num")
+            )
+            sponsorblock_remove_list = (
+                ["music_offtopic"] if kwargs["skip_non_music_sections"] else []
+            )
 
             file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
             outtmpl = f"{file_path}.%(ext)s"
@@ -214,7 +223,9 @@ def multicore_find_and_download_songs(kwargs):
     processes = []
     segment_index = 0
     for segment in file_segments:
-        p = multiprocessing.Process(target=multicore_handler, args=(segment_index, segment, kwargs.copy()))
+        p = multiprocessing.Process(
+            target=multicore_handler, args=(segment_index, segment, kwargs.copy())
+        )
         processes.append(p)
         segment_index += 1
 
@@ -249,7 +260,7 @@ def download_songs(**kwargs):
     """
     for url in kwargs["songs"]["urls"]:
         log.debug("Downloading to %s", url["save_path"])
-    reference_file = "All_Songs_For_This_Download.txt"
+    reference_file = DOWNLOAD_LIST
     track_db = write_tracks(reference_file, kwargs["songs"])
     os.rename(reference_file, kwargs["output_dir"] + "/" + reference_file)
     reference_file = str(kwargs["output_dir"]) + "/" + reference_file
@@ -259,3 +270,4 @@ def download_songs(**kwargs):
         multicore_find_and_download_songs(kwargs)
     else:
         find_and_download_songs(kwargs)
+    os.remove(reference_file)
