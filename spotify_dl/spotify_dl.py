@@ -110,7 +110,6 @@ def spotify_dl():
         action="store",
         type=str,
         default="",
-        required=False,
         help="Download through a proxy. Support HTTP & SOCKS5. Use 'http://username:password@hostname:port' or 'http://hostname:port'",
     )
     args = parser.parse_args()
