@@ -123,6 +123,7 @@ def find_and_download_songs(kwargs):
     the youtube_search lib is used to search for songs and get best url
     :param kwargs: dictionary of key value arguments to be used in download
     """
+    sponsorblock_postprocessor = []
     reference_file = kwargs["reference_file"]
     with open(reference_file, "r", encoding="utf-8") as file:
         for line in file:
@@ -140,9 +141,20 @@ def find_and_download_songs(kwargs):
             file_name = kwargs["file_name_f"](
                 name=name, artist=artist, track_num=kwargs["track_db"][i].get("num")
             )
-            sponsorblock_remove_list = (
-                ["music_offtopic"] if kwargs["skip_non_music_sections"] else []
-            )
+
+            if kwargs["use_sponsorblock"][0].lower() == "y":
+
+                sponsorblock_postprocessor = [
+                    {
+                        "key": "SponsorBlock",
+                        "categories": ["skip_non_music_sections"],
+                    },
+                    {
+                        "key": "ModifyChapters",
+                        "remove_sponsor_segments": ["music_offtopic"],
+                        "force_keyframes": True,
+                    },
+                ]
 
             file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
             outtmpl = f"{file_path}.%(ext)s"
@@ -150,17 +162,7 @@ def find_and_download_songs(kwargs):
                 "default_search": "ytsearch",
                 "format": "bestaudio/best",
                 "outtmpl": outtmpl,
-                "postprocessors": [
-                    {
-                        "key": "SponsorBlock",
-                        "categories": sponsorblock_remove_list,
-                    },
-                    {
-                        "key": "ModifyChapters",
-                        "remove_sponsor_segments": ["music_offtopic"],
-                        "force_keyframes": True,
-                    },
-                ],
+                "postprocessors": sponsorblock_postprocessor,
                 "noplaylist": True,
                 "no_color": False,
                 "postprocessor_args": [
