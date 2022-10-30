@@ -54,7 +54,7 @@ Pull requests and any contributions are always welcome. Please open an issue wit
 
 #### Running tests
 
-At the moment, there are barely any tests but PRs always welcome to improve this. Tests are setup and run with pytest, run
+Tests are setup and run with pytest, run
 
     make tests
 
