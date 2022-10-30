@@ -72,10 +72,10 @@ def spotify_dl():
     )
     parser.add_argument(
         "-s",
-        "--skip_non_music_sections",
-        default=False,
-        action="store_true",
-        help="Whether to skip non-music sections using SponsorBlock API.",
+        "--use_sponsorblock",
+        default="no",
+        action="store",
+        help="Whether to skip non-music sections using SponsorBlock API. Pass y or yes to skip using SponsorBlock",
     )
     parser.add_argument(
         "-w",
@@ -148,7 +148,9 @@ def spotify_dl():
         )
     )
     log.debug("Arguments: %s ", args)
-
+    console.print(
+        f"Sponsorblock enabled?: [bold green]{args.use_sponsorblock}[/bold green]"
+    )
     valid_urls = validate_spotify_urls(args.url)
     if not valid_urls:
         sys.exit(1)
@@ -180,7 +182,7 @@ def spotify_dl():
             skip_mp3=args.skip_mp3,
             keep_playlist_order=args.keep_playlist_order,
             no_overwrites=args.no_overwrites,
-            skip_non_music_sections=args.skip_non_music_sections,
+            use_sponsorblock=args.use_sponsorblock,
             file_name_f=file_name_f,
             multi_core=args.multi_core,
         )
