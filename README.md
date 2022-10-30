@@ -30,6 +30,10 @@ If you want to make use of parallel download, pass `-mc <number>`, where `<numbe
 
     spotify_dl -mc 4 -l spotify_playlist_link_1 spotify_playlist_link_2
 
+Spotify-dl can make use of SponsorBlock and skip non-music sections when downloading from YouTube. This is disabled by default and can be enabled using:
+
+        spotify_dl -l spotify_playlist_link_1 -s y
+
 For running in verbose mode, append `-V`
 
     spotify_dl -V -l spotify_playlist_link -o download_directory

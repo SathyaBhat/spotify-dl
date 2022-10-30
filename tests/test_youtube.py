@@ -41,7 +41,7 @@ def test_download_one_false_skip():
         skip_mp3=False,
         keep_playlist_order=False,
         no_overwrites=False,
-        skip_non_music_sections=False,
+        use_sponsorblock="no",
         file_name_f=yt.default_filename,
         multi_core=0,
     )
@@ -49,7 +49,9 @@ def test_download_one_false_skip():
         "Hotel California - Live On MTV, 1994/Eagles - Hotel California - Live On MTV, 1994.mp3",
         ID3=EasyID3,
     )
-    tags = ID3("Hotel California - Live On MTV, 1994/Eagles - Hotel California - Live On MTV, 1994.mp3")
+    tags = ID3(
+        "Hotel California - Live On MTV, 1994/Eagles - Hotel California - Live On MTV, 1994.mp3"
+    )
     assert music["artist"][0] == "Eagles"
     assert music["album"][0] == "Hell Freezes Over (Remaster 2018)"
     assert music["genre"][0] == "album rock"
@@ -92,7 +94,7 @@ def test_download_one_true_skip():
         skip_mp3=True,
         keep_playlist_order=False,
         no_overwrites=False,
-        skip_non_music_sections=False,
+        use_sponsorblock="yes",
         file_name_f=yt.default_filename,
         multi_core=0,
     )
@@ -128,7 +130,7 @@ def test_download_cover_none():
         skip_mp3=False,
         keep_playlist_order=False,
         no_overwrites=False,
-        skip_non_music_sections=False,
+        use_sponsorblock="no",
         file_name_f=yt.default_filename,
         multi_core=0,
     )
