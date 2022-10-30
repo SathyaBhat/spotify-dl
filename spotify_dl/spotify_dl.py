@@ -104,6 +104,14 @@ def spotify_dl():
         default=0,
         help="Use multiprocessing [-m [int:numcores]",
     )
+    parser.add_argument(
+        "-p",
+        "--proxy",
+        action="store",
+        type=str,
+        default="",
+        help="Download through a proxy. Support HTTP & SOCKS5. Use 'http://username:password@hostname:port' or 'http://hostname:port'",
+    )
     args = parser.parse_args()
     num_cores = os.cpu_count()
     args.multi_core = int(args.multi_core)
@@ -185,6 +193,7 @@ def spotify_dl():
             use_sponsorblock=args.use_sponsorblock,
             file_name_f=file_name_f,
             multi_core=args.multi_core,
+            proxy=args.proxy,
         )
 
 

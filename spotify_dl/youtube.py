@@ -159,6 +159,7 @@ def find_and_download_songs(kwargs):
             file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
             outtmpl = f"{file_path}.%(ext)s"
             ydl_opts = {
+                "proxy": kwargs.get('proxy'),
                 "default_search": "ytsearch",
                 "format": "bestaudio/best",
                 "outtmpl": outtmpl,
