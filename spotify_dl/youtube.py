@@ -80,7 +80,7 @@ def set_tags(temp, filename, kwargs):
     except mutagen.MutagenError as e:
         log.debug(e)
         print(
-            f"Failed to download: {mp3filename}, please ensure YouTubeDL is up-to-date. "
+            f"Failed to download: {filename}, please ensure YouTubeDL is up-to-date. "
         )
 
         return
