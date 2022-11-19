@@ -152,14 +152,14 @@ def find_and_download_songs(kwargs):
                 ]
 
             file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
-            
+
             mp3filename = f"{file_path}.mp3"
             mp3file_path = path.join(mp3filename)
-            
+
             if kwargs["no_overwrites"] and not kwargs["skip_mp3"] and path.exists(mp3file_path):
-                print('File {} already exists, we do not overwrite it '.format(mp3filename))
+                print(f'File {mp3filename} already exists, we do not overwrite it ')
                 continue
-            
+
             outtmpl = f"{file_path}.%(ext)s"
             ydl_opts = {
                 "proxy": kwargs.get('proxy'),
