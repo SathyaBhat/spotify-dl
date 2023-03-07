@@ -3,7 +3,7 @@ name: spotify-dl tests
 on: [push, pull_request]
 
 jobs:
-  build3.6:
+  build_old-python:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
