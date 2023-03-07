@@ -119,7 +119,7 @@ def test_spotify_track_fetch_one():
     assert {
         "album": "Hell Freezes Over (Remaster 2018)",
         "artist": "Eagles",
-        "cover": "https://i.scdn.co/image/ab67616d0000485196d28597a5ae44ab66552183",
+        "cover": "https://i.scdn.co/image/ab67616d0000b27396d28597a5ae44ab66552183",
         "genre": "album rock",
         "name": "Hotel California - Live On MTV, 1994",
         "num": 6,
