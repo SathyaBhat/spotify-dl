@@ -3,6 +3,11 @@ name: spotify-dl tests
 on: [push, pull_request]
 
 jobs:
+  deprecated:
+    name: build (3.6)
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo "Python 3.6 is not supported anymore, no build required"'
   build:
     runs-on: ubuntu-latest
     strategy:
