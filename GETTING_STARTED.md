@@ -2,7 +2,7 @@
 
 ### Pre-requisites
 
-You need Python 3.6+. To download songs as MP3, you will need ffmpeg.
+You need Python 3.7+. To download songs as MP3, you will need ffmpeg.
 
 - Linux users can get them by installing libav-tools by using apt-get `sudo apt-get install -y libav-tools`) or a package manager which comes with your distro
 - Windows users can download FFMPEG pre-built binaries from [here](http://ffmpeg.zeranoe.com/builds/). Extract the file using [7-zip](http://7-zip.org/) to a foldrer and [add the folder to your PATH environment variable](http://www.wikihow.com/Install-FFmpeg-on-Windows)

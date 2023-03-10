@@ -67,54 +67,49 @@ def write_tracks(tracks_file, song_dict):
     return track_db
 
 
-def set_tags(temp, file_path, kwargs):
+def set_tags(temp, filename, kwargs):
     """
      sets song tags after they are downloaded
     :param temp: contains index used to obtain more info about song being editted
-    :param file_path: location of song whose tags are to be editted
+    :param filename: location of song whose tags are to be editted
     :param kwargs: a dictionary of extra arguments to be used in tag editing
     """
-    mp3filename = f"{file_path}.mp3"
-    mp3file_path = path.join(mp3filename)
     song = kwargs["track_db"][int(temp[-1])]
-    if not kwargs["no_overwrites"] or not path.exists(mp3file_path):
-        try:
-            song_file = MP3(mp3filename, ID3=EasyID3)
-        except mutagen.MutagenError as e:
-            log.debug(e)
-            print(
-                f"Failed to download: {mp3filename}, please ensure YouTubeDL is up-to-date. "
-            )
+    try:
+        song_file = MP3(filename, ID3=EasyID3)
+    except mutagen.MutagenError as e:
+        log.debug(e)
+        print(
+            f"Failed to download: {filename}, please ensure YouTubeDL is up-to-date. "
+        )
 
-            return
-        song_file["date"] = song.get("year")
-        if kwargs["keep_playlist_order"]:
-            song_file["tracknumber"] = str(song.get("playlist_num"))
-        else:
-            song_file["tracknumber"] = (
-                str(song.get("num")) + "/" + str(song.get("num_tracks"))
-            )
-
-        song_file["genre"] = song.get("genre")
-        song_file.save()
-        song_file = MP3(mp3filename, ID3=ID3)
-        cover = song.get("cover")
-        if cover is not None:
-            if cover.lower().startswith("http"):
-                req = urllib.request.Request(cover)
-            else:
-                raise ValueError from None
-            with urllib.request.urlopen(req) as resp:  # nosec
-                song_file.tags["APIC"] = APIC(
-                    encoding=3,
-                    mime="image/jpeg",
-                    type=3,
-                    desc="Cover",
-                    data=resp.read(),
-                )
-        song_file.save()
+        return
+    song_file["date"] = song.get("year")
+    if kwargs["keep_playlist_order"]:
+        song_file["tracknumber"] = str(song.get("playlist_num"))
     else:
-        print("File {mp3filename} already exists, we do not overwrite it ")
+        song_file["tracknumber"] = (
+            str(song.get("num")) + "/" + str(song.get("num_tracks"))
+        )
+
+    song_file["genre"] = song.get("genre")
+    song_file.save()
+    song_file = MP3(filename, ID3=ID3)
+    cover = song.get("cover")
+    if cover is not None:
+        if cover.lower().startswith("http"):
+            req = urllib.request.Request(cover)
+        else:
+            raise ValueError from None
+        with urllib.request.urlopen(req) as resp:  # nosec
+            song_file.tags["APIC"] = APIC(
+                encoding=3,
+                mime="image/jpeg",
+                type=3,
+                desc="Cover",
+                data=resp.read(),
+            )
+    song_file.save()
 
 
 def find_and_download_songs(kwargs):
@@ -157,6 +152,14 @@ def find_and_download_songs(kwargs):
                 ]
 
             file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
+
+            mp3filename = f"{file_path}.mp3"
+            mp3file_path = path.join(mp3filename)
+
+            if kwargs["no_overwrites"] and not kwargs["skip_mp3"] and path.exists(mp3file_path):
+                print(f'File {mp3filename} already exists, we do not overwrite it ')
+                continue
+
             outtmpl = f"{file_path}.%(ext)s"
             ydl_opts = {
                 "proxy": kwargs.get('proxy'),
@@ -189,7 +192,7 @@ def find_and_download_songs(kwargs):
                     log.debug(e)
                     print(f"Failed to download {name}, make sure yt_dlp is up to date")
             if not kwargs["skip_mp3"]:
-                set_tags(temp, file_path, kwargs)
+                set_tags(temp, mp3filename, kwargs)
 
 
 def multicore_find_and_download_songs(kwargs):
