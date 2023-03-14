@@ -1,5 +1,5 @@
-sentry_sdk~=1.5
-yt-dlp>=2022.01.21
+sentry_sdk~=1.16
+yt-dlp>=2023.3.4
 spotipy~=2.21
 mutagen~=1.45
 rich~=12.0
