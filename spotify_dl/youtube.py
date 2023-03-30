@@ -25,6 +25,13 @@ def playlist_num_filename(**kwargs):
     return f"{kwargs['track_num']} - {default_filename(**kwargs)}"
 
 
+def duration_delta(info, expected_duration, delta):
+    """Download only videos that match maximum duration difference"""
+    duration = info.get('duration')
+    if abs(duration - expected_duration) > delta:
+        return 'The video length does not match'
+
+
 def write_tracks(tracks_file, song_dict):
     """
     Writes the information of all tracks in the playlist[s] to a text file in csv kind of format
@@ -45,6 +52,7 @@ def write_tracks(tracks_file, song_dict):
                 track_artist = track["artist"]
                 track_num = track["num"]
                 track_album = track["album"]
+                track_duration = track["duration"]
                 track["save_path"] = url_dict["save_path"]
                 track_db.append(track)
                 track_index = i
@@ -56,6 +64,7 @@ def write_tracks(tracks_file, song_dict):
                     str(track_num),
                     track_album,
                     str(track_index),
+                    track_duration,
                 ]
                 try:
                     writer.writerow(csv_row)
@@ -74,7 +83,7 @@ def set_tags(temp, filename, kwargs):
     :param filename: location of song whose tags are to be editted
     :param kwargs: a dictionary of extra arguments to be used in tag editing
     """
-    song = kwargs["track_db"][int(temp[-1])]
+    song = kwargs["track_db"][int(temp[5])]
     try:
         song_file = MP3(filename, ID3=EasyID3)
     except mutagen.MutagenError as e:
@@ -122,12 +131,13 @@ def find_and_download_songs(kwargs):
     reference_file = kwargs["reference_file"]
     with open(reference_file, "r", encoding="utf-8") as file:
         for line in file:
-            temp = line.split(";")
-            name, artist, album, i = (
+            temp = line.replace("\n", "").split(";")
+            name, artist, album, i, duration = (
                 temp[0],
                 temp[1],
                 temp[4],
-                int(temp[-1].replace("\n", "")),
+                int(temp[5]),
+                float(temp[6]),
             )
 
             query = f"{artist} - {name} Lyrics".replace(":", "").replace('"', "")
@@ -163,7 +173,8 @@ def find_and_download_songs(kwargs):
             outtmpl = f"{file_path}.%(ext)s"
             ydl_opts = {
                 "proxy": kwargs.get('proxy'),
-                "default_search": "ytsearch",
+                "default_search": "ytsearch10",
+                "max_downloads": 1,
                 "format": "bestaudio/best",
                 "outtmpl": outtmpl,
                 "postprocessors": sponsorblock_postprocessor,
@@ -178,6 +189,9 @@ def find_and_download_songs(kwargs):
                     "album=" + album,
                 ],
             }
+            if kwargs["max_duration_difference"] >= 0:
+                ydl_opts["match_filter"] = lambda info, *, incomplete: duration_delta(
+                    info, duration, kwargs["max_duration_difference"])
             if not kwargs["skip_mp3"]:
                 mp3_postprocess_opts = {
                     "key": "FFmpegExtractAudio",
@@ -190,7 +204,8 @@ def find_and_download_songs(kwargs):
                     ydl.download([query])
                 except Exception as e:  # skipcq: PYL-W0703
                     log.debug(e)
-                    print(f"Failed to download {name}, make sure yt_dlp is up to date")
+                    if type(e) != yt_dlp.utils.MaxDownloadsReached:
+                        print(f"Failed to download {name}, make sure yt_dlp is up to date")
             if not kwargs["skip_mp3"]:
                 set_tags(temp, mp3filename, kwargs)
 

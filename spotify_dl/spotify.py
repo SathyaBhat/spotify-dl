@@ -25,7 +25,7 @@ def fetch_tracks(sp, item_type, url):
                     fields="items.track.name,items.track.artists(name, uri),"
                     "items.track.album(name, release_date, total_tracks, images),"
                     "items.track.track_number,total, next,offset,"
-                    "items.track.id",
+                    "items.track.id,items.track.duration_ms",
                     additional_types=["track"],
                     offset=offset,
                 )
@@ -47,6 +47,7 @@ def fetch_tracks(sp, item_type, url):
                     track_artist = ",".join(
                         [artist["name"] for artist in track_info.get("artists")]
                     )
+                    track_duration = track_info.get("duration_ms") / 1000
                     if track_album_info:
                         track_album = track_album_info.get("name")
                         track_year = (
@@ -78,6 +79,7 @@ def fetch_tracks(sp, item_type, url):
                             "name": track_name,
                             "artist": track_artist,
                             "album": track_album,
+                            "duration": track_duration,
                             "year": track_year,
                             "num_tracks": album_total,
                             "num": track_num,
