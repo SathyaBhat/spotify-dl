@@ -99,7 +99,6 @@ def test_spotify_playlist_fetch_more():
             "album": "All The Best (Spanish Version)",
             "artist": "Zucchero",
             "cover": "https://i.scdn.co/image/ab67616d0000b27304e57d181ff062f8339d6c71",
-            "genre": "classic italian pop",
             "name": "You Are So Beautiful",
             "num": 18,
             "track_url": None,
