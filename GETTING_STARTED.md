@@ -11,7 +11,7 @@ You need Python 3.7+. To download songs as MP3, you will need ffmpeg.
 
         pip3 install spotify_dl
 
-1.  Login to [Spotify developer console](https://developer.spotify.com/my-applications/#!/applications) and click on "Create an App". Fill in details for name and description
+1.  Login to [Spotify developer console](https://developer.spotify.com/dashboard) and click on "Create an App". Fill in details for name and description
 
 1.  Make a note of Client ID and Client Secret. These values need to be then set `SPOTIPY_CLIENT_ID`, `SPOTIPY_CLIENT_SECRET` environment variables respectively.
 
@@ -23,12 +23,14 @@ You need Python 3.7+. To download songs as MP3, you will need ffmpeg.
             export SPOTIPY_CLIENT_SECRET=your-spotify-client-secret
 
     Windows Powershell:
-    $env:SPOTIPY_CLIENT_ID=your-spotify-client-id
-    $env:SPOTIPY_CLIENT_SECRET=your-spotify-client-secret
+    
+            $env:SPOTIPY_CLIENT_ID=your-spotify-client-id
+            $env:SPOTIPY_CLIENT_SECRET=your-spotify-client-secret
 
     Windows CMD:
-    set SPOTIPY_CLIENT_ID=your-spotify-client-id
-    set SPOTIPY_CLIENT_SECRET=your-spotify-client-secret
+    
+            set SPOTIPY_CLIENT_ID=your-spotify-client-id
+            set SPOTIPY_CLIENT_SECRET=your-spotify-client-secret
 
     See [this question](http://superuser.com/a/284351/4377) for more info,
 
