@@ -48,7 +48,7 @@ def get_tokens():
             set SPOTIPY_CLIENT_SECRET=your-spotify-client-secret
 
             Get your credentials at
-                https://developer.spotify.com/my-applications
+                https://developer.spotify.com/dashboard
         """
         )
         return None
