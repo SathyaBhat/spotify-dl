@@ -219,7 +219,7 @@ def parse_spotify_url(url):
     if url.startswith("spotify:"):
         log.error("Spotify URI was provided instead of a playlist/album/track URL.")
         sys.exit(1)
-    parsed_url = url.replace("https://open.spotify.com/", "")
+    parsed_url = url.replace("https://open.spotify.com/", "").split("?")[0]
     item_type = parsed_url.split("/")[0]
     item_id = parsed_url.split("/")[1]
     return item_type, item_id
