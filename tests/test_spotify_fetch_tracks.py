@@ -102,6 +102,7 @@ def test_spotify_playlist_fetch_more():
             "name": "You Are So Beautiful",
             "num": 18,
             "track_url": None,
+            "genre": "italian adult pop",
             "num_tracks": 18,
             "year": "2007",
             "playlist_num": 5,
