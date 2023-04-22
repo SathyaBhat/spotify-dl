@@ -41,6 +41,7 @@ def test_download_one_false_skip():
         skip_mp3=False,
         keep_playlist_order=False,
         no_overwrites=False,
+        remove_trailing_tracks=False,
         use_sponsorblock="no",
         file_name_f=yt.default_filename,
         multi_core=0,
