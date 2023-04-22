@@ -2,6 +2,7 @@ import urllib.request
 from os import path
 import os
 import multiprocessing
+
 import mutagen
 import csv
 import yt_dlp
@@ -120,6 +121,7 @@ def find_and_download_songs(kwargs):
     """
     sponsorblock_postprocessor = []
     reference_file = kwargs["reference_file"]
+    files = {}
     with open(reference_file, "r", encoding="utf-8") as file:
         for line in file:
             temp = line.split(";")
@@ -150,14 +152,21 @@ def find_and_download_songs(kwargs):
                         "force_keyframes": True,
                     },
                 ]
+            save_path = kwargs["track_db"][i]["save_path"]
+            file_path = path.join(save_path, file_name)
 
-            file_path = path.join(kwargs["track_db"][i]["save_path"], file_name)
+            mp3file_path = f"{file_path}.mp3"
 
-            mp3filename = f"{file_path}.mp3"
-            mp3file_path = path.join(mp3filename)
+            if save_path not in files:
+                path_files = set()
+                files[save_path] = path_files
+            else:
+                path_files = files[save_path]
+
+            path_files.add(f"{file_name}.mp3")
 
             if kwargs["no_overwrites"] and not kwargs["skip_mp3"] and path.exists(mp3file_path):
-                print(f'File {mp3filename} already exists, we do not overwrite it ')
+                print(f'File {mp3file_path} already exists, we do not overwrite it ')
                 continue
 
             outtmpl = f"{file_path}.%(ext)s"
@@ -192,7 +201,13 @@ def find_and_download_songs(kwargs):
                     log.debug(e)
                     print(f"Failed to download {name}, make sure yt_dlp is up to date")
             if not kwargs["skip_mp3"]:
-                set_tags(temp, mp3filename, kwargs)
+                set_tags(temp, mp3file_path, kwargs)
+        if kwargs["remove_trailing_tracks"]:
+            for save_path in files:
+                for f in os.listdir(save_path):
+                    if f not in files[save_path]:
+                        print(f"File {f} is not in the playlist anymore, we delete it")
+                        os.remove(path.join(save_path, f))
 
 
 def multicore_find_and_download_songs(kwargs):
