@@ -85,6 +85,13 @@ def spotify_dl():
         default=False,
     )
     parser.add_argument(
+        "-r",
+        "--remove-trailing-tracks",
+        default="no",
+        action="store_true",
+        help="Whether we should delete tracks that were previously downloaded but are not longer in the playlist"
+    )
+    parser.add_argument(
         "-V",
         "--verbose",
         action="store_true",
@@ -190,6 +197,7 @@ def spotify_dl():
             skip_mp3=args.skip_mp3,
             keep_playlist_order=args.keep_playlist_order,
             no_overwrites=args.no_overwrites,
+            remove_trailing_tracks=args.remove_trailing_tracks,
             use_sponsorblock=args.use_sponsorblock,
             file_name_f=file_name_f,
             multi_core=args.multi_core,

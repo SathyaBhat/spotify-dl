@@ -44,7 +44,7 @@ def fetch_tracks(sp, item_type, url):
                     track_num = track_info.get("track_number")
                     spotify_id = track_info.get("id")
                     track_name = track_info.get("name")
-                    track_artist = ",".join(
+                    track_artist = ", ".join(
                         [artist["name"] for artist in track_info.get("artists")]
                     )
                     if track_album_info:
