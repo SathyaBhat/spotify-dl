@@ -4,13 +4,13 @@ import time
 import json
 import os
 import sys
-from logging import DEBUG
+from logging import DEBUG, ERROR
 from pathlib import Path, PurePath
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from spotify_dl.constants import VERSION
-from spotify_dl.scaffold import log, console, get_tokens
+from spotify_dl.scaffold import log, setLogLevel, console, get_tokens
 from spotify_dl.spotify import (
     fetch_tracks,
     parse_spotify_url,
@@ -129,9 +129,13 @@ def spotify_dl():
     args = parser.parse_args()
     num_cores = os.cpu_count()
     args.multi_core = int(args.multi_core)
-    console.log(f"Starting spotify_dl [bold green]v{VERSION}[/bold green]")
+
+    if args.dump_json:
+        setLogLevel(ERROR)
     if args.verbose:
-        log.setLevel(DEBUG)
+        setLogLevel(DEBUG)
+
+    log.info(f"Starting spotify_dl v{VERSION}")
     log.debug("Setting debug mode on spotify_dl")
 
     if args.multi_core > (num_cores - 1):
@@ -170,8 +174,8 @@ def spotify_dl():
         )
     )
     log.debug("Arguments: %s ", args)
-    console.print(
-        f"Sponsorblock enabled?: [bold green]{args.use_sponsorblock}[/bold green]"
+    log.info(
+        f"Sponsorblock enabled?: {args.use_sponsorblock}"
     )
     valid_urls = validate_spotify_urls(args.url)
     if not valid_urls:
@@ -187,8 +191,8 @@ def spotify_dl():
             PurePath.joinpath(Path(args.output), Path(directory_name))
         )
         url_dict["save_path"].mkdir(parents=True, exist_ok=True)
-        console.print(
-            f"Saving songs to [bold green]{directory_name}[/bold green] directory"
+        log.info(
+            f"Saving songs to {directory_name} directory"
         )
         url_dict["songs"] = fetch_tracks(sp, item_type, url)
         url_data["urls"].append(url_dict.copy())
