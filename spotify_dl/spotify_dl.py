@@ -139,8 +139,8 @@ def spotify_dl():
     log.debug("Setting debug mode on spotify_dl")
 
     if args.multi_core > (num_cores - 1):
-        console.log(
-            f"Requested cores [bold red]{args.multi_core}[/bold red] exceeds available [bold green]{num_cores}[/bold green], using [bold green]{num_cores - 1}[/bold green] cores."
+        log.info(
+            f"Requested cores {args.multi_core} exceeds available {num_cores}, using {num_cores - 1} cores."
         )
         args.multi_core = num_cores - 1
     if args.version:
@@ -221,6 +221,6 @@ def spotify_dl():
 if __name__ == "__main__":
     start_time = time.time()
     spotify_dl()
-    console.log(
-        f"Download completed in [bold green]{time.time() - start_time} seconds.[/bold green]"
+    log.info(
+        f"Download completed in {time.time() - start_time} seconds."
     )
