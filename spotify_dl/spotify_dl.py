@@ -119,6 +119,14 @@ def spotify_dl():
         default="",
         help="Download through a proxy. Support HTTP & SOCKS5. Use 'http://username:password@hostname:port' or 'http://hostname:port'",
     )
+    parser.add_argument(
+        "-mdd",
+        "--max-duration-difference",
+        action="store",
+        type=float,
+        default=-1,
+        help="Only download songs that match the track duration up to a maximum difference in seconds",
+    )
     args = parser.parse_args()
     num_cores = os.cpu_count()
     args.multi_core = int(args.multi_core)
@@ -195,6 +203,7 @@ def spotify_dl():
             output_dir=args.output,
             format_str=args.format_str,
             skip_mp3=args.skip_mp3,
+            max_duration_difference=args.max_duration_difference,
             keep_playlist_order=args.keep_playlist_order,
             no_overwrites=args.no_overwrites,
             remove_trailing_tracks=args.remove_trailing_tracks,
