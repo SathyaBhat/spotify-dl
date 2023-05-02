@@ -135,12 +135,15 @@ def spotify_dl():
     if args.verbose:
         setLogLevel(DEBUG)
 
-    log.info(f"Starting spotify_dl v{VERSION}")
+    log.info("Starting spotify_dl v%s", VERSION)
     log.debug("Setting debug mode on spotify_dl")
 
     if args.multi_core > (num_cores - 1):
         log.info(
-            f"Requested cores {args.multi_core} exceeds available {num_cores}, using {num_cores - 1} cores."
+            "Requested cores %d exceeds available %d, using %d cores.",
+            args.multi_core,
+            num_cores,
+            num_cores - 1
         )
         args.multi_core = num_cores - 1
     if args.version:
@@ -175,7 +178,8 @@ def spotify_dl():
     )
     log.debug("Arguments: %s ", args)
     log.info(
-        f"Sponsorblock enabled?: {args.use_sponsorblock}"
+        "Sponsorblock enabled?: %s",
+        args.use_sponsorblock
     )
     valid_urls = validate_spotify_urls(args.url)
     if not valid_urls:
@@ -192,7 +196,8 @@ def spotify_dl():
         )
         url_dict["save_path"].mkdir(parents=True, exist_ok=True)
         log.info(
-            f"Saving songs to {directory_name} directory"
+            "Saving songs to %s directory",
+            directory_name
         )
         url_dict["songs"] = fetch_tracks(sp, item_type, url)
         url_data["urls"].append(url_dict.copy())
@@ -222,5 +227,6 @@ if __name__ == "__main__":
     start_time = time.time()
     spotify_dl()
     log.info(
-        f"Download completed in {time.time() - start_time} seconds."
+        "Download completed in %f seconds.", 
+        time.time() - start_time
     )

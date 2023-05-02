@@ -26,7 +26,12 @@ def playlist_num_filename(**kwargs):
     """name with track number"""
     return f"{kwargs['track_num']} - {default_filename(**kwargs)}"
 
+
 def dump_json(songs):
+    """
+    Outputs the JSON response of ydl.extract_info to stdout
+    :param songs: the songs for which the JSON should be output
+    """
     for song in songs:
         query = f"{song.get('artist')} - {song.get('name')} Lyrics".replace(":", "").replace("\"", "")
 
@@ -38,10 +43,11 @@ def dump_json(songs):
             try:
                 ytJson = ydl.extract_info('ytsearch:' + query, False)
                 print(json.dumps(ytJson.get('entries')))
-            except Exception as e:
+            except Exception as e:  # skipcq: PYL-W0703
                 log.debug(e)
-                print('Failed to download: {}, please ensure YouTubeDL is up-to-date. '.format(query))
+                print(f"Failed to download {song.get('name')}, make sure yt_dlp is up to date")
                 continue
+
 
 def write_tracks(tracks_file, song_dict):
     """
