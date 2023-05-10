@@ -4,7 +4,7 @@ import sentry_sdk
 from rich.logging import RichHandler
 from rich.console import Console
 
-__all__ = ["log", "get_tokens", "console"]
+__all__ = ["log", "setLogLevel", "get_tokens", "console"]
 
 logging.basicConfig(
     level=logging.INFO,
@@ -17,6 +17,14 @@ log = logging.getLogger("sdl")
 sentry_sdk.init(
     "https://fc66a23d79634b9bba1690ea13e289f0@o321064.ingest.sentry.io/2383261"
 )
+
+
+def setLogLevel(level):
+    """
+    Sets the log level of the global logger to the passed level
+    :param level: the log level
+    """
+    logging.getLogger().setLevel(level)
 
 
 def get_tokens():

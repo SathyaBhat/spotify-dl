@@ -4,13 +4,13 @@ import time
 import json
 import os
 import sys
-from logging import DEBUG
+from logging import DEBUG, ERROR
 from pathlib import Path, PurePath
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from spotify_dl.constants import VERSION
-from spotify_dl.scaffold import log, console, get_tokens
+from spotify_dl.scaffold import log, setLogLevel, console, get_tokens
 from spotify_dl.spotify import (
     fetch_tracks,
     parse_spotify_url,
@@ -18,7 +18,7 @@ from spotify_dl.spotify import (
     get_item_name,
 )
 
-from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename
+from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename, dump_json
 
 
 def spotify_dl():
@@ -48,6 +48,13 @@ def spotify_dl():
         action="store_true",
         help="Download using youtube-dl",
         default=True,
+    )
+    parser.add_argument(
+        "-j",
+        "--dump-json",
+        action="store_true",
+        help="Dump info-json using youtube-dl",
+        default=False
     )
     parser.add_argument(
         "-f",
@@ -122,14 +129,21 @@ def spotify_dl():
     args = parser.parse_args()
     num_cores = os.cpu_count()
     args.multi_core = int(args.multi_core)
-    console.log(f"Starting spotify_dl [bold green]v{VERSION}[/bold green]")
+
+    if args.dump_json:
+        setLogLevel(ERROR)
     if args.verbose:
-        log.setLevel(DEBUG)
+        setLogLevel(DEBUG)
+
+    log.info("Starting spotify_dl v%s", VERSION)
     log.debug("Setting debug mode on spotify_dl")
 
     if args.multi_core > (num_cores - 1):
-        console.log(
-            f"Requested cores [bold red]{args.multi_core}[/bold red] exceeds available [bold green]{num_cores}[/bold green], using [bold green]{num_cores - 1}[/bold green] cores."
+        log.info(
+            "Requested cores %d exceeds available %d, using %d cores.",
+            args.multi_core,
+            num_cores,
+            num_cores - 1
         )
         args.multi_core = num_cores - 1
     if args.version:
@@ -163,8 +177,9 @@ def spotify_dl():
         )
     )
     log.debug("Arguments: %s ", args)
-    console.print(
-        f"Sponsorblock enabled?: [bold green]{args.use_sponsorblock}[/bold green]"
+    log.info(
+        "Sponsorblock enabled?: %s",
+        args.use_sponsorblock
     )
     valid_urls = validate_spotify_urls(args.url)
     if not valid_urls:
@@ -180,12 +195,15 @@ def spotify_dl():
             PurePath.joinpath(Path(args.output), Path(directory_name))
         )
         url_dict["save_path"].mkdir(parents=True, exist_ok=True)
-        console.print(
-            f"Saving songs to [bold green]{directory_name}[/bold green] directory"
+        log.info(
+            "Saving songs to %s directory",
+            directory_name
         )
         url_dict["songs"] = fetch_tracks(sp, item_type, url)
         url_data["urls"].append(url_dict.copy())
-    if args.download is True:
+    if args.dump_json is True:
+        dump_json(url_dict["songs"])
+    elif args.download is True:
         file_name_f = default_filename
         if args.keep_playlist_order:
             file_name_f = playlist_num_filename
@@ -208,6 +226,7 @@ def spotify_dl():
 if __name__ == "__main__":
     start_time = time.time()
     spotify_dl()
-    console.log(
-        f"Download completed in [bold green]{time.time() - start_time} seconds.[/bold green]"
+    log.info(
+        "Download completed in %f seconds.", 
+        time.time() - start_time
     )
