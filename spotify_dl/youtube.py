@@ -33,19 +33,21 @@ def dump_json(songs):
     :param songs: the songs for which the JSON should be output
     """
     for song in songs:
-        query = f"{song.get('artist')} - {song.get('name')} Lyrics".replace(":", "").replace("\"", "")
+        query = f"{song.get('artist')} - {song.get('name')} Lyrics".replace(
+            ":", ""
+        ).replace('"', "")
 
-        ydl_opts = {
-            'quiet': True
-        }
+        ydl_opts = {"quiet": True}
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             try:
-                ytJson = ydl.extract_info('ytsearch:' + query, False)
-                print(json.dumps(ytJson.get('entries')))
+                ytJson = ydl.extract_info("ytsearch:" + query, False)
+                print(json.dumps(ytJson.get("entries")))
             except Exception as e:  # skipcq: PYL-W0703
                 log.debug(e)
-                print(f"Failed to download {song.get('name')}, make sure yt_dlp is up to date")
+                print(
+                    f"Failed to download {song.get('name')}, make sure yt_dlp is up to date"
+                )
                 continue
 
 
@@ -163,7 +165,6 @@ def find_and_download_songs(kwargs):
             )
 
             if kwargs["use_sponsorblock"][0].lower() == "y":
-
                 sponsorblock_postprocessor = [
                     {
                         "key": "SponsorBlock",
@@ -188,13 +189,17 @@ def find_and_download_songs(kwargs):
 
             path_files.add(f"{file_name}.mp3")
 
-            if kwargs["no_overwrites"] and not kwargs["skip_mp3"] and path.exists(mp3file_path):
-                print(f'File {mp3file_path} already exists, we do not overwrite it ')
+            if (
+                kwargs["no_overwrites"]
+                and not kwargs["skip_mp3"]
+                and path.exists(mp3file_path)
+            ):
+                print(f"File {mp3file_path} already exists, we do not overwrite it ")
                 continue
 
             outtmpl = f"{file_path}.%(ext)s"
             ydl_opts = {
-                "proxy": kwargs.get('proxy'),
+                "proxy": kwargs.get("proxy"),
                 "default_search": "ytsearch",
                 "format": "bestaudio/best",
                 "outtmpl": outtmpl,
@@ -225,7 +230,7 @@ def find_and_download_songs(kwargs):
                     print(f"Failed to download {name}, make sure yt_dlp is up to date")
             if not kwargs["skip_mp3"]:
                 set_tags(temp, mp3file_path, kwargs)
-        if kwargs["remove_trailing_tracks"]:
+        if kwargs["remove_trailing_tracks"] == "y":
             for save_path in files:
                 for f in os.listdir(save_path):
                     if f not in files[save_path]:
