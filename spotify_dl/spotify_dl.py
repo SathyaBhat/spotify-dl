@@ -18,7 +18,12 @@ from spotify_dl.spotify import (
     get_item_name,
 )
 
-from spotify_dl.youtube import download_songs, default_filename, playlist_num_filename, dump_json
+from spotify_dl.youtube import (
+    download_songs,
+    default_filename,
+    playlist_num_filename,
+    dump_json,
+)
 
 
 def spotify_dl():
@@ -54,7 +59,7 @@ def spotify_dl():
         "--dump-json",
         action="store_true",
         help="Dump info-json using youtube-dl",
-        default=False
+        default=False,
     )
     parser.add_argument(
         "-f",
@@ -95,8 +100,8 @@ def spotify_dl():
         "-r",
         "--remove-trailing-tracks",
         default="no",
-        action="store_true",
-        help="Whether we should delete tracks that were previously downloaded but are not longer in the playlist"
+        action="store",
+        help="Whether we should delete tracks that were previously downloaded but are not longer in the playlist",
     )
     parser.add_argument(
         "-V",
@@ -143,7 +148,7 @@ def spotify_dl():
             "Requested cores %d exceeds available %d, using %d cores.",
             args.multi_core,
             num_cores,
-            num_cores - 1
+            num_cores - 1,
         )
         args.multi_core = num_cores - 1
     if args.version:
@@ -177,16 +182,13 @@ def spotify_dl():
         )
     )
     log.debug("Arguments: %s ", args)
-    log.info(
-        "Sponsorblock enabled?: %s",
-        args.use_sponsorblock
-    )
+    log.info("Sponsorblock enabled?: %s", args.use_sponsorblock)
     valid_urls = validate_spotify_urls(args.url)
     if not valid_urls:
         sys.exit(1)
 
     url_data = {"urls": []}
-
+    start_time = time.time()
     for url in valid_urls:
         url_dict = {}
         item_type, item_id = parse_spotify_url(url)
@@ -195,10 +197,7 @@ def spotify_dl():
             PurePath.joinpath(Path(args.output), Path(directory_name))
         )
         url_dict["save_path"].mkdir(parents=True, exist_ok=True)
-        log.info(
-            "Saving songs to %s directory",
-            directory_name
-        )
+        log.info("Saving songs to %s directory", directory_name)
         url_dict["songs"] = fetch_tracks(sp, item_type, url)
         url_data["urls"].append(url_dict.copy())
     if args.dump_json is True:
@@ -215,18 +214,14 @@ def spotify_dl():
             skip_mp3=args.skip_mp3,
             keep_playlist_order=args.keep_playlist_order,
             no_overwrites=args.no_overwrites,
-            remove_trailing_tracks=args.remove_trailing_tracks,
+            remove_trailing_tracks=(args.remove_trailing_tracks[0].lower()),
             use_sponsorblock=args.use_sponsorblock,
             file_name_f=file_name_f,
             multi_core=args.multi_core,
             proxy=args.proxy,
         )
+    log.info("Download completed in %.2f seconds.", time.time() - start_time)
 
 
 if __name__ == "__main__":
-    start_time = time.time()
     spotify_dl()
-    log.info(
-        "Download completed in %f seconds.", 
-        time.time() - start_time
-    )
