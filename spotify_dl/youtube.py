@@ -161,7 +161,7 @@ def find_and_download_songs(kwargs):
             print(f"Initiating download for {query}.")
 
             file_name = kwargs["file_name_f"](
-                name=name, artist=artist, track_num=kwargs["track_db"][i].get("num")
+                name=name, artist=artist, track_num=kwargs["track_db"][i].get("playlist_num")
             )
 
             if kwargs["use_sponsorblock"][0].lower() == "y":
