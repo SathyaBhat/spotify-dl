@@ -4,7 +4,7 @@ from spotify_dl.utils import sanitize
 from rich.progress import Progress
 
 
-def fetch_tracks(sp, item_type, url):
+def fetch_tracks(sp, item_type, url, reverse_order=False):
     """
     Fetches tracks from the provided URL.
     :param sp: Spotify client
@@ -73,6 +73,10 @@ def fetch_tracks(sp, item_type, url):
                         genre = genres[0]
                     else:
                         genre = ""
+                    if reverse_order:
+                        playlist_num = str(total_songs - offset).zfill(len(str(total_songs)))
+                    else:
+                        playlist_num = str(offset + 1).zfill(len(str(total_songs)))
                     songs_list.append(
                         {
                             "name": track_name,
@@ -81,7 +85,7 @@ def fetch_tracks(sp, item_type, url):
                             "year": track_year,
                             "num_tracks": album_total,
                             "num": track_num,
-                            "playlist_num": offset + 1,
+                            "playlist_num": playlist_num,
                             "cover": cover,
                             "genre": genre,
                             "spotify_id": spotify_id,
@@ -134,6 +138,10 @@ def fetch_tracks(sp, item_type, url):
                     ][0]
                 else:
                     genre = ""
+                if reverse_order:
+                    playlist_num = str(total_songs - offset).zfill(len(str(total_songs)))
+                else:
+                    playlist_num = str(offset + 1).zfill(len(str(total_songs)))
                 for item in items["items"]:
                     track_name = item.get("name")
                     track_artist = ", ".join(
@@ -150,7 +158,7 @@ def fetch_tracks(sp, item_type, url):
                             "num_tracks": album_total,
                             "num": track_num,
                             "track_url": None,
-                            "playlist_num": offset + 1,
+                            "playlist_num": playlist_num,
                             "cover": cover,
                             "genre": genre,
                             "spotify_id": spotify_id,

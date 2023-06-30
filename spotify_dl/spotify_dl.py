@@ -77,6 +77,13 @@ def spotify_dl():
         help="Whether to keep original playlist ordering or not.",
     )
     parser.add_argument(
+        "-R",
+        "--reverse_order",
+        default=False,
+        action="store_true",
+        help="Reverse the playlist order if --keep_playlist_order is set.",
+    )
+    parser.add_argument(
         "-m",
         "--skip_mp3",
         action="store_true",
@@ -198,7 +205,7 @@ def spotify_dl():
         )
         url_dict["save_path"].mkdir(parents=True, exist_ok=True)
         log.info("Saving songs to %s directory", directory_name)
-        url_dict["songs"] = fetch_tracks(sp, item_type, url)
+        url_dict["songs"] = fetch_tracks(sp, item_type, url, args.reverse_order)
         url_data["urls"].append(url_dict.copy())
     if args.dump_json is True:
         dump_json(url_dict["songs"])
