@@ -4,7 +4,7 @@ from spotify_dl.utils import sanitize
 from rich.progress import Progress
 
 
-def fetch_tracks(sp, item_type, url, reverse_order):
+def fetch_tracks(sp, item_type, url, reverse_order=False):
     """
     Fetches tracks from the provided URL.
     :param sp: Spotify client
