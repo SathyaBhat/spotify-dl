@@ -198,7 +198,7 @@ def spotify_dl():
         )
         url_dict["save_path"].mkdir(parents=True, exist_ok=True)
         log.info("Saving songs to %s directory", directory_name)
-        url_dict["songs"] = fetch_tracks(sp, item_type, url)
+        url_dict["songs"] = fetch_tracks(sp, item_type, item_id)
         url_data["urls"].append(url_dict.copy())
     if args.dump_json is True:
         dump_json(url_dict["songs"])

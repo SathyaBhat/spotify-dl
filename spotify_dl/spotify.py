@@ -4,12 +4,12 @@ from spotify_dl.utils import sanitize
 from rich.progress import Progress
 
 
-def fetch_tracks(sp, item_type, url):
+def fetch_tracks(sp, item_type, item_id):
     """
-    Fetches tracks from the provided URL.
+    Fetches tracks from the provided item_id.
     :param sp: Spotify client
     :param item_type: Type of item being requested for: album/playlist/track
-    :param url: URL of the item
+    :param item_id: id of the item
     :return Dictionary of song and artist
     """
     songs_list = []
@@ -21,7 +21,7 @@ def fetch_tracks(sp, item_type, url):
             songs_task = progress.add_task(description="Fetching songs from playlist..")
             while True:
                 items = sp.playlist_items(
-                    playlist_id=url,
+                    playlist_id=item_id,
                     fields="items.track.name,items.track.artists(name, uri),"
                     "items.track.album(name, release_date, total_tracks, images),"
                     "items.track.track_number,total, next,offset,"
@@ -111,8 +111,8 @@ def fetch_tracks(sp, item_type, url):
                 description="Fetching songs from the album.."
             )
             while True:
-                album_info = sp.album(album_id=url)
-                items = sp.album_tracks(album_id=url, offset=offset)
+                album_info = sp.album(album_id=item_id)
+                items = sp.album_tracks(album_id=item_id, offset=offset)
                 total_songs = items.get("total")
                 track_album = album_info.get("name")
                 track_year = (
@@ -168,7 +168,7 @@ def fetch_tracks(sp, item_type, url):
                     break
 
     elif item_type == "track":
-        items = sp.track(track_id=url)
+        items = sp.track(track_id=item_id)
         track_name = items.get("name")
         album_info = items.get("album")
         track_artist = ", ".join([artist["name"] for artist in items["artists"]])
@@ -219,9 +219,10 @@ def parse_spotify_url(url):
     if url.startswith("spotify:"):
         log.error("Spotify URI was provided instead of a playlist/album/track URL.")
         sys.exit(1)
-    parsed_url = url.replace("https://open.spotify.com/", "").split("?")[0]
-    item_type = parsed_url.split("/")[0]
-    item_id = parsed_url.split("/")[1]
+    parsed_url = url.replace("https://open.spotify.com/", "").split("?")[0].split("/")
+    index_adjustment = 1 if parsed_url[0].startswith("intl") else 0
+    item_type = parsed_url[0+index_adjustment]
+    item_id = parsed_url[1+index_adjustment]
     return item_type, item_id
 
 
