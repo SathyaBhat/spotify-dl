@@ -136,7 +136,7 @@ def spotify_dl():
         action="store",
         type=str,
         default="192",
-        help="Set the preferred quality",
+        help="Set the preferred quality, default is 192",
     )
     args = parser.parse_args()
     num_cores = os.cpu_count()
