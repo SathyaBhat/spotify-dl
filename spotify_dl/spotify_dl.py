@@ -131,6 +131,13 @@ def spotify_dl():
         default="",
         help="Download through a proxy. Support HTTP & SOCKS5. Use 'http://username:password@hostname:port' or 'http://hostname:port'",
     )
+    parser.add_argument(
+        "--preferred-quality",
+        action="store",
+        type=str,
+        default="192",
+        help="Set the preferred quality",
+    )
     args = parser.parse_args()
     num_cores = os.cpu_count()
     args.multi_core = int(args.multi_core)
@@ -219,6 +226,7 @@ def spotify_dl():
             file_name_f=file_name_f,
             multi_core=args.multi_core,
             proxy=args.proxy,
+            preferred_quality=args.preferred-quality,
         )
     log.info("Download completed in %.2f seconds.", time.time() - start_time)
 
