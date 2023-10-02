@@ -50,7 +50,7 @@ You need Python 3.7+. To download songs as MP3, you will need ffmpeg.
 
 1.  To retrieve download songs as MP3, you will need to install ffmpeg. If you prefer to skip MP3 conversion, pass `-m` or `--skip_mp3` as a parameter when running the script
 
-    - Linux users can get them by installing libav-tools by using apt-get (`sudo apt-get install -y libav-tools`) if you'rte using a Debian/Ubuntu or a package manager which comes with your distro
+    - Linux users can get them by installing libav-tools by using apt-get (`sudo apt-get install -y libav-tools`) if you're using a Debian/Ubuntu or a package manager which comes with your distro
     - Windows users can download FFMPEG pre-built binaries from [here](http://ffmpeg.zeranoe.com/builds/). Extract the file using [7-zip](http://7-zip.org/) to a foldrer and [add the folder to your PATH environment variable](http://www.wikihow.com/Install-FFmpeg-on-Windows)
 
 1.  If you prefer to skip MP3 conversion, pass `-m` or `--skip_mp3` as a parameter when running the script
