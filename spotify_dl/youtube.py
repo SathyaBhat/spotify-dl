@@ -219,7 +219,7 @@ def find_and_download_songs(kwargs):
                 mp3_postprocess_opts = {
                     "key": "FFmpegExtractAudio",
                     "preferredcodec": "mp3",
-                    "preferredquality": "192",
+                    "preferredquality": kwargs.get("preferred_quality"),
                 }
                 ydl_opts["postprocessors"].append(mp3_postprocess_opts.copy())
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
