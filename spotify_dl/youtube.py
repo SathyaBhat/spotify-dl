@@ -64,7 +64,6 @@ def write_tracks(tracks_file, song_dict):
         i = 0
         writer = csv.writer(file_out, delimiter=";")
         for url_dict in song_dict["urls"]:
-            # for track in url_dict['songs']:
             for track in url_dict["songs"]:
                 track_url = track["track_url"]  # here
                 track_name = track["name"]
@@ -153,11 +152,10 @@ def find_and_download_songs(kwargs):
     with open(reference_file, "r", encoding="utf-8") as file:
         for line in file:
             temp = line.split(";")
-            name, artist, album, tempo, i = (
+            name, artist, album, i = (
                 temp[0],
                 temp[1],
                 temp[4],
-                temp[5],
                 int(temp[-1].replace("\n", "")),
             )
 
