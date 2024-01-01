@@ -120,7 +120,7 @@ def set_tags(temp, filename, kwargs):
         )
 
     song_file["genre"] = song.get("genre")
-    if song.get("tempo") != None:
+    if song.get("tempo") is not None:
         song_file["bpm"] = str(song.get("tempo"))
     song_file.save()
     song_file = MP3(filename, ID3=ID3)
