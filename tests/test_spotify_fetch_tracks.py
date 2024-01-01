@@ -399,7 +399,6 @@ def test_spotify_playlist_fetch_local_file():
     url = "https://open.spotify.com/playlist/1TWZ36xJ8qkvSeAQQUvU5b?si=ad56b6bb085b4ab9"
     item_type = "playlist"
     songs = fetch_tracks(sp, item_type, url)
-    print(songs)
     assert [
         {
             "album": "Yoshi's Island",
