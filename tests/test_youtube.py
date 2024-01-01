@@ -28,6 +28,7 @@ def test_download_one_false_skip():
                         "cover": "https://i.scdn.co/image/ab67616d0000b27396d28597a5ae44ab66552183",
                         "genre": "album rock",
                         "spotify_id": "2GpBrAoCwt48fxjgjlzMd4",
+                        'tempo': 74.656,
                     }
                 ],
             }
@@ -83,6 +84,7 @@ def test_download_one_true_skip():
                         "cover": "https://i.scdn.co/image/ab67616d0000b27396d28597a5ae44ab66552183",
                         "genre": "album rock",
                         "spotify_id": "2GpBrAoCwt48fxjgjlzMd4",
+                        'tempo': 74.656,
                     }
                 ],
             }
@@ -120,6 +122,7 @@ def test_download_cover_none():
                         "cover": None,
                         "genre": "classic rock",
                         "spotify_id": "12LhScrlYazmU4vsqpRQNI",
+                        'tempo': 159.15,
                     }
                 ],
             }
