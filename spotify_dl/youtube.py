@@ -33,7 +33,7 @@ def dump_json(songs):
     :param songs: the songs for which the JSON should be output
     """
     for song in songs:
-        query = f"{song.get('artist')} - {song.get('name')} Lyrics".replace(
+        query = f"{song.get('artist')} - {song.get('name')}".replace(
             ":", ""
         ).replace('"', "")
 
@@ -160,7 +160,7 @@ def find_and_download_songs(kwargs):
                 int(temp[-1].replace("\n", "")),
             )
 
-            query = f"{artist} - {name} Lyrics".replace(":", "").replace('"', "")
+            query = f"{artist} - {name}".replace(":", "").replace('"', "")
             print(f"Initiating download for {query}.")
 
             file_name = kwargs["file_name_f"](
