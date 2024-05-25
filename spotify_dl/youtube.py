@@ -7,6 +7,7 @@ import json
 import mutagen
 import csv
 import yt_dlp
+import ytmusicapi
 from mutagen.easyid3 import EasyID3
 from mutagen.id3 import APIC, ID3
 from mutagen.mp3 import MP3
@@ -41,8 +42,11 @@ def dump_json(songs):
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             try:
-                ytJson = ydl.extract_info("ytsearch:" + query, False)
-                print(json.dumps(ytJson.get("entries")))
+                ytJson = {}
+                with ytmusicapi.YTMusic() as ym:
+                    videoId = ym.search(query, filter = "songs")[0]["videoId"]
+                    ytJson = ydl.extract_info("https://music.youtube.com/watch?v=" + videoId, False)
+                print(json.dumps([ytJson])) # insert into array so that the format stays the same
             except Exception as e:  # skipcq: PYL-W0703
                 log.debug(e)
                 print(
@@ -144,7 +148,7 @@ def set_tags(temp, filename, kwargs):
 def find_and_download_songs(kwargs):
     """
     function handles actual download of the songs
-    the youtube_search lib is used to search for songs and get best url
+    the ytmusicapi lib is used to search for songs and get best url via YT Music
     :param kwargs: dictionary of key value arguments to be used in download
     """
     sponsorblock_postprocessor = []
@@ -200,6 +204,10 @@ def find_and_download_songs(kwargs):
                 print(f"File {mp3file_path} already exists, we do not overwrite it ")
                 continue
 
+            with ytmusicapi.YTMusic() as ytm:
+                # take video ID of first result
+                video_id = ytm.search(query, filter = "songs")[0]["videoId"]
+
             outtmpl = f"{file_path}.%(ext)s"
             ydl_opts = {
                 "proxy": kwargs.get("proxy"),
@@ -227,7 +235,7 @@ def find_and_download_songs(kwargs):
                 ydl_opts["postprocessors"].append(mp3_postprocess_opts.copy())
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 try:
-                    ydl.download([query])
+                    ydl.download([video_id])
                 except Exception as e:  # skipcq: PYL-W0703
                     log.debug(e)
                     print(f"Failed to download {name}, make sure yt_dlp is up to date")
