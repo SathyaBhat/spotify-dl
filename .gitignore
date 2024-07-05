@@ -17,6 +17,7 @@ unins
 .coverage
 .vscode/**
 .venv/*
+.cache
 
 # macOS temporary files
 .DS_Store

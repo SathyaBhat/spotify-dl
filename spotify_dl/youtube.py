@@ -1,6 +1,7 @@
 import urllib.request
 from os import path
 import os
+import shutil
 import multiprocessing
 
 import json
@@ -334,7 +335,8 @@ def download_songs(**kwargs):
         log.debug("Downloading to %s", url["save_path"])
     reference_file = DOWNLOAD_LIST
     track_db = write_tracks(reference_file, kwargs["songs"])
-    os.rename(reference_file, kwargs["output_dir"] + "/" + reference_file)
+    shutil.copy(reference_file, kwargs["output_dir"] + "/" + reference_file)
+    os.remove(reference_file)
     reference_file = str(kwargs["output_dir"]) + "/" + reference_file
     kwargs["reference_file"] = reference_file
     kwargs["track_db"] = track_db
