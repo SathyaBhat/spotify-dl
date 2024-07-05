@@ -1,3 +1,20 @@
+import Levenshtein
+
+
+def get_closest_match(results, expected) -> str:
+    """
+    Returns closest matching result based on Levenshtein edit distance.
+    """
+    best_r = ""
+    min_distance = float('inf')
+    for r in results:
+        curr_distance = Levenshtein.distance(r, expected)
+        if (curr_distance < min_distance):
+            min_distance = curr_distance
+            best_r = r
+    return best_r
+
+
 def sanitize(name, replace_with=""):
     """
     Removes some of the reserved characters from the name so it can be saved
