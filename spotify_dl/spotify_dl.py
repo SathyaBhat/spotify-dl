@@ -188,7 +188,7 @@ def spotify_dl():
         sys.exit(1)
 
     url_data = {"urls": []}
-    start_time = time.time() 
+    start_time = time.time()
     for url in valid_urls:
         url_dict = {}
         item_type, item_id = parse_spotify_url(url)
