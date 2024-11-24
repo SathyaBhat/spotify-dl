@@ -197,7 +197,7 @@ def spotify_dl():
             PurePath.joinpath(Path(args.output), Path(directory_name))
         )
         # Prevent empty folder from being created when dumping JSON
-        if args.dump_json is False: 
+        if args.dump_json is False:
             url_dict["save_path"].mkdir(parents=True, exist_ok=True)
             log.info("Saving songs to %s directory", directory_name)
         url_dict["songs"] = fetch_tracks(sp, item_type, item_id)
