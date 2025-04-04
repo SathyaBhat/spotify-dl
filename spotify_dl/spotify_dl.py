@@ -10,7 +10,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from spotify_dl.constants import VERSION
-from spotify_dl.scaffold import log, setLogLevel, console, get_tokens
+from spotify_dl.scaffold import log, setLogLevel, console, get_tokens, init_telemetry
 from spotify_dl.spotify import (
     fetch_tracks,
     parse_spotify_url,
@@ -131,7 +131,14 @@ def spotify_dl():
         default="",
         help="Download through a proxy. Support HTTP & SOCKS5. Use 'http://username:password@hostname:port' or 'http://hostname:port'",
     )
+    parser.add_argument(
+        "--no-telemetry",
+        action="store_true",
+        help="Disable Telemetry error reporting",
+    )
     args = parser.parse_args()
+    if not args.no_telemetry:
+        init_telemetry()
     num_cores = os.cpu_count()
     args.multi_core = int(args.multi_core)
 
