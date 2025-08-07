@@ -166,7 +166,6 @@ def find_and_download_songs(kwargs):
     the ytmusicapi lib is used to search for songs and get best url via YT Music
     :param kwargs: dictionary of key value arguments to be used in download
     """
-    sponsorblock_postprocessor = []
     reference_file = kwargs["reference_file"]
     files = {}
     with open(reference_file, "r", encoding="utf-8") as file:
@@ -186,8 +185,9 @@ def find_and_download_songs(kwargs):
                 name=name, artist=artist, track_num=kwargs["track_db"][i].get("playlist_num")
             )
 
+            postprocessors = []
             if kwargs["use_sponsorblock"][0].lower() == "y":
-                sponsorblock_postprocessor = [
+                postprocessors.extend([
                     {
                         "key": "SponsorBlock",
                         "categories": ["skip_non_music_sections"],
@@ -197,7 +197,7 @@ def find_and_download_songs(kwargs):
                         "remove_sponsor_segments": ["music_offtopic"],
                         "force_keyframes": True,
                     },
-                ]
+                ])
             save_path = kwargs["track_db"][i]["save_path"]
             file_path = path.join(save_path, file_name)
 
@@ -241,7 +241,7 @@ def find_and_download_songs(kwargs):
                 "default_search": "ytsearch",
                 "format": "bestaudio/best",
                 "outtmpl": outtmpl,
-                "postprocessors": sponsorblock_postprocessor,
+                "postprocessors": postprocessors,
                 "noplaylist": True,
                 "no_color": False,
                 "postprocessor_args": [
