@@ -1,5 +1,5 @@
 ## spotify_dl
-
+                    
 Downloads songs from any Spotify playlist, album or track.
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
