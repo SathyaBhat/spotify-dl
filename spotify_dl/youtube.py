@@ -83,13 +83,13 @@ def write_tracks(tracks_file, song_dict):
         i = 0
         writer = csv.writer(file_out, delimiter=";")
         for url_dict in song_dict["urls"]:
+            # for track in url_dict['songs']:
             for track in url_dict["songs"]:
                 track_url = track["track_url"]  # here
                 track_name = track["name"]
                 track_artist = track["artist"]
                 track_num = track["num"]
                 track_album = track["album"]
-                track_tempo = track["tempo"]
                 track["save_path"] = url_dict["save_path"]
                 track_db.append(track)
                 track_index = i
@@ -100,7 +100,6 @@ def write_tracks(tracks_file, song_dict):
                     track_url,
                     str(track_num),
                     track_album,
-                    str(track_tempo),
                     str(track_index),
                 ]
                 try:
@@ -139,8 +138,6 @@ def set_tags(temp, filename, kwargs):
         )
 
     song_file["genre"] = song.get("genre")
-    if song.get("tempo") is not None:
-        song_file["bpm"] = str(song.get("tempo"))
     song_file.save()
     song_file = MP3(filename, ID3=ID3)
     cover = song.get("cover")

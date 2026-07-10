@@ -42,14 +42,8 @@ def fetch_tracks(sp, item_type, item_id):
                         continue
                     track_album_info = track_info.get("album")
                     track_num = track_info.get("track_number")
-                    track_name = track_info.get("name")
                     spotify_id = track_info.get("id")
-                    try:
-                        track_audio_data = sp.audio_analysis(spotify_id)
-                        tempo = track_audio_data.get("track").get("tempo")
-                    except:
-                        log.error("Couldn't fetch audio analysis for %s", track_name)
-                        tempo = None
+                    track_name = track_info.get("name")
                     track_artist = ", ".join(
                         [artist["name"] for artist in track_info.get("artists")]
                     )
@@ -92,7 +86,6 @@ def fetch_tracks(sp, item_type, item_id):
                             "genre": genre,
                             "spotify_id": spotify_id,
                             "track_url": None,
-                            "tempo": tempo,
                         }
                     )
                     offset += 1
@@ -148,12 +141,6 @@ def fetch_tracks(sp, item_type, item_id):
                     )
                     track_num = item["track_number"]
                     spotify_id = item.get("id")
-                    try:
-                        track_audio_data = sp.audio_analysis(spotify_id)
-                        tempo = track_audio_data.get("track").get("tempo")
-                    except:
-                        log.error("Couldn't fetch audio analysis for %s", track_name)
-                        tempo = None
                     songs_list.append(
                         {
                             "name": track_name,
@@ -167,7 +154,6 @@ def fetch_tracks(sp, item_type, item_id):
                             "cover": cover,
                             "genre": genre,
                             "spotify_id": spotify_id,
-                            "tempo": tempo,
                         }
                     )
                     offset += 1
@@ -196,12 +182,6 @@ def fetch_tracks(sp, item_type, item_id):
             album_total = album_info.get("total_tracks")
         track_num = items["track_number"]
         spotify_id = items["id"]
-        try:
-            track_audio_data = sp.audio_analysis(spotify_id)
-            tempo = track_audio_data.get("track").get("tempo")
-        except:
-            log.error("Couldn't fetch audio analysis for %s", track_name)
-            tempo = None
         if len(items["album"]["images"]) > 0:
             cover = items["album"]["images"][0]["url"]
         else:
@@ -223,7 +203,6 @@ def fetch_tracks(sp, item_type, item_id):
                 "genre": genre,
                 "track_url": None,
                 "spotify_id": spotify_id,
-                "tempo": tempo,
             }
         )
 
