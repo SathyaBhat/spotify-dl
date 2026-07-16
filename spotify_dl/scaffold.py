@@ -1,6 +1,5 @@
 import logging
 from os import getenv
-import sentry_sdk
 from rich.logging import RichHandler
 from rich.console import Console
 
@@ -14,9 +13,17 @@ logging.basicConfig(
 )
 console = Console()
 log = logging.getLogger("sdl")
-sentry_sdk.init(
-    "https://fc66a23d79634b9bba1690ea13e289f0@o321064.ingest.sentry.io/2383261"
-)
+
+
+def init_telemetry():
+    """Initialize Sentry SDK if installed"""
+    try:
+        import sentry_sdk
+        sentry_sdk.init(
+            "https://fc66a23d79634b9bba1690ea13e289f0@o321064.ingest.sentry.io/2383261"
+        )
+    except ImportError:
+        log.debug("Sentry SDK not installed, skipping telemetry initialization")
 
 
 def setLogLevel(level):
