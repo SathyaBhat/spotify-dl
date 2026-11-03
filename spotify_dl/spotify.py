@@ -125,13 +125,11 @@ def fetch_tracks(sp, item_type, item_id):
                     cover = album_info["images"][0]["url"]
                 else:
                     cover = None
-                if (
-                    len(sp.artist(artist_id=album_info["artists"][0]["uri"])["genres"])
-                    > 0
-                ):
-                    genre = sp.artist(artist_id=album_info["artists"][0]["uri"])[
-                        "genres"
-                    ][0]
+                genres = sp.artist(artist_id=album_info["artists"][0]["uri"]).get(
+                    "genres", []
+                )
+                if len(genres) > 0:
+                    genre = genres[0]
                 else:
                     genre = ""
                 for item in items["items"]:
@@ -186,8 +184,9 @@ def fetch_tracks(sp, item_type, item_id):
             cover = items["album"]["images"][0]["url"]
         else:
             cover = None
-        if len(sp.artist(artist_id=items["artists"][0]["uri"])["genres"]) > 0:
-            genre = sp.artist(artist_id=items["artists"][0]["uri"])["genres"][0]
+        genres = sp.artist(artist_id=items["artists"][0]["uri"]).get("genres", [])
+        if len(genres) > 0:
+            genre = genres[0]
         else:
             genre = ""
         songs_list.append(
