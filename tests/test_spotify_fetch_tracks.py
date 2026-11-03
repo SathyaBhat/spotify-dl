@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotify_dl.spotify import fetch_tracks
 import spotipy
@@ -389,3 +391,44 @@ def test_spotify_playlist_fetch_local_file():
             "spotify_id": None,
         }
     ] == songs
+
+
+def client_with_artist(artist):
+    # No network: the Spotify client is replaced by canned responses.
+    album = {
+        "name": "Album",
+        "release_date": "2025-01-01",
+        "total_tracks": 1,
+        "images": [],
+        "artists": [{"uri": "spotify:artist:1"}],
+    }
+    track = {
+        "name": "Song",
+        "artists": [{"name": "Artist", "uri": "spotify:artist:1"}],
+        "track_number": 1,
+        "id": "track-id",
+    }
+    sp = MagicMock()
+    sp.artist.return_value = artist
+    sp.album.return_value = album
+    sp.album_tracks.return_value = {"total": 1, "items": [track]}
+    sp.track.return_value = {**track, "album": album}
+    return sp
+
+
+def test_album_fetch_without_artist_genres():
+    sp = client_with_artist({"name": "Artist"})
+    songs = fetch_tracks(sp, "album", "album-id")
+    assert [song["genre"] for song in songs] == [""]
+
+
+def test_track_fetch_without_artist_genres():
+    sp = client_with_artist({"name": "Artist"})
+    songs = fetch_tracks(sp, "track", "track-id")
+    assert [song["genre"] for song in songs] == [""]
+
+
+def test_album_and_track_fetch_keep_first_artist_genre():
+    sp = client_with_artist({"name": "Artist", "genres": ["rock", "pop"]})
+    assert fetch_tracks(sp, "album", "album-id")[0]["genre"] == "rock"
+    assert fetch_tracks(sp, "track", "track-id")[0]["genre"] == "rock"
